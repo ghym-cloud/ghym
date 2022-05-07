@@ -1,0 +1,14 @@
+---
+- name: Create VM
+  hosts: AeDc12
+  become: yes
+  pre_tasks:
+   - name: Copy data for VM creation from local pc to HV
+     copy:
+       src: /home/max/github.com/ghym/Python/
+       dest: /tmp/ae-dc1-wn2/
+       owner: max
+       group: max
+  tasks:
+   - name: Run python script to create VM
+     command: "/usr/local/bin/python3.7 /tmp/ae-dc1-wn2/CreateVM.py ae-dc1-wn2 max 123456"

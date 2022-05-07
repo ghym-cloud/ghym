@@ -1,0 +1,21 @@
+---
+- name: Install Ceph cluster
+  hosts: Storage
+  become: yes
+  pre_tasks:
+   - apt:
+       name: cephadm
+       state: present
+   - name: Bootstrap Ceph
+     command: "cephadm bootstrap --single-host-defaults --mon-ip 172.16.0.6"
+   - apt:
+       name: ceph
+       state: present
+   - apt:
+       name: ceph-deploy
+       state: present
+  tasks:
+   - name: Enabling object gateway
+     command: "ceph dashboard set-rgw-credentials"
+   - name: Disable certificate verification
+     command: "ceph dashboard set-rgw-api-ssl-verify False"

@@ -1,0 +1,44 @@
+---
+- name: Preinstalled software on all YUM hosts
+  hosts: HyperV
+  become: yes
+  pre_tasks:
+   - yum:
+       name: screen
+       state: installed
+   - yum:
+       name: mc
+       state: installed
+- name: Preinstalled software on all APT hosts
+  hosts: BareMetal_apt
+  become: yes
+  pre_tasks:
+   - apt:
+       name: screen
+       state: present
+   - apt:
+       name: mc
+       state: present
+   - apt:
+       name: net-tools
+       state: present
+- name: ae-dc1-1
+  hosts: AeDc11
+  pre_tasks:
+   - name: Copy public ssh key
+     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-1.pub max@172.16.0.3:/home/max/.ssh/authorized_keys"
+- name: ae-dc1-2
+  hosts: AeDc12
+  pre_tasks:
+   - name: Copy public ssh key
+     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-2.pub max@172.16.0.5:/home/max/.ssh/authorized_keys"
+- name: ae-dc1-3
+  hosts: AeDc13
+  pre_tasks:
+   - name: Copy public ssh key
+     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-3.pub max@172.16.0.6:/home/max/.ssh/authorized_keys"
+- name: ae-dc1-4
+  hosts: AeDc14
+  pre_tasks:
+   - name: Copy public ssh key
+     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-4.pub max@172.16.0.7:/home/max/.ssh/authorized_keys"

@@ -1,0 +1,20 @@
+preserve_hostname: False
+hostname: VMNAME
+fqdn: VMNAME
+users:
+    - default
+    - name: USERNAME
+      passwd: USERPASSWORD
+      groups: ['wheel']
+      shell: /bin/bash
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      ssh-authorized-keys:
+        - SSHKEY
+output:
+  all: ">> /var/log/kvm/VMNAME.log"
+ssh_genkeytypes: ['ed25519', 'rsa']
+ssh_authorized_keys:
+  - SSHKEY
+timezone: Asia/Dubai
+runcmd:
+  - systemctl stop network && systemctl start network

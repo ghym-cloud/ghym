@@ -1,0 +1,25 @@
+---
+- name: Installation of KVM Hyper-V
+  hosts: HyperV
+  become: yes
+  pre_tasks:
+   - yum:
+       name: qemu-kvm
+       state: installed
+   - yum:
+       name: libvirt
+       state: installed
+   - yum:
+       name: libvirt-python
+       state: installed
+   - yum:
+       name: libguestfs-tools
+       state: installed
+   - yum:
+       name: virt-install
+       state: installed
+   - name: Start the libvirtd service
+     systemd:
+       enabled: yes
+       state: started
+       name: libvirtd
