@@ -1,6 +1,5 @@
 # ghym
-Ghym - is my personal on-premise cloud for DevOps education that could be converted to on-demand cloud computing platform if i succes with my education gaols
-SLA: Forever free for both private and enterprise but as is
+Ghym - is my personal on-premise cloud for self DevOps education that I plan to convert to on-demand cloud computing platform if I succeed with my education gaols. SLA: Forever free for both private and enterprise but as is
 
 ## Hardware
 1. HP Pro Liant DL360e G8
