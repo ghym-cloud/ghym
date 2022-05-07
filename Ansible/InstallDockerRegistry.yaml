@@ -1,0 +1,57 @@
+---
+- name: Install Docker Regostry
+  hosts: AeDc13
+  become: yes
+  pre_tasks:
+   - name: Install Common CA certificates
+     apt: 
+      name: ca-certificates
+      state: present
+   - name: Install GnuPG is GNU's tool for secure communication and data storage
+     apt:
+      name: gnupg
+      state: present
+   - name: Install core utils
+     apt:
+      name: lsb-release
+      state: present
+   - name: Add Docker official GPG Key
+     apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+   - name: Add Docker repository into sources list
+     apt_repository:
+       repo: deb https://download.docker.com/linux/ubuntu focal stable
+       state: present
+   - name: Install Docker engine
+     apt:
+      name: docker-ce
+      state: present
+   - name: Install Docker CLI
+     apt:
+      name: docker-ce-cli
+      state: present
+   - name: Install Containerd
+     apt:
+      name: containerd.io
+      state: present
+   - name: Install Docker Compose Plugin
+     apt:
+      name: docker-compose-plugin
+      state: present
+   - name: Install Docker compose
+     apt:
+      name: docker-compose
+      state: present
+   - name: Create directory for docker-compase.yaml
+     file:
+      path: /docker/DockerRegistry
+      state: directory
+   - name: Copy Docker registry compose file from local host to remote host
+     copy:
+      src: /home/max/github.com/ghym/Docker/DockerRegistry.yaml
+      dest: /docker/DockerRegistry/docker-compose.yaml
+      owner: max
+      group: max
+#   - name: Start Docker Registry
+#     command: "cd /docker/DockerRegistry && docker-compose up -d"

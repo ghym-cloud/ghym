@@ -9,8 +9,11 @@
    - yum:
        name: mc
        state: installed
+   - yum:
+       name: docker.mc
+       state: installed
 - name: Preinstalled software on all APT hosts
-  hosts: BareMetal_apt
+  hosts: Tower
   become: yes
   pre_tasks:
    - apt:
@@ -21,6 +24,9 @@
        state: present
    - apt:
        name: net-tools
+       state: present
+   - apt:
+       name: docker.io
        state: present
 - name: ae-dc1-1
   hosts: AeDc11
