@@ -45,13 +45,13 @@
       state: present
    - name: Create directory for docker-compase.yaml
      file:
-      path: /docker/DockerRegistry
+      path: /docker-compose
       state: directory
    - name: Copy Docker registry compose file from local host to remote host
      copy:
       src: /home/max/github.com/ghym/Docker/DockerRegistry.yaml
-      dest: /docker/DockerRegistry/docker-compose.yaml
+      dest: /docker-compose/docker_registry.yaml
       owner: max
       group: max
-#   - name: Start Docker Registry
-#     command: "cd /docker/DockerRegistry && docker-compose up -d"
+   - name: Start Docker Registry
+     command: "docker-compose -f /docker-compose/docker_registry.yaml up -d"

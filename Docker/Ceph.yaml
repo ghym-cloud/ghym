@@ -1,0 +1,59 @@
+version: '3.7'
+services:
+ mon:
+  container_name: 'ceph-mon'
+  image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  command: 'mon'
+  network_mode: 'host'
+  volumes:
+   - '/ceph/etc/ceph:/etc/ceph'
+   - '/ceph/var/lib/ceph:/var/lib/ceph'
+  environment:
+   - 'LANG=en_US.utf8'
+   - 'TZ=Asia/Dubai'
+   - 'MON_IP=172.16.0.6'
+   - 'CEPH_PUBLIC_NETWORK=172.16.0.0/24'
+ mgr:
+  container_name: 'ceph-mgr'
+  image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  command: 'mgr'
+  network_mode: 'host'
+  volumes:
+   - '/ceph/etc/ceph:/etc/ceph'
+   - '/ceph/var/lib/ceph:/var/lib/ceph'
+  environment:
+   - 'LANG=en_US.utf8' 
+   - 'TZ=Asia/Dubai'
+  depends_on:
+   - 'mon'
+ osd:
+  container_name: 'ceph-osd'
+  pid: 'host'
+  privileged: 'true'
+  image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  command: 'osd'
+  network_mode: 'host'
+  volumes:
+   - '/ceph/etc/ceph:/etc/ceph'
+   - '/ceph/var/lib/ceph:/var/lib/ceph'
+  environment:
+   - 'LANG=en_US.utf8' 
+   - 'TZ=Asia/Dubai'
+   - 'OSD_TYPE=directory'
+   - 'JOURNAL_DIR=/var/lib/ceph/osd'
+   - 'HOSTNAME=ae-dc1-3'
+  depends_on:
+   - 'mgr'
+ rgw:
+  container_name: 'ceph-rgw'
+  image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  command: 'rgw'
+  network_mode: 'host'
+  volumes:
+   - '/ceph/etc/ceph:/etc/ceph'
+   - '/ceph/var/lib/ceph:/var/lib/ceph'
+  environment:
+   - 'LANG=en_US.utf8' 
+   - 'TZ=Asia/Dubai'
+  depends_on:
+   - 'osd'

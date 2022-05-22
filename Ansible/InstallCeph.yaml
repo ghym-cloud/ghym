@@ -1,21 +1,56 @@
 ---
-- name: Install Ceph cluster
-  hosts: Storage
+- name: Install Ceph
+  hosts: AeDc13
   become: yes
   pre_tasks:
-   - apt:
-       name: cephadm
-       state: present
-   - name: Bootstrap Ceph
-     command: "cephadm bootstrap --single-host-defaults --mon-ip 172.16.0.6"
-   - apt:
-       name: ceph
-       state: present
-   - apt:
-       name: ceph-deploy
-       state: present
-  tasks:
-   - name: Enabling object gateway
-     command: "ceph dashboard set-rgw-credentials"
-   - name: Disable certificate verification
-     command: "ceph dashboard set-rgw-api-ssl-verify False"
+   - name: Create directory for docker-compase.yaml
+     file:
+      path: /docker-compose
+      state: directory
+   - name: Create directory for Ceph
+     file:
+      path: /ceph
+      state: directory
+   - name: Copy Ceph compose file from local host to remote host
+     copy:
+      src: /home/max/github.com/ghym/Docker/Ceph.yaml
+      dest: /docker-compose/ceph.yaml
+      owner: max
+      group: max
+   - name: Start Ceph monitor
+     command: "docker-compose -f /docker-compose/ceph.yaml up -d mon"
+   - name: Stop ceph-mon in order to change config
+     command: "docker stop ceph-mon"
+   - name: Change Ceph config
+     blockinfile:
+      dest: "/ceph/etc/ceph/ceph.conf"
+      block: |
+        osd_crush_chooseleaf_type = 0
+        osd pool default size = 1
+        osd pool default min size = 1
+        osd max object name len = 256
+        osd max object namespace len = 64
+        max open files = 655350
+        cephx cluster require signatures = false
+        cephx service require signatures = false
+      backup: no
+   - name: Start ceph-mon
+     command: "docker start ceph-mon"
+   - name: Create keyrings for osd and rgw
+     command: "docker exec ceph-mon {{ item }}"
+     with_items:
+     - 'ceph osd pool create ghym 1'
+     - 'ceph auth get client.bootstrap-osd -o /var/lib/ceph/bootstrap-osd/ceph.keyring'
+     - 'ceph auth get client.bootstrap-rgw -o /var/lib/ceph/bootstrap-rgw/ceph.keyring'
+   - name: Start MGR and OSD for Ceph
+     command: "docker-compose -f /docker-compose/ceph.yaml up -d osd"
+   - name:  Change pools settings
+     command: "docker exec ceph-mon ceph osd pool {{ item }}"
+     with_items:
+     - 'create ghym 1'
+     - 'set ghym size 1'
+     - 'set ghym min_size 1'
+   - name: Start RGW for Ceph
+     command: "docker-compose -f /docker-compose/ceph.yaml up -d rgw"
+   - name: Create Ceph user
+     command: "docker exec ceph-rgw radosgw-admin user create --uid=ghym --display-name=ghym --system --admin"
