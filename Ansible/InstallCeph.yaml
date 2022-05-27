@@ -45,12 +45,12 @@
    - name: Start MGR and OSD for Ceph
      command: "docker-compose -f /docker-compose/ceph.yaml up -d osd"
    - name:  Change pools settings
-     command: "docker exec ceph-mon ceph osd pool {{ item }}"
+     command: "docker exec ceph-mon {{ item }}"
      with_items:
-     - 'create ghym 1'
-     - 'set ghym size 1'
-     - 'set ghym min_size 1'
+     - 'ceph osd pool create ghym 1'
+     - 'ceph osd pool set ghym size 1'
+     - 'ceph osd pool set ghym min_size 1'
    - name: Start RGW for Ceph
-     command: "docker-compose -f /docker-compose/ceph.yaml up -d rgw"
+     command: "docker-compose -f /docker-compose/ceph.yaml up -d mds"
    - name: Create Ceph user
      command: "docker exec ceph-rgw radosgw-admin user create --uid=ghym --display-name=ghym --system --admin"
