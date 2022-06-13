@@ -1,4 +1,4 @@
-# ghym
+# Ghym
 Ghym - is my personal on-premise cloud for self DevOps education that I plan to convert to on-demand cloud computing platform if I succeed with my education gaols. SLA: Forever free for both private and enterprise but as is
 
 ## Hardware
@@ -28,7 +28,7 @@ Ghym - is my personal on-premise cloud for self DevOps education that I plan to 
  - RAID 0: 927 GiB
 
 ## Computers
-#	Name		Type		OS
+####	Name		Type		OS
 1.	AE-DC1-1	(Hypervisor)	Centos 7
  1.	AE-DC1-CP2	(Virtual)	Ubuntu 20.04
  2.	AE-DC1-WN3	(Virtual)	Ubuntu 20.04

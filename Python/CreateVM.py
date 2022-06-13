@@ -1,9 +1,10 @@
-# Run as ./CreateVM.py VMNAME USERNAME USERPASSWORD
+# Run as ./CreateVM.py VMNAME USERNAME USERPASSWORD HYPERVISOR
 import os, sys, shutil, crypt
 # Name of Virtual Machine and Username from CLI arguments
 vmname = sys.argv[1]
 username = sys.argv[2]
 password = sys.argv[3]
+hv = sys.argv[4]
 # Folder of Virtual Machine
 directory = "/home/hdd/"
 file_tmp = "/tmp/" + vmname
@@ -11,7 +12,14 @@ file_ssh_key = "/home/max/.ssh/" + vmname
 file_meta_data = file_tmp + "/Template/meta-data"
 file_user_data = file_tmp + "/Template/user-data"
 hdd = directory + vmname + ".qcow2"
-image = "/home/template/ae-dc1-cp1.qcow2"
+image = "/cephfs/template/ae-dc1-cp1.qcow2"
+if hv == "ae-dc1-1":
+  network = "default"
+elif hv == "ae-dc1-2":
+  network = "bridged-network"
+else:
+  print("Error: Unknown Hyper-Visor")
+  quit()
 # Create "mata-data" file with content
 meta_data = open(file_meta_data, "r")
 meta_data_content = meta_data.read()
@@ -47,10 +55,11 @@ user_data.close()
 shutil.copyfile(image, hdd)
 #qemu-img create -f qcow2 -o preallocation=metadata $VM.new.image 60G
 #virt-resize --quiet --expand /dev/sda1 $VM.qcow2 $VM.new.image
-os.system("mkisofs -o " + file_tmp + "/Template/" + vmname + ".iso -V cidata -J -r " +file_user_data + " " + file_meta_data)
+os.system("mkisofs -o " + file_tmp + "/Template/" + vmname + ".iso -V cidata -J -r " + file_user_data + " " + file_meta_data)
 # Create a storage pool for Virtual Machine
 #os.system("virsh pool-create-as --name " + hdd + " --type dir --target " + directory)
 # Deploy Virtual Machine
+#os.system("virt-install --import --name " + vmname + " --memory 2048 --vcpu 2 --cpu host --disk " + hdd +",format=qcow2,bus=virtio --disk " + file_tmp + "/Template/" + vmname + ".iso,device=cdrom --network network=" + network + ",model=virtio --os-type=linux --graphics=vnc")
 os.system("virt-install --import --name " + vmname + " --memory 2048 --vcpu 2 --cpu host --disk " + hdd +",format=qcow2,bus=virtio --disk " + file_tmp + "/Template/" + vmname + ".iso,device=cdrom --network bridge=br0,model=virtio --os-type=linux --graphics=vnc")
 # Eject CD-Rom
 os.system("virsh change-media " + vmname + " hda --eject --config")

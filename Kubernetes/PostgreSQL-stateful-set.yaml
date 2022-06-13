@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql
+  namespace: default
+  labels:
+    app: postgresql
+    name: postgresql
+spec:
+  serviceName: postgresql
+  selector:
+    matchLabels:
+      app: postgresql
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:latest
+        volumeMounts:
+        - name: postgresql
+          mountPath: /cephfs/postgresql_data
+        env:
+          - name: POSTGRES_PASSWORD
+            value: p05t9rE59I6hYm
+          - name: PGDATA
+            value: /cephfs/postgresql_data/pgdata
+      volumes:
+      - name: postgresql
+        persistentVolumeClaim:
+          claimName: postgresql

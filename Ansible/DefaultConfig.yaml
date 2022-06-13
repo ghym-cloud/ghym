@@ -3,48 +3,92 @@
   hosts: HyperV
   become: yes
   pre_tasks:
-   - yum:
+   - name: Install screen
+     yum:
        name: screen
        state: installed
-   - yum:
+   -  name: Install mc
+      yum:
        name: mc
        state: installed
-   - yum:
-       name: docker.mc
+   - name: Install docker
+     yum:
+       name: docker
        state: installed
+   - name: Install ceph-common
+     yum:
+       name: ceph-common
+       state: installed
+   - name: Set timezone to Asia/Dubai
+     timezone:
+       name: Asia/Dubai
 - name: Preinstalled software on all APT hosts
-  hosts: Tower
+  hosts: Ubuntu
   become: yes
   pre_tasks:
-   - apt:
+   - name: Update all packages to their latest version
+     apt:
+       name: "*"
+       state: latest
+   - name: Install screen
+     apt:
        name: screen
+       update_cache: yes
        state: present
-   - apt:
+   - name: Install mc
+     apt:
        name: mc
        state: present
-   - apt:
+   - name: Install net-tools
+     apt:
        name: net-tools
        state: present
-   - apt:
+   - name: Install ceph-common
+     apt:
+       name: ceph-common
+       state: present
+   - name: Install mlocate
+     apt:
+       name: mlocate
+       state: present
+   - name: Set timezone to Asia/Dubai
+     timezone:
+       name: Asia/Dubai
+- name: K8S preconfiguration
+  hosts: k8s
+  become: yes
+  pre_tasks:
+   - name: Install docker
+     apt:
        name: docker.io
        state: present
-- name: ae-dc1-1
-  hosts: AeDc11
-  pre_tasks:
-   - name: Copy public ssh key
-     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-1.pub max@172.16.0.3:/home/max/.ssh/authorized_keys"
-- name: ae-dc1-2
-  hosts: AeDc12
-  pre_tasks:
-   - name: Copy public ssh key
-     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-2.pub max@172.16.0.5:/home/max/.ssh/authorized_keys"
-- name: ae-dc1-3
-  hosts: AeDc13
-  pre_tasks:
-   - name: Copy public ssh key
-     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-3.pub max@172.16.0.6:/home/max/.ssh/authorized_keys"
-- name: ae-dc1-4
-  hosts: AeDc14
-  pre_tasks:
-   - name: Copy public ssh key
-     command: "sshpass -p '123456' scp /home/max/github.com/ghym/Certificate/ae-dc1-4.pub max@172.16.0.7:/home/max/.ssh/authorized_keys"
+   - name: Enable service docker
+     systemd:
+       name: docker
+       enabled: yes
+   - name: Make sure a service unit is running
+     systemd:
+       name: docker
+       state: started
+   - name: Add kubernetes sighned key
+     apt_key:
+       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+       state: present
+   - name: Add kubernetes repositories
+     apt_repository:
+       repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+       state: present
+#   - name: Disable swap
+#     command: "/usr/sbin/swapoff –a"
+   - name: Install kubeadm
+     apt:
+       name: kubeadm
+       state: present
+   - name: Install kubelet
+     apt:
+       name: kubelet
+       state: present
+   - name: Install kubectl
+     apt:
+       name: kubectl
+       state: present
