@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bind
+  namespace: default
+  labels:
+    app: bind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bind
+  template:
+    metadata:
+      labels:
+        app: bind
+    spec:
+      containers:
+      - name: bind
+        image: cytopia/bind
+        env:
+        - name: DOCKER_LOGS
+          value: 1
+        - name: ALLOW_QUERY
+          value: any
+        ports:
+        - containerPort: 53

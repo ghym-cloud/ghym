@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      role: mongodb
+  serviceName: "mongodb"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: mongodb
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongodb
+        image: mongo
+        command:
+          - mongod
+          - "--replSet"
+          - rs0
+          - "--dbpath"
+          - "/cephfs/mongodb_data/"
+        ports:
+          - containerPort: 27017
+        volumeMounts:
+          - name: mongodb
+            mountPath: /cephfs/mongodb_data/
+#      - name: mongo-sidecar
+#        image: cvallance/mongo-k8s-sidecar
+#        env:
+#          - name: MONGO_SIDECAR_POD_LABELS
+#            value: "role=mongodb"
+      volumes:
+      - name: mongodb
+        persistentVolumeClaim:
+          claimName: mongodb
