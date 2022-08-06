@@ -1,14 +1,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: cassandra
-  namespace: default
+  name: cassandra-data
   labels:
     type: local
 spec:
   storageClassName: local-storage
   capacity:
-    storage: 1Gi
+    storage: 10Gi
   volumeMode: Filesystem
   local:
     path: /cephfs/cassandra_data

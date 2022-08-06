@@ -4,10 +4,22 @@ metadata:
   labels:
     app: cassandra
   name: cassandra
-  namespace: default
+  namespace: ghym
 spec:
-#  clusterIP: None
   ports:
-  - port: 9042
+  - name: cassandra-cql
+    port: 9042
+    targetPort: 9042
+  - name: cassandra-storage
+    port: 7000
+    targetPort: 7000
+  - name: cassandra-storage-ssl
+    port: 7001
+    targetPort: 7001
+  - name: cassandra-jmx
+    port: 7199
+    targetPort: 7199
   selector:
     app: cassandra
+  externalIPs:
+  - 172.16.0.8

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: ghym
+  labels:
+    app: nginx
+    type: front-end
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      type: front-end
+  template:
+    metadata:
+      labels:
+        app: nginx
+        type: front-end
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.22.0
+        volumeMounts:
+        - name: nginx
+          mountPath: /etc/nginx
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - |
+                apt-get update -y
+                apt-get upgrade -y
+                apt-get install php7.4-fpm -y
+                apt-get install php7.4-curl
+                apt-get install php7.4-mysql
+                service php7.4-fpm start
+                chown -R nginx:nginx /run/php/
+      volumes:
+      - name: nginx
+        persistentVolumeClaim:
+          claimName: nginx

@@ -1,5 +1,5 @@
 # Ghym
-Ghym - is my personal on-premise cloud for self DevOps education that I plan to convert to on-demand cloud computing platform if I succeed with my education gaols. SLA: Forever free for both private and enterprise but as is
+ghym - is a private cloud for myself DevOps education that I plan to convert to free cloud computing platform if I succeed with my education gaols. SLA - there is no sla, use As Is or don't use at all as I keep right to shutdown cloud suddenly and forever without prior notice or handover data
 
 ## Hardware
 1. HP Pro Liant DL360e G8
@@ -26,6 +26,10 @@ Ghym - is my personal on-premise cloud for self DevOps education that I plan to 
  - CPU: 4 Cored
  - RAM: 8 Gb
  - RAID 0: 927 GiB
+7. HP Pro 3500
+ - CPU: 2 Cores
+ - RAM: 8Gb
+ - RAID 1: 512 GiB
 
 ## Computers
 ####	Name		Type		OS
@@ -46,3 +50,20 @@ Ghym - is my personal on-premise cloud for self DevOps education that I plan to 
 6.	AE-DC1-6	(Hypervisor)	MS Server 2019 Core
  1.	AE-DC1-WN7	(Virtual)	Ubuntu 20.04
  2.	AE-DC1-WN8	(Virtual)	Ubuntu 20.04
+7.	AE-DC!-GW	(Hardware)	Ubuntu 20.04
+
+## Get started
+
+Get started right now using our documentation
+
+## Feedback
+
+If you find any issue, have general feedback or question drom an email to bug@ghym.ae
+
+## Contributions
+
+Contributions are welcome. Find out how to contribute.
+
+## License
+
+Copyright (c) [2022] ghym.ae, see license file

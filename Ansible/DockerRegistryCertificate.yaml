@@ -1,0 +1,31 @@
+---
+- name: Install Docker Registry SSL certificate as CA.crt
+  hosts: k8s
+  become: yes
+  pre_tasks:
+   - name: Create folder
+     file:
+       path: '/etc/docker/certs.d/ae-dc1-3:5000'
+       state: directory
+   - name: Copy certificate
+     copy:
+       src: '/home/max/github.com/ghym/Certificate/ghym_docker.crt'
+       dest: '/etc/docker/certs.d/ae-dc1-3:5000/ca.crt'
+   - name: Copy CA certificate
+     copy:
+       src: '/home/max/github.com/ghym/Certificate/ghym_docker.pem'
+       dest: '/etc/docker/certs.d/ca.pem'
+   - name: Create a symbolic link of CA certificate
+     file:
+       src: '/etc/docker/certs.d/ca.pem'
+       dest: '/etc/ssl/certs/ca.pem'
+       state: link
+   - name: Copy Docker config file
+     copy:
+       src: '/home/max/github.com/ghym/Docker/daemon.json'
+       dest: '/etc/docker/daemon.json'
+   - name: Restart Docker
+     systemd:
+       state: restarted
+       daemon_reload: yes
+       name: docker

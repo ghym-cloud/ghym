@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zookeeper
-  namespace: default
+  namespace: ghym
   labels:
     app: zookeeper
 spec:
@@ -18,3 +18,5 @@ spec:
     protocol: TCP
   selector:
     app: zookeeper
+  externalIPs:
+  - 172.16.0.8

@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka
-  namespace: default
+  namespace: ghym
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
         app: kafka

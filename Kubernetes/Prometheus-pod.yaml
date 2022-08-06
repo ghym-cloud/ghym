@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prometheus
+  namespace: ghym
+  labels:
+    app: prometheus
+spec:
+  containers:
+  - name: prometheus
+    image: prom/prometheus
+    ports:
+    - containerPort: 9090
+    volumeMounts:
+    - name: prometheus
+      mountPath: /etc/prometheus
+  volumes:
+  - name: prometheus
+    persistentVolumeClaim:
+      claimName: prometheus

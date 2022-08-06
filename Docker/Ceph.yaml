@@ -3,6 +3,7 @@ services:
  mon:
   container_name: 'ceph-mon'
   image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  restart: 'always'
   command: 'mon'
   network_mode: 'host'
   volumes:
@@ -16,13 +17,14 @@ services:
  mgr:
   container_name: 'ceph-mgr'
   image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  restart: 'always'
   command: 'mgr'
   network_mode: 'host'
   volumes:
    - '/ceph/etc/ceph:/etc/ceph'
    - '/ceph/var/lib/ceph:/var/lib/ceph'
   environment:
-   - 'LANG=en_US.utf8' 
+   - 'LANG=en_US.utf8'
    - 'TZ=Asia/Dubai'
   depends_on:
    - 'mon'
@@ -31,13 +33,14 @@ services:
   pid: 'host'
   privileged: 'true'
   image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  restart: 'always'
   command: 'osd'
   network_mode: 'host'
   volumes:
    - '/ceph/etc/ceph:/etc/ceph'
    - '/ceph/var/lib/ceph:/var/lib/ceph'
   environment:
-   - 'LANG=en_US.utf8' 
+   - 'LANG=en_US.utf8'
    - 'TZ=Asia/Dubai'
    - 'OSD_TYPE=directory'
    - 'JOURNAL_DIR=/var/lib/ceph/osd'
@@ -47,19 +50,21 @@ services:
  rgw:
   container_name: 'ceph-rgw'
   image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  restart: 'always'
   command: 'rgw'
   network_mode: 'host'
   volumes:
    - '/ceph/etc/ceph:/etc/ceph'
    - '/ceph/var/lib/ceph:/var/lib/ceph'
   environment:
-   - 'LANG=en_US.utf8' 
+   - 'LANG=en_US.utf8'
    - 'TZ=Asia/Dubai'
   depends_on:
    - 'osd'
  mds:
   container_name: 'ceph-mds'
   image: 'ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7'
+  restart: 'always'
   command: 'mds'
   network_mode: 'host'
   hostname: 'ae-dc1-3'
@@ -67,7 +72,7 @@ services:
    - '/ceph/etc/ceph:/etc/ceph'
    - '/ceph/var/lib/ceph:/var/lib/ceph'
   environment:
-   - 'LANG=en_US.utf8' 
+   - 'LANG=en_US.utf8'
    - 'TZ=Asia/Dubai'
    - 'CEPHFS_CREATE=1'
   depends_on:

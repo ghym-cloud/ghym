@@ -2,14 +2,14 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: redis
-  namespace: default
+  namespace: ghym
 spec:
   containers:
   - name: redis
     image: redis:5.0.4
     command:
       - redis-server
-      - "/cephfs/redis_data/config/redis.conf"
+      - "/redis-master/redis.conf"
     env:
     - name: MASTER
       value: "true"
@@ -19,9 +19,9 @@ spec:
       limits:
         cpu: "0.1"
     volumeMounts:
-    - mountPath: /cephfs/redis_data/data
+    - mountPath: /redis-master-data
       name: data
-    - mountPath: /cephfs/redis_data/config
+    - mountPath: /redis-master
       name: config
   volumes:
     - name: data

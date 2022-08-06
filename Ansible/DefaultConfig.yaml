@@ -22,6 +22,19 @@
    - name: Set timezone to Asia/Dubai
      timezone:
        name: Asia/Dubai
+#   - name: Install Load Balancer
+#     yum:
+#       name: ipvsadm
+#       state: installed
+#   - name: Enable IP forwarding
+#     sysctl:
+#       name: net.ipv4.ip_forward
+#       value: "1"
+#       state: present
+#   - name: Start the ipvsadm service
+#     systemd:
+#       state: started
+#       name: ipvsadm
 - name: Preinstalled software on all APT hosts
   hosts: Ubuntu
   become: yes
@@ -78,8 +91,6 @@
      apt_repository:
        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
        state: present
-#   - name: Disable swap
-#     command: "/usr/sbin/swapoff –a"
    - name: Install kubeadm
      apt:
        name: kubeadm
@@ -92,3 +103,7 @@
      apt:
        name: kubectl
        state: present
+   - name: Copy system hosts file
+     copy:
+       src: '/home/max/github.com/ghym/Ansible/hosts'
+       dest: '/etc/hosts'

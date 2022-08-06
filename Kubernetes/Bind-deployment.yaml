@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bind
-  namespace: default
+  namespace: ghym
   labels:
     app: bind
 spec:
@@ -20,8 +20,15 @@ spec:
         image: cytopia/bind
         env:
         - name: DOCKER_LOGS
-          value: 1
+          value: "1"
         - name: ALLOW_QUERY
-          value: any
+          value: "any"
         ports:
         - containerPort: 53
+        volumeMounts:
+        - name: bind
+          mountPath: /etc/bind
+      volumes:
+      - name: bind
+        persistentVolumeClaim:
+          claimName: bind

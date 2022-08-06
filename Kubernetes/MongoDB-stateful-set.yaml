@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb
-  namespace: default
+  namespace: ghym
 spec:
   selector:
     matchLabels:
@@ -23,17 +23,13 @@ spec:
           - "--replSet"
           - rs0
           - "--dbpath"
-          - "/cephfs/mongodb_data/"
+          - "/usr/local/mongodb"
         ports:
           - containerPort: 27017
         volumeMounts:
           - name: mongodb
-            mountPath: /cephfs/mongodb_data/
-#      - name: mongo-sidecar
-#        image: cvallance/mongo-k8s-sidecar
-#        env:
-#          - name: MONGO_SIDECAR_POD_LABELS
-#            value: "role=mongodb"
+#            mountPath: /data/db
+            mountPath: /usr/local/mongodb
       volumes:
       - name: mongodb
         persistentVolumeClaim:

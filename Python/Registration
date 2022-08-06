@@ -1,0 +1,33 @@
+@Control Plane:
+1 openssl genrsa -out ghym.key 2048
+2 openssl req -new -key ghym.key -out ghym.csr -subj "/CN=ghym"
+3 openssl x509 -req -in ghym.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ghym.crt -days 365
+4 kubectl config set-credentials ghym --client-certificate=/cephfs/cert/ghym.crt --client-key=/cephfs/cert/ghym.key
+5 kubectl config set-context ghym --cluster=kubernetes --user=ghym
+6 generate file "config":
+
+apiVersion: v1
+clusters:
+- cluster:
+   certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1EY3lOekUxTURJMU5sb1hEVE15TURjeU5ERTFNREkxTmxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTHZLCm9PTkNpTXR0bUJVdlBJbjlSRVlvcDAvUlVpM2wzbFJnVU82L2I5S1hwSFQxb244ZjM4RlhmRlUwblpHSFpRUU4KV2xyaUJ1UFhYV3FWQXZLVEtEa3hXSjZma2drcWpKK2Q1UEhmd0FyTXVQak9ldlFtS3p4bnB5ZnNpWFFtcGdYaApodDVocTJpSDlneWRZTmhXWHpJYzFKSHdDVWJVbXI4cWRSWHY4NGVRU0poUmdRTkpQLzltbXFRU2pNVlNKaWMrCmNZZlFESGhEMjQ4djZoSXhwQ0hqYnFtU010amkxRktJN3llN3VuT1ZMMHYzWitlWUxMaExScFJBQ0lxLzdPN3MKWEtqRXFBTi9KaXhBOXpxeFo4NlF3WXFzMzBWNEJMd0J6aENjS1JJOTRYS1IwbFQ1bE9UYktEamxaZ0I0THlJVwplVmxLS0Z2Uk5iK3VEQ1JMaE1FQ0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZQRFpEb3RWM1NWYmJOYU85a2xHYUxCSkVPUFdNQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBTHRJMHI3aG11Rm5wd3lXcWE2dQpmZGJuNmJzWnpDdEZJUmFZNDJBUERQZ2tPS0VmSzFoQ1RZOVlmU2xJeExhSHVDYW1RQm9jMGk3M0p5MFdybjNUCjd0REhNbm5YRG1idVpWK0EyTnVCdGgvOUhUaTlvN21WYTFMOW0vNGhxQ0EveCtZR0xTTEc2dG5oODQxWURMSloKdExkZkV0YXZaLzJ4NFBEVnc5M2FBc0x5SXJYK3FXZW95cUp1SGtpRVpsRHZLc3lJL2hpL3R0WEVrQmtEUi82NQpFQXI0NDNrVEVLS0lPMHo0K3RtT1VKZEt2d2xvZ2NkaGlPa2lTVHZqWm5JUGpXRWgzTFo1eWFFdEtZTW9waXVUClBPTWhHR3kwekR1bFFaZHh3azVNNDMrTDc4azNOSis3eDRQbG9FSWxyUXNITmxxTGwySVQ4NDVUelpjaDZIengKQ3AwPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+   server: https://ghym.ae:6443
+  name: kubernetes
+contexts:
+- context:
+   cluster: kubernetes
+   namespace: ghym
+   user: ghym
+  name: ghym
+current-context: ghym
+kind: Config
+preferences: {}
+users:
+- name: ghym
+  user:
+   client-certificate: ghym.crt
+   client-key: ghym.key
+
+7 send to email 3 files:
+ - ghym.crt
+ - ghym.key
+ - config

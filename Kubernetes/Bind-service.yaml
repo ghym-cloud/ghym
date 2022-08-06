@@ -2,12 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: bind
+  namespace: ghym
 spec:
-  type: NodePort
   selector:
     app: bind
   ports:
-    - port: 53
-      targetPort: 53
-      nodePort: 30053
-      protocol: UDP
+  - port: 53
+    targetPort: 53
+    protocol: UDP
+  externalIPs:
+  - 172.16.0.8

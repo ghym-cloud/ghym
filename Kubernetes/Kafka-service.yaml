@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kafka-svc
-  namespace: default
+  namespace: ghym
   labels:
     name: kafka
 spec:
@@ -13,4 +13,5 @@ spec:
   selector:
     app: kafka
     id: "0"
-  type: LoadBalancer
+  externalIPs:
+  - 172.16.0.7
