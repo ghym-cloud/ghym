@@ -1,5 +1,5 @@
 vm=1
-k8s=0
+k8s=1
 apache=1
 nginx=1
 mysql=0
