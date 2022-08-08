@@ -1,4 +1,4 @@
-vm=0
+vm=1
 k8s=0
 apache=1
 nginx=1
