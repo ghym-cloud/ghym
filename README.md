@@ -62,8 +62,8 @@ If you find any issue, have general feedback or question drom an email to bug@gh
 
 ## Contributions
 
-Contributions are welcome. Find out how to contribute.
+Contributions are welcome. Find out how to contribute
 
 ## License
 
-Copyright (c) [2022] ghym.ae, see license file
+Copyright (c) 2022 ghym.ae, see license file
