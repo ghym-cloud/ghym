@@ -1,10 +1,1 @@
-pipeline {
-  agent any
-  stages {
-    stage('Test') {
-      steps {
-        echo 'Github + Jenkins works'
-      }
-    }
-  }
-}
+echo $GIT_URL
