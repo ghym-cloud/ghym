@@ -1,1 +1,10 @@
-echo "git log -1 --name-only --oneline"
+pipeline {
+  agent any
+  stages {
+    stage('Hello') {
+      steps {
+        echo 'Hello World'
+      }
+    }
+  }
+}
