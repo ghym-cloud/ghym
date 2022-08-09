@@ -1,1 +1,2 @@
-cd /var/jenkins_home/workspace/Service && git diff --name-only HEAD HEAD~1
+'cd /var/jenkins_home/workspace/Service'
+'git diff --name-only HEAD HEAD~1'
