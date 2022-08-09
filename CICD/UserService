@@ -1,1 +1,1 @@
-echo "Test"
+git diff --name-only HEAD HEAD~1
