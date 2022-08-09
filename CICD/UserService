@@ -1,10 +1,1 @@
-pipeline {
-  agent any
-  stages {
-    stage('Hello') {
-      steps {
-        echo 'Hello World'
-      }
-    }
-  }
-}
+cd ~/workspace/Service && git diff --name-only HEAD HEAD~1
