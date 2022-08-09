@@ -1,1 +1,1 @@
-pwd
+git diff --name-only HEAD HEAD~1
