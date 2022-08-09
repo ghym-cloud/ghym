@@ -1,1 +1,1 @@
-git log -1 --name-only --oneline
+echo "git log -1 --name-only --oneline"
