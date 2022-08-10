@@ -22,8 +22,29 @@ spec:
         volumeMounts:
         - name: jenkins
           mountPath: /var/jenkins_home
+        - name: nginx
+          mountPath: /var/jenkins_home/nginx
+        - name: apache
+          mountPath: /var/jenkins_home/apache
+#        - name: cephfs
+#          mountPath: /cephfs
       volumes:
       - name: jenkins
         persistentVolumeClaim:
           claimName: jenkins
+      - name: nginx
+        persistentVolumeClaim:
+          claimName: nginx
+      - name: apache
+        persistentVolumeClaim:
+          claimName: apache
+#      - name: cephfs
+#        cephfs:
+#          monitors:
+#          - 172.16.0.6:6789
+#          path: /
+#          user: admin
+#          secretRef:
+#            name: cephfs
+#          readOnly: true
 # password: j3nK1n$@dm1n
