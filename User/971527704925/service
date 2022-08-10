@@ -1,7 +1,7 @@
 vm=0
 k8s=0
 apache=0
-nginx=0
+nginx=1
 mysql=0
 postgresql=0
 mongodb=0
