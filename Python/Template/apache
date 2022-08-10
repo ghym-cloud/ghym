@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+    ServerAdmin maxkadyshev@gmail.com
+    DocumentRoot "/usr/local/apache2/conf/www/USER"
+    ServerName USER.ghym.ae
+    ErrorLog "logs/USER-error_log"
+    CustomLog "logs/USER-access_log" common
+</VirtualHost>
