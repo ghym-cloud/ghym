@@ -33,3 +33,4 @@ spec:
       - name: mongodb
         persistentVolumeClaim:
           claimName: mongodb
+# password: m0n90db
