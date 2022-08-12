@@ -21,6 +21,7 @@ spec:
         command:
           - mongod
           - "--auth"
+          - "--bind_ip_all"
           - "--dbpath"
           - "/usr/local/mongodb"
         ports:
