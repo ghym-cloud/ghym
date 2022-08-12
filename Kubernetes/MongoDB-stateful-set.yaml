@@ -21,8 +21,6 @@ spec:
         command:
           - mongod
           - "--auth"
-#          - "--replSet"
-#          - rs0
           - "--dbpath"
           - "/usr/local/mongodb"
         ports:
