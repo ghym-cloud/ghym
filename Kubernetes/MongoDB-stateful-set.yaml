@@ -20,8 +20,9 @@ spec:
         image: mongo
         command:
           - mongod
-          - "--replSet"
-          - rs0
+          - "--auth"
+#          - "--replSet"
+#          - rs0
           - "--dbpath"
           - "/usr/local/mongodb"
         ports:
