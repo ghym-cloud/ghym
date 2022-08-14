@@ -7,3 +7,4 @@ data:
   redis-config: |
     maxmemory 2mb
     maxmemory-policy allkeys-lru
+    requirepass red1$
