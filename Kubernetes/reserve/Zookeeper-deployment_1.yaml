@@ -19,17 +19,17 @@ spec:
         ports:
         - containerPort: 2181
         env:
-#        - name: ALLOW_ANONYMOUS_LOGIN
-#          value: "yes"
-        - name: ZOO_ENABLE_AUTH
+        - name: ALLOW_ANONYMOUS_LOGIN
           value: "yes"
-        - name: ZOO_SERVER_USERS
-          value: "user"
-        - name: ZOO_SERVER_PASSWORDS
-          value: "bitnami"
+#        - name: ZOO_ENABLE_AUTH
+#          value: "yes"
+#        - name: ZOO_SERVER_USERS
+#          value: "user"
+#        - name: ZOO_SERVER_PASSWORDS
+#          value: "bitnami"
         volumeMounts:
           - name: zookeeper
-            mountPath: /bitnami/zookeeper
+            mountPath: /bitnami
       volumes:
       - name: zookeeper
         persistentVolumeClaim:

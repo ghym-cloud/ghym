@@ -12,6 +12,5 @@ spec:
     protocol: TCP
   selector:
     app: kafka
-    id: "0"
   externalIPs:
-  - 172.16.0.7
+  - 172.16.0.8
