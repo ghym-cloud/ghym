@@ -7,14 +7,8 @@ metadata:
     app: zookeeper
 spec:
   ports:
-  - name: client
+  - name: zookeeper
     port: 2181
-    protocol: TCP
-  - name: follower
-    port: 2888
-    protocol: TCP
-  - name: leader
-    port: 3888
     protocol: TCP
   selector:
     app: zookeeper
