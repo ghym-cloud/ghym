@@ -4,7 +4,7 @@ pipeline {
     stage('LoadBalancer') {
       steps {
         echo '* Building started *'
-        uname -a
+        sh 'uname -a'
         echo '* Building finished *'
       }
     }
