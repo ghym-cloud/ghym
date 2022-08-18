@@ -1,0 +1,9 @@
+# USER NAME IP PORT
+frontend NAME
+    bind 172.16.0.1:PORT
+    mode tcp
+    default_backend NAME
+backend NAME
+    mode tcp
+    balance roundrobin
+    server IP:PORT

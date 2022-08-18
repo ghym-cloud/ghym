@@ -1,0 +1,14 @@
+# List of ports are taken and can not be use with ghym anymore:
+# LB - Load Balancer
+22
+80:LB
+443:LB
+3306
+5432
+6379
+6443:LB
+8008:LB
+8080:LB
+8443:LB
+9042
+27017
