@@ -3,9 +3,14 @@ pipeline {
   stages {
     stage('LoadBalancer') {
       steps {
-        echo '* Building started *'
-        sh 'uname -a'
-        echo '* Building finished *'
+        sh '''
+         for ports in $(sed -En "s/([0-9]{,5}):LB/\\1/p" PORT)
+         do
+          port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
+          name=$(sed -En "s/[0-9]{,5}:LB:(.*)/\\1/p" PORT)
+          echo $name
+         done
+        '''
       }
     }
   }
