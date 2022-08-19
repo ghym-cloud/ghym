@@ -1,14 +1,14 @@
 # List of ports are taken and can not be use with ghym anymore:
 # LB - Load Balancer
 22
-80:LB
-443:LB
+80:LB:[ae-dc1-cp1 ae-dc1-cp2]:[172.16.0.8 172.16.0.11]
+443:LB:[ae-dc1-cp1]:[172.16.0.8]
 3306
 5432
 6379
-6443:LB
-8008:LB
-8080:LB
-8443:LB
+6443:LB:[ae-dc1-cp1]:[172.16.0.8]
+8008:LB:[ae-dc1-cp1]:[172.16.0.8]
+8080:LB:[ae-dc1-cp1]:[172.16.0.8]
+8443:LB:[ae-dc1-cp1]:[172.16.0.8]
 9042
 27017

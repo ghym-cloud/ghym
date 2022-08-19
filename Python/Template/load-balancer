@@ -1,9 +1,8 @@
-# USER NAME IP PORT
-frontend NAME
+# NAME IP PORT
+frontend ghym_PORT
     bind 172.16.0.1:PORT
     mode tcp
-    default_backend NAME
-backend NAME
+    default_backend ghym_NAME_PORT
+backend ghym_NAME_PORT
     mode tcp
     balance roundrobin
-    server IP:PORT
