@@ -19,9 +19,8 @@ pipeline {
             echo "    "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
            done
            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
-           git add *
-           git commit -m "Jenkins:LoadBalance"
-           git push origin HEAD:main
+           git add LoadBalancer/haproxy.cfg
+           git commit -m "LoadBalance with port: "$ports
            git push
           fi
          done
