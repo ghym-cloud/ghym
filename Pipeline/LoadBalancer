@@ -16,7 +16,7 @@ pipeline {
            for server in $(sed -En "s/[0-9]{,5}:LB:\\[(.*)\\]/\\1/p" PORT)
            do
             ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
-            echo "    "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
+            echo "    server "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
            done
            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
            git add LoadBalancer/haproxy.cfg
