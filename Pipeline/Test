@@ -8,7 +8,7 @@ pipeline {
       steps {
         echo '* Building started *'
         sh '''
-         pwd
+         uname -a
         '''
         echo '* Building finished *'
       }
