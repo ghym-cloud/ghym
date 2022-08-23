@@ -27,6 +27,11 @@ spec:
         volumeMounts:
         - name: mysql
           mountPath: /var/lib/mysql
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: mysql
         persistentVolumeClaim:

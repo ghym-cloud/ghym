@@ -67,6 +67,11 @@ spec:
         volumeMounts:
           - name: kafka
             mountPath: /bitnami/kafka
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: kafka
         persistentVolumeClaim:

@@ -30,6 +30,11 @@ spec:
         volumeMounts:
           - name: zookeeper
             mountPath: /bitnami/zookeeper
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: zookeeper
         persistentVolumeClaim:

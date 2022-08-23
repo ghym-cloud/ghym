@@ -35,10 +35,16 @@ spec:
                 apt-get update -y
                 apt-get upgrade -y
                 apt-get install php7.4-fpm -y
-                apt-get install php7.4-curl
-                apt-get install php7.4-mysql
+                apt-get install php7.4-curl -y
+                apt-get install php7.4-mysql -y
+                apt-get install dnsutils -y
                 service php7.4-fpm start
                 chown -R nginx:nginx /run/php/
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: nginx
         persistentVolumeClaim:

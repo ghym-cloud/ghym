@@ -14,6 +14,11 @@ spec:
     volumeMounts:
     - name: prometheus
       mountPath: /etc/prometheus
+  dnsConfig:
+    nameservers:
+    - 172.16.0.8
+    searches:
+    - ghym.local
   volumes:
   - name: prometheus
     persistentVolumeClaim:

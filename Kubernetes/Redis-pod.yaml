@@ -25,6 +25,11 @@ spec:
       name: data
     - mountPath: /redis-master
       name: config
+  dnsConfig:
+    nameservers:
+    - 172.16.0.8
+    searches:
+    - ghym.local
   volumes:
     - name: data
       emptyDir: {}
