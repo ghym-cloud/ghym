@@ -19,6 +19,7 @@ pipeline {
             echo "    server "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
            done
            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
+           curl http://10.96.142.58/mysql/insert_port.php?port=$ports
            git add LoadBalancer/haproxy.cfg
            git commit -m "LoadBalance with port: "$ports
            eval "$(ssh-agent -s)"
