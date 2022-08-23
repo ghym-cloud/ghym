@@ -1,0 +1,14 @@
+pipeline {
+  agent any
+  stages {
+    stage('LoadBalancer') {
+      steps {
+        echo '* Building started *'
+        sh '''
+         pwd
+        '''
+        echo '* Building finished *'
+      }
+    }
+  }
+}
