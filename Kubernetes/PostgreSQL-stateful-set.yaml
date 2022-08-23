@@ -28,6 +28,11 @@ spec:
             value: p05t9rE59I6hYm
           - name: PGDATA
             value: /data/pgdata
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: postgresql
         persistentVolumeClaim:

@@ -28,6 +28,11 @@ spec:
           mountPath: /var/jenkins_home/apache
 #        - name: cephfs
 #          mountPath: /cephfs
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: jenkins
         persistentVolumeClaim:

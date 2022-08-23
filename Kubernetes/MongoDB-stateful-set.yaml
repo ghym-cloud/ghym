@@ -28,8 +28,13 @@ spec:
           - containerPort: 27017
         volumeMounts:
           - name: mongodb
-#            mountPath: /data/db
-            mountPath: /usr/local/mongodb
+            mountPath: /data/db
+#            mountPath: /usr/local/mongodb
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: mongodb
         persistentVolumeClaim:

@@ -54,6 +54,11 @@ spec:
           mountPath: /opt/cassandra/conf
         - name: cassandra-data
           mountPath: /var/lib/cassandra
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
       volumes:
       - name: cassandra-conf
         persistentVolumeClaim:
