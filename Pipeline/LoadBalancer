@@ -18,6 +18,7 @@ pipeline {
            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
            git add *
            git commit -m "Jenkins:LoadBalance"
+           git push origin HEAD:main
            git push
           fi
          done
