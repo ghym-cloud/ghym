@@ -1,6 +1,6 @@
 vm=0
 k8s=0
-apache=0
+apache=1
 nginx=0
 mysql=0
 postgresql=0
