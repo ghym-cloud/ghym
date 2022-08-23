@@ -21,7 +21,7 @@ pipeline {
            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
            git add LoadBalancer/haproxy.cfg
            git commit -m "LoadBalance with port: "$ports
-           git push
+           git push origin HEAD:main
           fi
          done
         '''
