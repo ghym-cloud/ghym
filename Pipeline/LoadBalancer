@@ -21,6 +21,8 @@ pipeline {
            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
            git add LoadBalancer/haproxy.cfg
            git commit -m "LoadBalance with port: "$ports
+           eval "$(ssh-agent -s)"
+           ssh-add /var/jenkins_home/.ssh/jenkins-github-2
            git push origin HEAD:main
           fi
          done
