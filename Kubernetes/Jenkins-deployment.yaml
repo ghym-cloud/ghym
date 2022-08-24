@@ -52,4 +52,5 @@ spec:
 #          secretRef:
 #            name: cephfs
 #          readOnly: true
+
 # password: j3nK1n$@dm1n
