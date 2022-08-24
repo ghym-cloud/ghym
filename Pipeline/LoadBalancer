@@ -7,25 +7,28 @@ pipeline {
     stage('LoadBalancer') {
       steps {
         sh '''
-         for ports in $(sed -En "s/([0-9]{,5}):LB:.*/\\1/p" PORT)
+         for f in $(git diff --name-only HEAD HEAD~1 | grep LoadBalancer)
          do
-          port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
-          if [ $port -eq 0 ]
-          then
-           cat Python/Template/load-balancer >> LoadBalancer/haproxy.cfg
-           for server in $(sed -En "s/[0-9]{,5}:LB:\\[(.*)\\]/\\1/p" PORT)
-           do
-            ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
-            echo "    server "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
-           done
-           sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
-           curl http://10.96.142.58/mysql/insert_port.php?port=$ports
-           git add LoadBalancer/haproxy.cfg
-           git commit -m "LoadBalance with port: "$ports
-           eval "$(ssh-agent -s)"
-           ssh-add /var/jenkins_home/.ssh/jenkins-github-2
-           git push origin HEAD:main
-          fi
+          for ports in $(sed -En "s/([0-9]{,5}):LB:.*/\\1/p" PORT)
+          do
+           port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
+           if [ $port -eq 0 ]
+           then
+            cat Python/Template/load-balancer >> LoadBalancer/haproxy.cfg
+            for server in $(sed -En "s/[0-9]{,5}:LB:\\[(.*)\\]/\\1/p" PORT)
+            do
+             ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
+             echo "    server "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
+            done
+            sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
+            curl http://10.96.142.58/mysql/insert_port.php?port=$ports
+            git add LoadBalancer/haproxy.cfg
+            git commit -m "LoadBalance with port: "$ports
+            eval "$(ssh-agent -s)"
+            ssh-add /var/jenkins_home/.ssh/jenkins-github-2
+            git push origin HEAD:main
+           fi
+          done
          done
         '''
       }
