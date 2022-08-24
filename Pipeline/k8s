@@ -1,0 +1,21 @@
+pipeline {
+  agent any;
+  triggers {
+    githubPush()
+  }
+  stages {
+    stage('DNS') {
+      steps {
+        sh '''
+         for f in $(git diff --name-only HEAD HEAD~1 | grep Kubernetes)
+         do
+          if [ $f -eq '' ]
+          then
+           /var/jenkins_home/.local/bin/kubectl apply -f $f
+          fi
+         done
+        '''
+      }
+    }
+  }
+}
