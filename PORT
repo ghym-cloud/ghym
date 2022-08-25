@@ -1,14 +1,22 @@
-# List of ports are taken and can not be use with ghym anymore:
+# List of ports are taken and can not be use with ghym anymore
+#
+# Type:
 # LB - Load Balancer
+# FW - Fire Wall
+#
+# Format:
+# PORT:TYPE:HOSTNAME
+#
 22
-80
-443
-3306
-5432
-6379
+80:FW:ae-dc1-cp1
+443:FW:ae-dc1-cp1
+3306:FW:ae-dc1-cp1
+5000:FW:ae-dc1-3
+5432:FW:ae-dc1-cp1
+6379:FW:ae-dc1-cp1
 6443:LB:[ae-dc1-cp1 ae-dc1-cp2]
-8008
-8080
-8443
-9042
-27017
+8008:FW:ae-dc1-cp1
+8080:FW:ae-dc1-cp1
+8443:FW:ae-dc1-cp1
+9042:FW:ae-dc1-cp1
+27017:FW:ae-dc1-cp1

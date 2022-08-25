@@ -7,7 +7,7 @@ pipeline {
     stage('LoadBalancer') {
       steps {
         sh '''
-         for f in $(git diff --name-only HEAD HEAD~1 | grep LoadBalancer)
+         for f in $(git diff --name-only HEAD HEAD~1 | grep PORT)
          do
           for ports in $(sed -En "s/([0-9]{,5}):LB:.*/\\1/p" PORT)
           do
@@ -26,6 +26,8 @@ pipeline {
             git commit -m "LoadBalance with port: "$ports
             eval "$(ssh-agent -s)"
             ssh-add /var/jenkins_home/.ssh/jenkins-github-2
+            scp LoadBalancer/haproxy.cfg max@172.16.0.1:/etc/haproxy/haproxy.cfg
+            ssh max@172.16.0.1 'echo "123456" | sudo -S systemctl restart haproxy.service'
             git push origin HEAD:main
            fi
           done
