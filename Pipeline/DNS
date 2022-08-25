@@ -1,11 +1,11 @@
 pipeline {
   agent any
-  trigers {
+  triggers {
     githubPush()
   }
   stages {
     stage('DNS') {
-      step {
+      steps {
         sh '''
          a='          value: "'
          while read -r line
