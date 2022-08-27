@@ -28,7 +28,8 @@ pipeline {
             ssh-add /var/jenkins_home/.ssh/jenkins-github-2
             scp LoadBalancer/haproxy.cfg max@172.16.0.1:/etc/haproxy/haproxy.cfg
             ssh max@172.16.0.1 'echo "123456" | sudo -S systemctl restart haproxy.service'
-            git push origin HEAD:main
+            #git push origin HEAD:main
+            git push ghym HEAD:main
            fi
           done
          done
