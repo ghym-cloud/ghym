@@ -18,6 +18,12 @@ pipeline {
          ptr="${ptr}\\""
          sed -i "s/value: \\"ae-dc1-.*/$a/" Kubernetes/Bind-deployment.yaml
          sed -i "s/value: \\"172\\.16.*/$ptr/" Kubernetes/Bind-deployment.yaml
+         git add Kubernetes/Bind-deployment.yaml
+         git commit -m "DNS updates"
+         eval "$(ssh-agent -s)"
+         ssh-add /var/jenkins_home/.ssh/jenkins-github-2
+         git push origin HEAD:main
+         /var/jenkins_home/.local/bin/kubectl apply -f Kubernetes/Bind-deployment.yaml
         '''
       }
     }
