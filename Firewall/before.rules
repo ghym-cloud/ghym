@@ -33,7 +33,6 @@
 # Allow TCP to k8s - mongodb [27017]
 -A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 27017 -j DNAT --to-destination 172.16.0.8:27017
 # Pipeline generated
--A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 80 -j DNAT --to-destination  172.16.0.8:80
 #ghym
 #
 -A POSTROUTING -s 172.16.0.0/24 ! -d 172.16.0.0/24 -j MASQUERADE
