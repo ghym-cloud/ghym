@@ -7,19 +7,19 @@ pipeline {
     stage('Firewall') {
       steps {
        sh '''
-        for f in $(git diff --name-only HEAD HEAD~1 | grep PORT)
+#        for f in $(git diff --name-only HEAD HEAD~1 | grep PORT)
+#        do
+        for ports in $(sed -En "s/([0-9]{,5}):FW:.*/\\1/p" PORT)
         do
-         for ports in $(sed -En "s/([0-9]{,5}):FW:.*/\\1/p" PORT)
-         do
-          port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
-          if [ $port -eq 0 ]
-          then
-           server=$(sed -En "s/[0-9]{,5}:FW:\\[(.*)\\]/\\1/p" PORT)
-           ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
-           sed -i "s/\\#ghym/-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport $ports -j DNAT --to-destination $ip:$ports\\n\\#ghym/" Firewall/before.rules
-          fi
-         done
+         port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
+         if [ $port -eq 0 ]
+         then
+          server=$(sed -En "s/[0-9]{,5}:FW:\\[(.*)\\]/\\1/p" PORT)
+          ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
+          sed -i "s/\\#ghym/-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport $ports -j DNAT --to-destination $ip:$ports\\n\\#ghym/" Firewall/before.rules
+         fi
         done
+#        done
        '''
       }
     }
