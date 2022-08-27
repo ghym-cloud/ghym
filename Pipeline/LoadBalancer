@@ -21,14 +21,13 @@ pipeline {
              echo "    server "$server$ip":"$ports >> LoadBalancer/haproxy.cfg
             done
             sed -i 's/PORT/'$ports'/' LoadBalancer/haproxy.cfg
-            curl http://10.96.142.58/mysql/insert_port.php?port=$ports
+            curl http://10.96.142.58/mysql/insert_port.php?port=$ports&type=LB
             git add LoadBalancer/haproxy.cfg
             git commit -m "LoadBalance with port: "$ports
             eval "$(ssh-agent -s)"
             ssh-add /var/jenkins_home/.ssh/jenkins-github-2
             scp LoadBalancer/haproxy.cfg max@172.16.0.1:/etc/haproxy/haproxy.cfg
             ssh max@172.16.0.1 'echo "123456" | sudo -S systemctl restart haproxy.service'
-            #git push origin HEAD:main
             git push ghym HEAD:main
            fi
           done

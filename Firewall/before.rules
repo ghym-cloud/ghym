@@ -10,12 +10,33 @@
 # NAT
 *nat
 :PREROUTING ACCEPT [0:0]
-# Allow HTTP to K8S [80]
+# Allow TCP to k8s - nginx [80]
 -A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 80 -j DNAT --to-destination 172.16.0.8:80
-# Allow HTTPS to K8S [443]
+# Allow TCP to k8s - nginx [443]
 -A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 443 -j DNAT --to-destination 172.16.0.8:443
+# Allow TCP to k8s - mysql [3306]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 3306 -j DNAT --to-destination 172.16.0.8:3306
+# Allow TCP to ae-dc1-3 - docker registry [5000]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 5000 -j DNAT --to-destination 172.16.0.6:5000
+# Allow TCP to k8s - postgresql [5432]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 5432 -j DNAT --to-destination 172.16.0.8:5432
+# Allow TCP to k8s - redis [6379]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 6379 -j DNAT --to-destination 172.16.0.8:6379
+# Allow TCP to k8s - jenkins [8008]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 8008 -j DNAT --to-destination 172.16.0.8:8008
+# Allow TCP to k8s - apache [8080]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 8080 -j DNAT --to-destination 172.16.0.8:8080
+# Allow TCP to k8s - apache [8443]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 8443 -j DNAT --to-destination 172.16.0.8:8443
+# Allow TCP to k8s - cassandra [9042]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 9042 -j DNAT --to-destination 172.16.0.8:9042
+# Allow TCP to k8s - mongodb [27017]
+-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport 27017 -j DNAT --to-destination 172.16.0.8:27017
+#ghym
+#
+-A POSTROUTING -s 172.16.0.0/24 ! -d 172.16.0.0/24 -j MASQUERADE
 COMMIT
-
+#
 # Don't delete these required lines, otherwise there will be errors
 *filter
 :ufw-before-input - [0:0]
@@ -26,6 +47,18 @@ COMMIT
 # allow all on loopback
 -A ufw-before-input -i lo -j ACCEPT
 -A ufw-before-output -o lo -j ACCEPT
+#
+# MANUAL START
+#
+# Allow SSH to GW [22]
+-A ufw-before-input -p tcp --dport 22 -j ACCEPT
+-A ufw-before-output -p tcp --dport 22 -j ACCEPT
+# Allow K8S to LB
+-A ufw-before-input -p tcp --dport 6443 -j ACCEPT
+-A ufw-before-output -p tcp --dport 6443 -j ACCEPT
+#
+# MANUAL END
+#
 # quickly process packets for which we already have a connection
 -A ufw-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A ufw-before-output -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
@@ -64,15 +97,6 @@ COMMIT
 # allow MULTICAST UPnP for service discovery (be sure the MULTICAST line above
 # is uncommented)
 -A ufw-before-input -p udp -d 239.255.255.250 --dport 1900 -j ACCEPT
-
-# MANUAL START
-
-# Allow SSH to GW [22]
--A ufw-before-input -p tcp --dport 22 -j ACCEPT
-# Allow SSH to GW [6443]
--A ufw-before-input -p tcp --dport 6443 -j ACCEPT
-
-# MANUAL END
-
+#
 # don't delete the 'COMMIT' line or these rules won't be processed
 COMMIT
