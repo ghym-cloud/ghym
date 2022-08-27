@@ -16,8 +16,8 @@ pipeline {
          done < DNS
          a="${a}\\""
          ptr="${ptr}\\""
-         sed -i "s/value: \\"ae-dc1-/$a/" Kubernetes/Bind-deployment.yaml
-         sed -i "s/value: \\"172.16./$ptr/" Kubernetes/Bind-deployment.yaml
+         sed -i "s/value: \\"ae-dc1-.*/$a/" Kubernetes/Bind-deployment.yaml
+         sed -i "s/value: \\"172\\.16.*/$ptr/" Kubernetes/Bind-deployment.yaml
         '''
       }
     }
