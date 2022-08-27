@@ -15,7 +15,7 @@ pipeline {
            if [ $port -eq 0 ]
            then
             cat Python/Template/load-balancer >> LoadBalancer/haproxy.cfg
-            for server in $(sed -En "s/[0-9]{,5}:LB:\\[(.*)\\]/\\1/p" PORT)
+            for server in $(cat PORT | grep ^$ports: | sed -e 's/[0-9]{,5}:LB:\\[(.*)\\]/\\1/')
             do
              ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
              echo "    server "$server$ip":"$ports >> LoadBalancer/haproxy.cfg

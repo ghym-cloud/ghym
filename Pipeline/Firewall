@@ -17,6 +17,15 @@ pipeline {
           server=$(cat PORT | grep ^$ports: | sed -e 's/[0-9]\\{,5\\}:FW:\\(.*\\)/\\1/')
           ip=$(curl http://10.96.142.58/linux/nslookup.php?host=$server)
           sed -i "s/\\#ghym/-A PREROUTING -i enp4s0 -d 192.168.172.2 -p tcp --dport $ports -j DNAT --to-destination $ip:$ports\\n\\#ghym/" Firewall/before.rules
+
+          curl http://10.96.142.58/mysql/insert_port.php?port=$ports&type=FW
+          git add Firewall/before.rules
+          git commit -m "Firewall with port: "$ports
+          eval "$(ssh-agent -s)"
+          ssh-add /var/jenkins_home/.ssh/jenkins-github-2
+          scp Firewall/before.rules max@172.16.0.1:/etc/ufw/before.rules
+          ssh max@172.16.0.1 'echo "123456" | sudo -S ufw reload'
+          git push ghym HEAD:main
          fi
         done
 #        done
