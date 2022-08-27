@@ -7,20 +7,17 @@ pipeline {
     stage('DNS') {
       steps {
         sh '''
-         a='          value: "'
-         ptr='          value: "'
+         a='value: "'
+         ptr='value: "'
          while read -r line
          do
           a="${a}$line,"
-          ptr="${ptr}$(echo $line | sed -e 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/\\2=\\1/')"
+          ptr="${ptr}$(echo $line | sed -e 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/\\2=\\1,/')"
          done < DNS
          a="${a}\\""
          ptr="${ptr}\\""
-         echo "----------"
-         echo $a
-         echo "++++++++++"
-         echo $ptr
-         echo "=========="
+         sed -i "s/value: \\"ae-dc1-/$a/" Kubernetes/Bind-deployment.yaml
+         sed -i "s/value: \\"172.16./$ptr/" Kubernetes/Bind-deployment.yaml
         '''
       }
     }
