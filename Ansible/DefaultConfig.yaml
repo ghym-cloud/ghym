@@ -103,7 +103,23 @@
      apt:
        name: kubectl
        state: present
-   - name: Copy system hosts file
-     copy:
-       src: '/home/max/github.com/ghym/Ansible/hosts'
-       dest: '/etc/hosts'
+#   - name: Copy system hosts file
+#     copy:
+#       src: '/home/max/github.com/ghym/Ansible/hosts'
+#       dest: '/etc/hosts'
+   - name: Instal python
+     apt:
+       name: python
+       state: present
+   - name: Install pip
+     apt:
+       name: pip
+       state: present
+   - name: Install PyYaml module
+     pip:
+       name: pyyaml
+       state: present
+   - name: Install k8s module
+     pip:
+       name: kubernetes
+       state: present

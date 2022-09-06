@@ -1,0 +1,10 @@
+---
+- name: Create Jenkins Pipeline
+  hosts: AeDc1Cp1
+  become: yes
+  pre_tasks:
+   - name: Create pipeline
+     kubernetes.core.k8s_exec:
+       namespace: ghym
+       pod: jenkins-7d9f576f7d-b6p2s
+       command: 
