@@ -1,0 +1,35 @@
+auth:
+  clientProtocol: sasl
+  sasl:
+    mechanisms: plain,scram-sha-512
+    jaas:
+      clientUsers:
+      - ghym
+      clientPasswords:
+      - k@fk@
+listeners:
+- CLIENT://:9092
+- INTERNAL://:9093
+advertisedListeners:
+- CLIENT://:9092
+- INTERNAL://:9093
+listenerSecurityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:PLAINTEXT"
+podSecurityContext:
+  enabled: false
+containerSecurityContext:
+  allowPrivilegeEscalation: true
+  runAsUser: 0
+  runAsNonRoot: false
+persistence:
+  storageClass: local-storage
+volumePermissions:
+  enabled: true
+zookeeper:
+  podSecurityContext:
+    enabled: false
+  containerSecurityContext:
+    runAsUser: 0
+    runAsNonRoot: false
+    allowPrivilegeEscalation: true
+  persistence:
+    storageClass: local-storage

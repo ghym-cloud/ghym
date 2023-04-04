@@ -1,0 +1,12 @@
+podSecurityContext:
+  enabled: false
+containerSecurityContext:
+  runAsUser: 0
+  runAsNonRoot: false
+master:
+  persistence:
+    storageClass: local-storage
+replica:
+  replicaCount: 1
+  persistence:
+    storageClass: local-storage

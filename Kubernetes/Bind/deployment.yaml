@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bind
+  namespace: ghym
+  labels:
+    app: bind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bind
+  template:
+    metadata:
+      labels:
+        app: bind
+    spec:
+      containers:
+      - name: bind
+        image: ubuntu/bind9
+        ports:
+        - containerPort: 53
+        volumeMounts:
+        - name: bind-conf-root
+          mountPath: /etc/bind
+          readOnly: true
+        - name: bind-conf-custom
+          mountPath: /etc/bind/custom/conf
+          readOnly: true
+        - name: bind-conf-zone
+          mountPath: /etc/bind/custom/zone
+          readOnly: true
+      dnsConfig:
+        nameservers:
+        - 94.200.200.200
+        - 91.74.74.74
+      volumes:
+      - name: bind-conf-root
+        configMap:
+          name: bind-conf-root
+      - name: bind-conf-custom
+        configMap:
+          name: bind-conf-custom
+      - name: bind-conf-zone
+        configMap:
+          name: bind-conf-zone

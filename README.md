@@ -30,6 +30,10 @@ ghym - is a private cloud for myself DevOps education that I plan to convert to 
  - CPU: 2 Cores
  - RAM: 8Gb
  - RAID 1: 512 GiB
+8. HP Pro Liant DL 360e G8
+ - CPU: 6 Cores
+ - RAM: 32 Gb
+ - RAID 10: 3725 Gb
 
 ## Computers
 ####	Name		Type		OS
@@ -50,7 +54,9 @@ ghym - is a private cloud for myself DevOps education that I plan to convert to 
 6.	AE-DC1-6	(Hypervisor)	MS Server 2019 Core
  1.	AE-DC1-WN7	(Virtual)	Ubuntu 20.04
  2.	AE-DC1-WN8	(Virtual)	Ubuntu 20.04
-7.	AE-DC!-GW	(Hardware)	Ubuntu 20.04
+7.	AE-DC1-GW	(Hardware)	Ubuntu 20.04
+8.	AE-DC1-7	(Hypervisor)	MS Windows Server 2012
+ 1.	AE-DC1-WN9	(Virtual)	Ubuntu 20.04
 
 ## Get started
 

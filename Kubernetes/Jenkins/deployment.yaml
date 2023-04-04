@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: ghym
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts-jdk11
+        ports:
+        - containerPort: 8080
+          name: jenkins
+        volumeMounts:
+        - name: jenkins
+          mountPath: /var/jenkins_home
+        - name: nginx
+          mountPath: /var/jenkins_home/nginx
+        - name: apache
+          mountPath: /var/jenkins_home/apache
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: jenkins
+        persistentVolumeClaim:
+          claimName: jenkins
+      - name: nginx
+        persistentVolumeClaim:
+          claimName: nginx
+      - name: apache
+        persistentVolumeClaim:
+          claimName: apache
+# password: j3nK1n$@dm1n

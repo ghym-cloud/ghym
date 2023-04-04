@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: ghym
+  labels:
+    app: nginx
+    type: front-end
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      type: front-end
+  template:
+    metadata:
+      labels:
+        app: nginx
+        type: front-end
+    spec:
+      containers:
+      - name: nginx
+        image: maxkadyshev/nginx:1.22.0
+        volumeMounts:
+        - name: nginx-conf-root
+          mountPath: /etc/nginx
+          readOnly: true
+        - name: nginx-conf-d
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+        - name: nginx-cert
+          mountPath: /etc/nginx/cert
+          readOnly: true
+        - name: nginx
+          mountPath: /etc/nginx/www
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  service php7.4-fpm start
+                  chown -R nginx:nginx /run/php/
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: nginx
+        persistentVolumeClaim:
+          claimName: nginx
+      - name: nginx-conf-root
+        configMap:
+          name: nginx-conf-root
+      - name: nginx-conf-d
+        configMap:
+          name: nginx-conf-d
+      - name: nginx-cert
+        configMap:
+          name: nginx-cert

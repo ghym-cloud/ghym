@@ -7,16 +7,66 @@
 # Format:
 # PORT:TYPE:HOSTNAME
 #
-22
-80:FW:ae-dc1-cp1
-443:FW:ae-dc1-cp1
-3306:FW:ae-dc1-cp1
-5000:FW:ae-dc1-3
-5432:FW:ae-dc1-cp1
-6379:FW:ae-dc1-cp1
-6443:LB:[ae-dc1-cp1 ae-dc1-cp2]
-8008:FW:ae-dc1-cp1
-8080:FW:ae-dc1-cp1
-8443:FW:ae-dc1-cp1
-9042:FW:ae-dc1-cp1
-27017:FW:ae-dc1-cp1
+ports:
+- name: ssh
+  protocol: tcp
+  port: 22
+- name: http
+  protocol: tcp
+  port: 80
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+- name: https
+  protocol: tcp
+  port: 443
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+- name: mysql
+  protocol: tcp
+  port: 3306
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+- name: registry
+  protocol: tcp
+  port: 5000
+  type: firewall
+  hosts:
+  - name: ae-dc1-3
+- name: postgresql
+  protocol: tcp
+  port: 5432
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+- name: redis
+  protocol: tcp
+  port: 6379
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+- name: cassandra
+  protocol: tcp
+  port: 9042
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+- name: mongodb
+  protocol: tcp
+  port: 27017
+  type: firewall
+  hosts:
+  - name: ae-dc1-cp1
+# ---
+#22
+#80:FW:ae-dc1-cp1
+#443:FW:ae-dc1-cp1
+#3306:FW:ae-dc1-cp1
+#5000:FW:ae-dc1-3
+#5432:FW:ae-dc1-cp1
+#6379:FW:ae-dc1-cp1
+#6443:LB:[ae-dc1-cp1 ae-dc1-cp2]
+#9042:FW:ae-dc1-cp1
+#27017:FW:ae-dc1-cp1

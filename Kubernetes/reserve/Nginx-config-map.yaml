@@ -1,0 +1,471 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf-root
+  namespace: ghym
+data:
+  fastcgi_params: |
+    fastcgi_param  QUERY_STRING       $query_string;
+    fastcgi_param  REQUEST_METHOD     $request_method;
+    fastcgi_param  CONTENT_TYPE       $content_type;
+    fastcgi_param  CONTENT_LENGTH     $content_length;
+    fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+    fastcgi_param  REQUEST_URI        $request_uri;
+    fastcgi_param  DOCUMENT_URI       $document_uri;
+    fastcgi_param  DOCUMENT_ROOT      $document_root;
+    fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+    fastcgi_param  REQUEST_SCHEME     $scheme;
+    fastcgi_param  HTTPS              $https if_not_empty;
+    fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+    fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;
+    fastcgi_param  REMOTE_ADDR        $remote_addr;
+    fastcgi_param  REMOTE_PORT        $remote_port;
+    fastcgi_param  SERVER_ADDR        $server_addr;
+    fastcgi_param  SERVER_PORT        $server_port;
+    fastcgi_param  SERVER_NAME        $server_name;
+    fastcgi_param  REDIRECT_STATUS    200;
+  mime.types: |
+    types {
+        text/html                                                                 html htm shtml;
+        text/css                                                                  css;
+        text/xml                                                                  xml;
+        image/gif                                                                 gif;
+        image/jpeg                                                                jpeg jpg;
+        application/javascript                                                    js;
+        application/atom+xml                                                      atom;
+        application/rss+xml                                                       rss;
+        text/mathml                                                               mml;
+        text/plain                                                                txt;
+        text/vnd.sun.j2me.app-descriptor                                          jad;
+        text/vnd.wap.wml                                                          wml;
+        text/x-component                                                          htc;
+        image/avif                                                                avif;
+        image/png                                                                 png;
+        image/svg+xml                                                             svg svgz;
+        image/tiff                                                                tif tiff;
+        image/vnd.wap.wbmp                                                        wbmp;
+        image/webp                                                                webp;
+        image/x-icon                                                              ico;
+        image/x-jng                                                               jng;
+        image/x-ms-bmp                                                            bmp;
+        font/woff                                                                 woff;
+        font/woff2                                                                woff2;
+        application/java-archive                                                  jar war ear;
+        application/json                                                          json;
+        application/mac-binhex40                                                  hqx;
+        application/msword                                                        doc;
+        application/pdf                                                           pdf;
+        application/postscript                                                    ps eps ai;
+        application/rtf                                                           rtf;
+        application/vnd.apple.mpegurl                                             m3u8;
+        application/vnd.google-earth.kml+xml                                      kml;
+        application/vnd.google-earth.kmz                                          kmz;
+        application/vnd.ms-excel                                                  xls;
+        application/vnd.ms-fontobject                                             eot;
+        application/vnd.ms-powerpoint                                             ppt;
+        application/vnd.oasis.opendocument.graphics                               odg;
+        application/vnd.oasis.opendocument.presentation                           odp;
+        application/vnd.oasis.opendocument.spreadsheet                            ods;
+        application/vnd.oasis.opendocument.text                                   odt;
+        application/vnd.openxmlformats-officedocument.presentationml.presentation pptx;
+        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet         xlsx;
+        application/vnd.openxmlformats-officedocument.wordprocessingml.document   docx;
+        application/vnd.wap.wmlc                                                  wmlc;
+        application/wasm                                                          wasm;
+        application/x-7z-compressed                                               7z;
+        application/x-cocoa                                                       cco;
+        application/x-java-archive-diff                                           jardiff;
+        application/x-java-jnlp-file                                              jnlp;
+        application/x-makeself                                                    run;
+        application/x-perl                                                        pl pm;
+        application/x-pilot                                                       prc pdb;
+        application/x-rar-compressed                                              rar;
+        application/x-redhat-package-manager                                      rpm;
+        application/x-sea                                                         sea;
+        application/x-shockwave-flash                                             swf;
+        application/x-stuffit                                                     sit;
+        application/x-tcl                                                         tcl tk;
+        application/x-x509-ca-cert                                                der pem crt;
+        application/x-xpinstall                                                   xpi;
+        application/xhtml+xml                                                     xhtml;
+        application/xspf+xml                                                      xspf;
+        application/zip                                                           zip;
+        application/octet-stream                                                  bin exe dll;
+        application/octet-stream                                                  deb;
+        application/octet-stream                                                  dmg;
+        application/octet-stream                                                  iso img;
+        application/octet-stream                                                  msi msp msm;
+        audio/midi                                                                mid midi kar;
+        audio/mpeg                                                                mp3;
+        audio/ogg                                                                 ogg;
+        audio/x-m4a                                                               m4a;
+        audio/x-realaudio                                                         ra;
+        video/3gpp                                                                3gpp 3gp;
+        video/mp2t                                                                ts;
+        video/mp4                                                                 mp4;
+        video/mpeg                                                                mpeg mpg;
+        video/quicktime                                                           mov;
+        video/webm                                                                webm;
+        video/x-flv                                                               flv;
+        video/x-m4v                                                               m4v;
+        video/x-mng                                                               mng;
+        video/x-ms-asf                                                            asx asf;
+        video/x-ms-wmv                                                            wmv;
+        video/x-msvideo                                                           avi;
+    }
+  nginx.conf: |
+    user             nginx;
+    worker_processes auto;
+    error_log        /var/log/nginx/error.log error;
+    pid              /var/run/nginx.pid;
+    events {
+        worker_connections  1024;
+    }
+    http {
+        include           /etc/nginx/mime.types;
+        default_type      application/octet-stream;
+        log_format        main '$remote_addr - $remote_user [$time_local] "$request" '
+                               '$status $body_bytes_sent "$http_referer" '
+                               '"$http_user_agent" "$http_x_forwarded_for"';
+        access_log        /var/log/nginx/access.log  main;
+        sendfile          on;
+        keepalive_timeout 65;
+        gzip              on;
+        include           /etc/nginx/conf.d/*.conf;
+    }
+  scgi_params: |
+    scgi_param  REQUEST_METHOD     $request_method;
+    scgi_param  REQUEST_URI        $request_uri;
+    scgi_param  QUERY_STRING       $query_string;
+    scgi_param  CONTENT_TYPE       $content_type;
+    scgi_param  DOCUMENT_URI       $document_uri;
+    scgi_param  DOCUMENT_ROOT      $document_root;
+    scgi_param  SCGI               1;
+    scgi_param  SERVER_PROTOCOL    $server_protocol;
+    scgi_param  REQUEST_SCHEME     $scheme;
+    scgi_param  HTTPS              $https if_not_empty;
+    scgi_param  REMOTE_ADDR        $remote_addr;
+    scgi_param  REMOTE_PORT        $remote_port;
+    scgi_param  SERVER_PORT        $server_port;
+    scgi_param  SERVER_NAME        $server_name;
+  uwsgi_params: |
+    uwsgi_param  QUERY_STRING       $query_string;
+    uwsgi_param  REQUEST_METHOD     $request_method;
+    uwsgi_param  CONTENT_TYPE       $content_type;
+    uwsgi_param  CONTENT_LENGTH     $content_length;
+    uwsgi_param  REQUEST_URI        $request_uri;
+    uwsgi_param  PATH_INFO          $document_uri;
+    uwsgi_param  DOCUMENT_ROOT      $document_root;
+    uwsgi_param  SERVER_PROTOCOL    $server_protocol;
+    uwsgi_param  REQUEST_SCHEME     $scheme;
+    uwsgi_param  HTTPS              $https if_not_empty;
+    uwsgi_param  REMOTE_ADDR        $remote_addr;
+    uwsgi_param  REMOTE_PORT        $remote_port;
+    uwsgi_param  SERVER_PORT        $server_port;
+    uwsgi_param  SERVER_NAME        $server_name;
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf-d
+  namespace: ghym
+data:
+  971508367195.conf: |
+    server {
+     listen       80;
+     server_name  971508367195.ghym.ae;
+     location / {
+      root   /etc/nginx/www/971508367195;
+      index  index.php, index.html;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www/971508367195;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
+  971527704925.conf: |
+    server {
+     listen       80;
+     server_name  971527704925.ghym.ae;
+     location / {
+      root   /etc/nginx/www/971527704925;
+      index  index.php, index.html;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www/971527704925;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
+  971551659890.conf: |
+    server {
+     listen       80;
+     server_name  971551659890.ghym.ae;
+     location / {
+      root   /etc/nginx/www/971551659890;
+      index  index.php, index.html;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www/971551659890;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
+  default.conf: |
+    server {
+     listen       80;
+     server_name  localhost;
+     access_log  /var/log/nginx/host.access.log  main;
+     location / {
+      root   /etc/nginx/www;
+      index  index.php index.html;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
+  ghym.ae.conf: |
+    server {
+     listen               80 default_server;
+     server_name          *.ghym.ae;
+     location / {
+      root   /etc/nginx/www/ghym.ae;
+      index  index.php;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www/ghym.ae;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
+  kadyshev.com.conf: |
+    server {
+     listen               80;
+     server_name          kadyshev.com;
+     location / {
+      root   /etc/nginx/www/kadyshev.com;
+      index  index.html;
+    }
+     error_page   500 502 503 504  /50x.html;
+     location = /50x.html {
+      root   /usr/share/nginx/html;
+     }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-cert
+  namespace: ghym
+data:
+  fullchain.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIIEVzCCAz+gAwIBAgISBGlyODB2kI/CH0/YWnxvrLoEMA0GCSqGSIb3DQEBCwUA
+    MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
+    EwJSMzAeFw0yMzAzMzEwNzI2MzZaFw0yMzA2MjkwNzI2MzVaMBIxEDAOBgNVBAMT
+    B2doeW0uYWUwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASgcDJAckJR6aehKiXl
+    Nm1sFBI/BAphyX7isF74Ftipj83IUPIyROrcqGmeAdrJ0vY3cjXxf46JzpcBc90M
+    LaNOo4ICUDCCAkwwDgYDVR0PAQH/BAQDAgeAMB0GA1UdJQQWMBQGCCsGAQUFBwMB
+    BggrBgEFBQcDAjAMBgNVHRMBAf8EAjAAMB0GA1UdDgQWBBT53K58XHVyjQFcnchy
+    XxoW/uM1PjAfBgNVHSMEGDAWgBQULrMXt1hWy65QCUDmH6+dixTCxjBVBggrBgEF
+    BQcBAQRJMEcwIQYIKwYBBQUHMAGGFWh0dHA6Ly9yMy5vLmxlbmNyLm9yZzAiBggr
+    BgEFBQcwAoYWaHR0cDovL3IzLmkubGVuY3Iub3JnLzAgBgNVHREEGTAXggdnaHlt
+    LmFlggxrYWR5c2hldi5jb20wTAYDVR0gBEUwQzAIBgZngQwBAgEwNwYLKwYBBAGC
+    3xMBAQEwKDAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcw
+    ggEEBgorBgEEAdZ5AgQCBIH1BIHyAPAAdgB6MoxU2LcttiDqOOBSHumEFnAyE4VN
+    O9IrwTpXo1LrUgAAAYc2xpS9AAAEAwBHMEUCIH1MtPUK054ZhouedHk6ndCmwAZ7
+    cEfQ3S1ySjm5swU/AiEAs/iftlooDEm6ok7hBygbJKr7c2QgaR29uTVsqM+HDUcA
+    dgDoPtDaPvUGNTLnVyi8iWvJA9PL0RFr7Otp4Xd9bQa9bgAAAYc2xpS4AAAEAwBH
+    MEUCIFM1/LtUwDtmJt22ZbN2bMCdMBUZSTg5edVS1RA43ex9AiEAj+q3BDMSVk6g
+    wUPcvb9k/DHwLVdxOnwyzQ13rn4yzk4wDQYJKoZIhvcNAQELBQADggEBALCMr4vk
+    lsFl9h+rQy0C5mLEfDYWjzhsZNrtwt6IHkwBc7SK/3/6RTIei4xC68A9LbPER8py
+    G9BQIxG2ktxMzfvVovwQHmV+qzMip07IaAfwLkcPhoqoGPvM+CtK+4fVTgoALofi
+    sP7So75ZRTdlCvypv0Ttt4a7xS9L4SV8lfq1REvKPOnWzGXhOeqyw5bf4Tj+teyj
+    8esnRdSd9uk8371r2Dept2x4y7GYe1Im+o9UKesgTnxdCTJwXKe3OI+1bjbYN9Qz
+    QGyrePTkOT5ALdsN/UcREfBp2BFfBWW0f4XL/5gjullYXA8Vxpfbc2EL8X7WIq18
+    R6Cwpoz2DFfBeew=
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+    TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+    WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+    RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
+    R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
+    sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
+    NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
+    Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
+    /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+    AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+    Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+    FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+    AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+    Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+    gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
+    PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
+    ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
+    CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
+    lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
+    avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
+    yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
+    yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
+    hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
+    HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
+    MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
+    nLRbwHOoq7hHwg==
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
+    MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+    DkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
+    TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
+    AQUAA4ICDwAwggIKAoICAQCt6CRz9BQ385ueK1coHIe+3LffOJCMbjzmV6B493XC
+    ov71am72AE8o295ohmxEk7axY/0UEmu/H9LqMZshftEzPLpI9d1537O4/xLxIZpL
+    wYqGcWlKZmZsj348cL+tKSIG8+TA5oCu4kuPt5l+lAOf00eXfJlII1PoOK5PCm+D
+    LtFJV4yAdLbaL9A4jXsDcCEbdfIwPPqPrt3aY6vrFk/CjhFLfs8L6P+1dy70sntK
+    4EwSJQxwjQMpoOFTJOwT2e4ZvxCzSow/iaNhUd6shweU9GNx7C7ib1uYgeGJXDR5
+    bHbvO5BieebbpJovJsXQEOEO3tkQjhb7t/eo98flAgeYjzYIlefiN5YNNnWe+w5y
+    sR2bvAP5SQXYgd0FtCrWQemsAXaVCg/Y39W9Eh81LygXbNKYwagJZHduRze6zqxZ
+    Xmidf3LWicUGQSk+WT7dJvUkyRGnWqNMQB9GoZm1pzpRboY7nn1ypxIFeFntPlF4
+    FQsDj43QLwWyPntKHEtzBRL8xurgUBN8Q5N0s8p0544fAQjQMNRbcTa0B7rBMDBc
+    SLeCO5imfWCKoqMpgsy6vYMEG6KDA0Gh1gXxG8K28Kh8hjtGqEgqiNx2mna/H2ql
+    PRmP6zjzZN7IKw0KKP/32+IVQtQi0Cdd4Xn+GOdwiK1O5tmLOsbdJ1Fu/7xk9TND
+    TwIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
+    SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
+    c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
+    +tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
+    ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
+    b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9E
+    U1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
+    MA0GCSqGSIb3DQEBCwUAA4IBAQAKcwBslm7/DlLQrt2M51oGrS+o44+/yQoDFVDC
+    5WxCu2+b9LRPwkSICHXM6webFGJueN7sJ7o5XPWioW5WlHAQU7G75K/QosMrAdSW
+    9MUgNTP52GE24HGNtLi1qoJFlcDyqSMo59ahy2cI2qBDLKobkx/J3vWraV0T9VuG
+    WCLKTVXkcGdtwlfFRjlBz4pYg1htmf5X6DYO8A4jqv2Il9DjXA6USbW1FzXSLr9O
+    he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
+    Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
+    -----END CERTIFICATE-----
+  chain.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+    TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+    WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+    RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
+    R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
+    sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
+    NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
+    Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
+    /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+    AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+    Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+    FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+    AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+    Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+    gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
+    PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
+    ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
+    CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
+    lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
+    avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
+    yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
+    yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
+    hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
+    HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
+    MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
+    nLRbwHOoq7hHwg==
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
+    MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+    DkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
+    TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
+    AQUAA4ICDwAwggIKAoICAQCt6CRz9BQ385ueK1coHIe+3LffOJCMbjzmV6B493XC
+    ov71am72AE8o295ohmxEk7axY/0UEmu/H9LqMZshftEzPLpI9d1537O4/xLxIZpL
+    wYqGcWlKZmZsj348cL+tKSIG8+TA5oCu4kuPt5l+lAOf00eXfJlII1PoOK5PCm+D
+    LtFJV4yAdLbaL9A4jXsDcCEbdfIwPPqPrt3aY6vrFk/CjhFLfs8L6P+1dy70sntK
+    4EwSJQxwjQMpoOFTJOwT2e4ZvxCzSow/iaNhUd6shweU9GNx7C7ib1uYgeGJXDR5
+    bHbvO5BieebbpJovJsXQEOEO3tkQjhb7t/eo98flAgeYjzYIlefiN5YNNnWe+w5y
+    sR2bvAP5SQXYgd0FtCrWQemsAXaVCg/Y39W9Eh81LygXbNKYwagJZHduRze6zqxZ
+    Xmidf3LWicUGQSk+WT7dJvUkyRGnWqNMQB9GoZm1pzpRboY7nn1ypxIFeFntPlF4
+    FQsDj43QLwWyPntKHEtzBRL8xurgUBN8Q5N0s8p0544fAQjQMNRbcTa0B7rBMDBc
+    SLeCO5imfWCKoqMpgsy6vYMEG6KDA0Gh1gXxG8K28Kh8hjtGqEgqiNx2mna/H2ql
+    PRmP6zjzZN7IKw0KKP/32+IVQtQi0Cdd4Xn+GOdwiK1O5tmLOsbdJ1Fu/7xk9TND
+    TwIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
+    SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
+    c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
+    +tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
+    ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
+    b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9E
+    U1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
+    MA0GCSqGSIb3DQEBCwUAA4IBAQAKcwBslm7/DlLQrt2M51oGrS+o44+/yQoDFVDC
+    5WxCu2+b9LRPwkSICHXM6webFGJueN7sJ7o5XPWioW5WlHAQU7G75K/QosMrAdSW
+    9MUgNTP52GE24HGNtLi1qoJFlcDyqSMo59ahy2cI2qBDLKobkx/J3vWraV0T9VuG
+    WCLKTVXkcGdtwlfFRjlBz4pYg1htmf5X6DYO8A4jqv2Il9DjXA6USbW1FzXSLr9O
+    he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
+    Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
+    -----END CERTIFICATE-----
+  cert.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIIEVzCCAz+gAwIBAgISBGlyODB2kI/CH0/YWnxvrLoEMA0GCSqGSIb3DQEBCwUA
+    MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
+    EwJSMzAeFw0yMzAzMzEwNzI2MzZaFw0yMzA2MjkwNzI2MzVaMBIxEDAOBgNVBAMT
+    B2doeW0uYWUwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASgcDJAckJR6aehKiXl
+    Nm1sFBI/BAphyX7isF74Ftipj83IUPIyROrcqGmeAdrJ0vY3cjXxf46JzpcBc90M
+    LaNOo4ICUDCCAkwwDgYDVR0PAQH/BAQDAgeAMB0GA1UdJQQWMBQGCCsGAQUFBwMB
+    BggrBgEFBQcDAjAMBgNVHRMBAf8EAjAAMB0GA1UdDgQWBBT53K58XHVyjQFcnchy
+    XxoW/uM1PjAfBgNVHSMEGDAWgBQULrMXt1hWy65QCUDmH6+dixTCxjBVBggrBgEF
+    BQcBAQRJMEcwIQYIKwYBBQUHMAGGFWh0dHA6Ly9yMy5vLmxlbmNyLm9yZzAiBggr
+    BgEFBQcwAoYWaHR0cDovL3IzLmkubGVuY3Iub3JnLzAgBgNVHREEGTAXggdnaHlt
+    LmFlggxrYWR5c2hldi5jb20wTAYDVR0gBEUwQzAIBgZngQwBAgEwNwYLKwYBBAGC
+    3xMBAQEwKDAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcw
+    ggEEBgorBgEEAdZ5AgQCBIH1BIHyAPAAdgB6MoxU2LcttiDqOOBSHumEFnAyE4VN
+    O9IrwTpXo1LrUgAAAYc2xpS9AAAEAwBHMEUCIH1MtPUK054ZhouedHk6ndCmwAZ7
+    cEfQ3S1ySjm5swU/AiEAs/iftlooDEm6ok7hBygbJKr7c2QgaR29uTVsqM+HDUcA
+    dgDoPtDaPvUGNTLnVyi8iWvJA9PL0RFr7Otp4Xd9bQa9bgAAAYc2xpS4AAAEAwBH
+    MEUCIFM1/LtUwDtmJt22ZbN2bMCdMBUZSTg5edVS1RA43ex9AiEAj+q3BDMSVk6g
+    wUPcvb9k/DHwLVdxOnwyzQ13rn4yzk4wDQYJKoZIhvcNAQELBQADggEBALCMr4vk
+    lsFl9h+rQy0C5mLEfDYWjzhsZNrtwt6IHkwBc7SK/3/6RTIei4xC68A9LbPER8py
+    G9BQIxG2ktxMzfvVovwQHmV+qzMip07IaAfwLkcPhoqoGPvM+CtK+4fVTgoALofi
+    sP7So75ZRTdlCvypv0Ttt4a7xS9L4SV8lfq1REvKPOnWzGXhOeqyw5bf4Tj+teyj
+    8esnRdSd9uk8371r2Dept2x4y7GYe1Im+o9UKesgTnxdCTJwXKe3OI+1bjbYN9Qz
+    QGyrePTkOT5ALdsN/UcREfBp2BFfBWW0f4XL/5gjullYXA8Vxpfbc2EL8X7WIq18
+    R6Cwpoz2DFfBeew=
+    -----END CERTIFICATE-----
+  key.pem: |
+    -----BEGIN PRIVATE KEY-----
+    MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgvigfgG5Fapp9YhgE
+    QL+OyeMJNBAyfu8fxghIIjxUvtShRANCAASgcDJAckJR6aehKiXlNm1sFBI/BAph
+    yX7isF74Ftipj83IUPIyROrcqGmeAdrJ0vY3cjXxf46JzpcBc90MLaNO
+    -----END PRIVATE KEY-----

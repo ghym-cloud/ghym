@@ -1,0 +1,59 @@
+https://learning.edx.org/course/course-v1:LinuxFoundationX+LFS153x+1T2022/block-v1:LinuxFoundationX+LFS153x+1T2022+type@sequential+block@b4bc59fa94ba4f77b91ef8345b53b3ff/block-v1:LinuxFoundationX+LFS153x+1T2022+type@vertical+block@788db5db6294428eb21c991e6a092a52
+
+
+DNS
+https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
+https://github.com/flannel-io/flannel#flannel
+http://docs.cloudstack.apache.org/projects/archived-cloudstack-installation/en/4.11/qig.html
+https://tienbm90.medium.com/resolved-br0-received-packet-on-xx-with-own-address-as-source-address-fad895d410a4
+https://www.katacoda.com/courses/kubernetes/playground
+https://labs.play-with-k8s.com/
+https://phoenixnap.com/kb/install-kubernetes-on-ubuntu
+https://www.cloudsigma.com/how-to-install-and-use-kubernetes-on-ubuntu-20-04/
+
+
+https://github.com/MaxKadyshev/ghym
+https://git-scm.com/book/en/v2
+https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
+https://www.howtoforge.com/tutorial/how-to-mount-cephfs-on-centos-7/
+https://ubuntu.com/ceph/docs/file-storage
+https://docs.2gis.com/en/on-premise/map
+https://docs.google.com/document/d/1M9uctQwVO1AjIgv5H9si7YXhM_TDG7u-hROubNNOH0s/edit
+
+
+
+https://linuxconfig.org/how-to-use-bridged-networking-with-libvirt-and-kvm
+https://www.cyberciti.biz/faq/create-vm-using-the-qcow2-image-file-in-kvm/
+https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+https://www2.fhtc.edu/troubleshoot/simple/y-y-n-n-d-n-y.htm
+https://bugzilla.redhat.com/show_bug.cgi?id=1904448
+https://www.cyberciti.biz/faq/how-to-install-kvm-on-centos-7-rhel-7-headless-server/
+
+CEPH
+
+https://docs.ceph.com/en/mimic/start/quick-cephfs/
+https://docs.ceph.com/en/mimic/start/quick-ceph-deploy/
+https://docs.ceph.com/en/mimic/start/quick-start-preflight/
+https://docs.ceph.com/en/latest/cephadm/install/
+https://www.reddit.com/r/ceph/comments/ln0o5k/easiest_solution_to_run_ceph_on_a_single_node/
+https://balderscape.medium.com/setting-up-a-virtual-single-node-ceph-storage-cluster-d86d6a6c658e
+https://hub.docker.com/r/ceph/daemon
+https://github.com/VasiliyLiao/ceph-docker-compose
+
+SSH GATEWAY
+https://docstore.mik.ua/orelly/networking_2ndEd/ssh/ch11_05.htm
+
+
+mkisofs -o /tmp/ae-dc1-cp2/Template/ae-dc1-cp2.iso -V cidata -J -r /tmp/ae-dc1-cp2/Template/user-data /tmp/ae-dc1-cp2/Template/meta-data
+
+virt-install --import --name ae-dc1-cp2 --memory 2048 --vcpu 2 --cpu host --disk /home/hdd/ae-dc1-cp2.qcow2,format=qcow2,bus=virtio --disk /tmp/ae-dc1-cp2/Template/ae-dc1-cp2.iso,device=cdrom --network network=bridged-network,model=virtio --os-type=linux --graphics=vnc
+
+
+radosgw-admin user info --uid=ghym
+ceph auth get client.admin
+
+
+docker run -d --net=host --name ceph-api -v /ceph/etc/ceph:/etc/ceph -v /ceph/var/lib/ceph:/var/lib/ceph -e LANG=en_US.utf8 -e TZ=Asia/Dubai -e KV_TYPE=etcd -e KV_IP=172.16.0.6 ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7 restapi
+docker run -d --net=host --name ceph-rbd -v /ceph/etc/ceph:/etc/ceph -v /ceph/var/lib/ceph:/var/lib/ceph -e LANG=en_US.utf8 -e TZ=Asia/Dubai -e KV_TYPE=etcd -e KV_IP=172.16.0.6 ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7 rbd_mirror
+
+docker run -d --name=ceph-rgw-web -v /ceph/etc/ceph:/etc/ceph -v /ceph/var/lib/ceph:/var/lib/ceph -e LANG=en_US.utf8 -e TZ=Asia/Dubai -e CEPH_DAEMON=RGW -p 9000:9000 -e RGW_REMOTE_CGI=1 -e RGW_REMOTE_CGI_HOST=172.16.0.6 -e RGW_REMOTE_CGI_PORT=9000 ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
