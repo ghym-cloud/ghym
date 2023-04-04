@@ -1,0 +1,10 @@
+dbUser:
+  user: cassandra
+  password: ardnassac
+podSecurityContext:
+  enabled: false
+containerSecurityContext:
+  runAsUser: 0
+  runAsNonRoot: false
+persistence:
+  storageClass: local-storage

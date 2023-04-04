@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql
+  namespace: ghym
+  labels:
+    app: postgresql
+    name: postgresql
+spec:
+  serviceName: postgresql
+  selector:
+    matchLabels:
+      app: postgresql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:12.11
+        volumeMounts:
+        - name: postgresql
+          mountPath: /data
+        env:
+          - name: POSTGRES_PASSWORD
+            value: p05t9rE59I6hYm
+          - name: PGDATA
+            value: /data/pgdata
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - |
+                apt-get clean
+                apt-get update -y
+                apt-get upgrade -y
+                apt-get install postgis --no-install-recommends -y
+                apt-get install postgresql-12-postgis-3 -y
+                apt-get install postgresql-12-postgis-3-scripts -y
+                apt-get install git -y
+                apt-get install make -y
+                apt-get install gcc -y
+                apt-get install postgresql-server-dev-12 -y
+                apt-get install flex -y
+                apt-get install bison -y
+                git clone https://github.com/postgrespro/jsquery.git && cd jsquery && make USE_PGXS=1 && make USE_PGXS=1 install
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: postgresql
+        persistentVolumeClaim:
+          claimName: postgresql

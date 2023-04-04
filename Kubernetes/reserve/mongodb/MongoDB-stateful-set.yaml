@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: ghym
+spec:
+  selector:
+    matchLabels:
+      role: mongodb
+  serviceName: "mongodb"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: mongodb
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongodb
+        image: mongo
+        command:
+          - mongod
+          - "--auth"
+          - "--bind_ip_all"
+          - "--dbpath"                    # comment for reset
+          - "/usr/local/mongodb"          # comment for reset
+        ports:
+          - containerPort: 27017
+        volumeMounts:
+          - name: mongodb
+#            mountPath: /data/db
+            mountPath: /usr/local/mongodb # comment for reset
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: mongodb
+        persistentVolumeClaim:
+          claimName: mongodb
+# password: m0n90db

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: cassandra
-  namespace: default
+  namespace: ghym
   labels:
     app: cassandra
     name: cassandra
@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 1800
       containers:
       - name: cassandra
-        image: gcr.io/google-samples/cassandra:v13
+        image: cassandra:3.11.13
         imagePullPolicy: Always
         ports:
         - containerPort: 7000
@@ -33,11 +33,11 @@ spec:
           name: cql
         resources:
           limits:
-            cpu: "500m"
-            memory: 1Gi
+            cpu: 4
+            memory: 12G
           requests:
-            cpu: "500m"
-            memory: 1Gi
+            cpu: 3.9
+            memory: 12G
         securityContext:
           capabilities:
             add:
@@ -49,48 +49,26 @@ spec:
               - /bin/sh
               - -c
               - nodetool drain
-        env:
-          - name: MAX_HEAP_SIZE
-            value: 512M
-          - name: HEAP_NEWSIZE
-            value: 100M
-          - name: CASSANDRA_SEEDS
-            value: "cassandra-0.cassandra.default.svc.cluster.local"
-          - name: CASSANDRA_CLUSTER_NAME
-            value: "cassandra"
-          - name: CASSANDRA_DC
-            value: "dc-cassandra-ghym"
-          - name: CASSANDRA_RACK
-            value: "rack-cassandra-ghym"
-          - name: POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-        readinessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - /ready-probe.sh
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-#        livenessProbe:
-#          exec:
-#            command:
-#            - /bin/bash
-#            - -c
-#            - /ready-probe.sh
-#          initialDelaySeconds: 240
-#          periodSeconds: 60
-#        volumeMounts:
-#        - name: cassandra-conf
-#          mountPath: /etc/cassandra
-#        - name: cassandra-data
-#          mountPath: /cassandra_data
-#      volumes:
-#      - name: cassandra-data
-#        persistentVolumeClaim:
-#          claimName: cassandra-data
-#      - name: cassandra-conf
-#        persistentVolumeClaim:
-#          claimName: cassandra-conf
+        volumeMounts:
+        - name: cassandra-conf
+          mountPath: /etc/cassandra
+        - name: cassandra-data
+          mountPath: /var/lib/cassandra/data
+        - name: cassandra-commitlog
+          mountPath: /tmp/cassandra
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: cassandra-conf
+        persistentVolumeClaim:
+          claimName: cassandra-conf
+      - name: cassandra-data
+        persistentVolumeClaim:
+          claimName: cassandra-data
+      - name: cassandra-commitlog
+        persistentVolumeClaim:
+          claimName: cassandra-commitlog
+# password: kaccaHtpa

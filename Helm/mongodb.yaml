@@ -1,0 +1,4 @@
+auth:
+  rootPassword: "m0n90db"
+persistence:
+  storageClass: local-storage

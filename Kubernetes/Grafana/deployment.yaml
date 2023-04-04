@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: ghym
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana-enterprise:9.1.2
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-clock-panel,grafana-simple-json-datasource"
+        - name: GF_PATHS_CONFIG
+          value: /var/lib/grafana/grafana.ini
+        - name: GF_PATHS_PROVISIONING
+          value: /var/lib/grafana/provisioning
+        volumeMounts:
+        - name: grafana
+          mountPath: /var/lib/grafana
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: grafana
+        persistentVolumeClaim:
+          claimName: grafana

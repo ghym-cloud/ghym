@@ -1,0 +1,112 @@
+kafka-topics.sh --bootstrap-server 172.16.0.8:9092 --create --topic test1
+kafka-acls.sh --bootstrap-server 172.16.0.8:9092 --list
+kafka-acls.sh --bootstrap-server 172.16.0.8:9092 --command-config kafka.properties --add --allow-principal User:test2 --operation All --topic test2 --force
+keytool -keystore kafka.keystore.jks -alias ghym.ae -validity 365 -genkey
+openssl req -new -x509 -keyout ca-key -out ca-cert -days 365
+keytool -keystore kafka.truststore.jks -alias CARoot -import -file ca-cert
+***************************************************************************************************************************************************
+for user in $(git diff --name-only HEAD HEAD~1 | grep User)
+do
+ for service in $(grep -i '=1' $user | sed -En 's/([a-z|0-9]*)=[1]{1}/\1/p')
+ do
+  phone=$(echo $user | sed -En 's/User\/([0-9]{12})\/service/\1/p')
+  case $service in
+  vm)
+   echo "VM 2"
+   ;;
+  k8s)
+   echo "k8s 3"
+   ;;
+  apache)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=apache)
+   if [ $service -eq 0 ]
+   then
+    mkdir User/$phone/apache /var/jenkins_home/apache/www/$phone
+    cp Python/Template/index.html User/$phone/apache/index.html
+    cp -R User/$phone/apache/. /var/jenkins_home/apache/www/$phone
+    cat Python/Template/apache >> /var/jenkins_home/apache/extra/httpd-vhosts.conf
+    sed -i 's/USER/'$phone'/' /var/jenkins_home/apache/extra/httpd-vhosts.conf
+    git add User/$phone/apache/index.html
+    git commit -m "Service apache for user $phone has been activated successfully"
+    curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&apache=1
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec deploy/apache -- apachectl -k graceful
+   fi 
+   ;;
+  nginx)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=nginx)
+   if [ $service -eq 0 ]
+   then
+    mkdir User/$phone/nginx /var/jenkins_home/nginx/www/$phone
+    cp Python/Template/index.html User/$phone/nginx/index.html
+    cp -R User/$phone/nginx/. /var/jenkins_home/nginx/www/$phone
+    cp Python/Template/nginx /var/jenkins_home/nginx/conf.d/$phone.conf
+    sed -i 's/USER/'$phone'/' /var/jenkins_home/nginx/conf.d/$phone.conf
+    git add User/$phone/nginx/index.html
+    git commit -m "Service nginx for user $phone has been activated successfully"
+    curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&nginx=1
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec -it deploy/nginx -- service nginx reload
+   fi
+   ;;
+  mysql)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=mysql)
+   if [ $service -eq 0 ]
+   then
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec -it deploy/mysql -- mysql --user=root -pmy59I9hym -e "create database ghym$phone"
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec -it deploy/mysql -- mysql --user=root -pmy59I9hym -e "create user 'ghym$phone'@'%' identified by '$phone'"
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec -it deploy/mysql -- mysql --user=root -pmy59I9hym -e "grant all privileges on ghym$phone.* to 'ghym$phone'@'%'"
+    curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&mysql=1
+   fi
+   ;;
+  postgresql)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=postgresql)
+   if [ $service -eq 0 ]
+   then
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec postgresql-0 -- psql --username=postgres --command="create user ghym$phone password '$phone'"
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec postgresql-0 -- psql --username=postgres --command="create database ghym$phone owner ghym$phone"
+    curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&postgresql=1
+   fi
+   ;;
+  mongodb)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=mongodb)
+   if [ $service -eq 0 ]
+   then
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec sts/mongodb -- mongosh --host localhost --port 27017 --authenticationDatabase "admin" --username "admin" --password "m0n90db" --eval "use $phone" --eval "printjson(db.createUser({user:'$phone',pwd:'$phone',roles:[{role:'dbOwner',db:'$phone'}]}))"
+   curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&mongodb=1
+   fi
+   ;;
+  redis)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=redis)
+   if [ $service -eq 0 ]
+   then
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec redis -- redis-cli --pass 'red1$' acl setuser $phone on ">$phone" -@all +get +set "~$phone*" resetchannels "&$phone*"
+   curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&redis=1
+   fi
+   ;;
+  cassandra)
+   service=$(curl http://10.96.142.58/mysql/select_user.php?phone=$phone\&service=cassandra)
+   if [ $service -eq 0 ]
+   then
+    /var/jenkins_home/.local/bin/kubectl -n ghym exec sts/cassandra -- cqlsh --username=cassandra --password='c@s$an6ra' --execute="create keyspace if not exists ghym$phone with replication={'class':'SimpleStrategy','replication_factor':'1'};create user ghym$phone with password 'ghym$phone';grant all on keyspace ghym$phone to ghym$phone;" localhost 9042
+   curl http://10.96.142.58/mysql/update_user.php?phone=$phone\&cassandra=1
+   fi
+   ;;
+  kafka)
+   echo "kafka 11"
+   ;;
+  s3)
+   echo "s3 12"
+   ;;
+  fs)
+   echo "fs 13"
+   ;;
+  prometheus)
+   echo "prometheus 14"
+   ;;
+  zabbix)
+   echo "zabbix 1"
+   ;;
+  esac
+ done
+done
+
+/usr/local/share/ca-certificates

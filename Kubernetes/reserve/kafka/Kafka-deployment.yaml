@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  namespace: ghym
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - name: kafka
+        image: bitnami/kafka:3.2
+        ports:
+        - containerPort: 9092
+#          name: client
+#        - containerPort: 9093
+#          name: external
+        env:
+#        - name: BITNAMI_DEBUG
+#          value: "true"
+#        - name: KAFKA_CFG_SASL_ENABLED_MECHANISMS
+#          value: PLAIN
+#        - name: KAFKA_CLIENT_USERS
+#          value: "user"
+#        - name: KAFKA_CLIENT_PASSWORDS
+#          value: "bitnami"
+# PLAINTEXT
+# SASL
+# SSL
+# SASL_SSL
+        - name: ALLOW_PLAINTEXT_LISTENER
+          value: "yes"
+#        - name: KAFKA_CFG_LISTENERS
+#          value: "SSL://:9092"
+#        - name: KAFKA_CFG_ADVERTISED_LISTENERS
+#          value: "SSL://:9092"
+#        - name: KAFKA_CFG_INTER_BROKER_LISTENER_NAME
+#          value: "SSL"
+        - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+          value: "zookeeper:2181"
+#        - name: KAFKA_ZOOKEEPER_USER
+#          value: "user"
+#        - name: KAFKA_ZOOKEEPER_PASSWORD
+#          value: "bitnami"
+#        - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+#          value: ""
+#        - name: KAFKA_CERTIFICATE_PASSWORD
+#          value: "qwerty"
+#        - name: KAFKA_TLS_TYPE
+#          value: JKS
+#        - name: KAFKA_TLS_CLIENT_AUTH
+#          value: "none"
+#        - name: KAFKA_ZOOKEEPER_PROTOCOL
+#          value: "SSL"
+#        - name: KAFKA_ZOOKEEPER_TLS_TRUSTSTORE_FILE
+#          value: "/bitnami/kafka/config/certs/zookeeper.keystore.jks"
+#        - name: KAFKA_TLS_TRUSTSTORE_FILE
+#          value: "/bitnami/kafka/config/certs/kafka.truststore.jks"
+#        - name: KAFKA_TLS_KEYSTORE_FILE
+#          value: "/bitnami/kafka/config/certs/kafka.keystore.jks"
+        volumeMounts:
+          - name: kafka-conf
+            mountPath: /opt/bitnami/kafka
+          - name: kafka-data
+            mountPath: /bitnami/kafka
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: kafka-conf
+        persistentVolumeClaim:
+          claimName: kafka-conf
+      - name: kafka-data
+        persistentVolumeClaim:
+          claimName: kafka-data
