@@ -14,6 +14,8 @@ pipeline {
           ptr=$(mktemp)
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/    \\1\\tIN\\tA\\t\\2/' DNS)" > $a
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=172\\.16\\.\\([0-9]\\{,3\\}\\)\\.\\([0-9]\\{,3\\}\\)/    \\3\\.\\2\\.16\\.172\\.in-addr\\.arpa\\.\\tIN\\tPTR\\t\\1./' DNS)" > $ptr
+          sed -i "/ A /d" Kubernetes/Bind/config-map.yaml
+          sed -i "/ PTR /d" Kubernetes/Bind/config-map.yaml
           sed -e "/; A/r$a" Kubernetes/Bind/config-map.yaml
           sed -e "/; PTR/r$ptr" Kubernetes/Bind/config-map.yaml
           rm -f $a $ptr
