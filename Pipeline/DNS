@@ -9,6 +9,7 @@ pipeline {
         sh '''
          for f in $(git diff --name-only HEAD HEAD~1 | grep DNS)
          do
+          git pull --all
           a=$(mktemp)
           ptr=$(mktemp)
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/    \\1\\tIN\\tA\\t\\2/' DNS)" > $a
