@@ -71,7 +71,7 @@ data:
                                                  1209600        ; Expiry time
                                                  10800          ; Negative Cache TTL
     )
-    0.16.172.in-addr.arpa.          IN   NS      bind.
+    0.16.172.in-addr.arpa.          IN   NS      bind.          ; PTR
     1.0.16.172.in-addr.arpa.        IN   PTR     ae-dc1-gw.ghym.local. ; 172.16.0.1
     2.0.16.172.in-addr.arpa.        IN   PTR     ae-dc1-1-ilo.ghym.local. ; 172.16.0.2
     3.0.16.172.in-addr.arpa.        IN   PTR     ae-dc1-1.ghym.local. ; 172.16.0.3
@@ -103,7 +103,7 @@ data:
                                                  1209600        ; Expiry time
                                                  10800          ; Negative Cache TTL
     )
-                                    IN   NS      bind.
+                                    IN   NS      bind.          ; A
     ae-dc1-gw.ghym.local            IN   A       172.16.0.1
     ae-dc1-1-ilo.ghym.local         IN   A       172.16.0.2
     ae-dc1-1.ghym.local             IN   A       172.16.0.3
