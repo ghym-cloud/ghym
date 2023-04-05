@@ -9,18 +9,14 @@ pipeline {
         sh '''
          for f in $(git diff --name-only HEAD HEAD~1 | grep DNS)
          do
-          a='value: "'
-          ptr='value: "'
-          while read -r line
-          do
-           a="${a}$line,"
-           ptr="${ptr}$(echo $line | sed -e 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/\\2=\\1,/')"
-          done < DNS
-          a="${a}\\""
-          ptr="${ptr}\\""
-          sed -i "s/value: \\"ae-dc1-.*/$a/" Kubernetes/Bind-deployment.yaml
-          sed -i "s/value: \\"172\\.16.*/$ptr/" Kubernetes/Bind-deployment.yaml
-          git add Kubernetes/Bind-deployment.yaml
+          a=$(mktemp)
+          ptr=$(mktemp)
+          echo -e "$(sed 's/\([a-z,0-9,-]\{,30\}\.ghym\.local\)=\(172\.16\.[0-9]\{,3\}\.[0-9]\{,3\}\)/    \1\\tIN\\tA\\t\2/' DNS)" > $a
+          echo -e "$(sed 's/\([a-z,0-9,-]\{,30\}\.ghym\.local\)=172\.16\.\([0-9]\{,3\}\)\.\([0-9]\{,3\}\)/    \3\.\2\.16\.172\.in-addr\.arpa\.\\tIN\\tPTR\\t\1./' DNS)" > $ptr
+          sed -e "/; A/r$a" Kubernetes/Bind/config-map.yaml
+          sed -e "/; PTR/r$ptr" Kubernetes/Bind/config-map.yaml
+          rm -f $a $ptr
+          git add Kubernetes/Bind/config-map.yaml
           git commit -m "DNS updates "$(date +%s)
           eval "$(ssh-agent -s)"
           ssh-add /var/jenkins_home/.ssh/jenkins-github-2
