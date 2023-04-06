@@ -9,9 +9,9 @@ pipeline {
         sh '''
          for f in $(git diff --name-only HEAD HEAD~1 | grep DNS)
          do
-          git clone git@github.com:ghym-cloud/ghym.git
           a=$(mktemp)
           ptr=$(mktemp)
+          git pull --all
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/    \\1\\tIN\\tA\\t\\2/' DNS)" > $a
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=172\\.16\\.\\([0-9]\\{,3\\}\\)\\.\\([0-9]\\{,3\\}\\)/    \\3\\.\\2\\.16\\.172\\.in-addr\\.arpa\\.\\tIN\\tPTR\\t\\1./' DNS)" > $ptr
           sed -i "/ A /d" Kubernetes/Bind/config-map.yaml
@@ -21,8 +21,8 @@ pipeline {
           rm -f $a $ptr
           git add Kubernetes/Bind/config-map.yaml
           git commit -m "DNS updates "$(date +%s)
-          eval "$(ssh-agent -s)"
-          ssh-add /var/jenkins_home/.ssh/jenkins-github-2
+          #eval "$(ssh-agent -s)"
+          #ssh-add /var/jenkins_home/.ssh/github
           git push ghym HEAD:main
           /var/jenkins_home/.local/bin/kubectl apply -f Kubernetes/Bind-deployment.yaml
          done
