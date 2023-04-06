@@ -65,7 +65,7 @@ data:
   0.16.172.in-addr.arpa: |
     $TTL 3600
     @                               IN   SOA     bind. admin.bind. (
-                                                 1672835141     ; Serial number
+                                                 1680777492     ; Serial number
                                                  1200           ; Refresh time
                                                  180            ; Retry time
                                                  1209600        ; Expiry time
@@ -94,10 +94,11 @@ data:
     16.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn6.ghym.local.
     17.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn7.ghym.local.
     18.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn8.ghym.local.
+    50.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn10.ghym.local.
   ghym.local: |
     $TTL 3600
     @                               IN   SOA     bind.  admin.bind. (
-                                                 1672835142     ; Serial number
+                                                 1680777492     ; Serial number
                                                  1200           ; Refresh time
                                                  180            ; Retry time
                                                  1209600        ; Expiry time
@@ -126,4 +127,4 @@ data:
     ae-dc1-wn6.ghym.local	IN	A	172.16.0.16
     ae-dc1-wn7.ghym.local	IN	A	172.16.0.17
     ae-dc1-wn8.ghym.local	IN	A	172.16.0.18
-    ae-dc1-wn9.ghym.local	IN	A	172.16.0.23
+    ae-dc1-wn10.ghym.local	IN	A	172.16.0.50
