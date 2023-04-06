@@ -20,6 +20,7 @@ pipeline {
           sed -ie "/; PTR/r$ptr" Kubernetes/Bind/config-map.yaml
           rm -f $a $ptr
           git checkout main
+          git pull --all
           git add Kubernetes/Bind/config-map.yaml
           git commit -m "DNS updates "$(date +%s)
           git push ghym HEAD:main
