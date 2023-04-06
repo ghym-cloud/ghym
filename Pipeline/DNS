@@ -11,6 +11,8 @@ pipeline {
          do
           a=$(mktemp)
           ptr=$(mktemp)
+          git checkout main
+          git pull --all -f
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=\\(172\\.16\\.[0-9]\\{,3\\}\\.[0-9]\\{,3\\}\\)/    \\1\\tIN\\tA\\t\\2/' DNS)" > $a
           echo -e "$(sed 's/\\([a-z,0-9,-]\\{,30\\}\\.ghym\\.local\\)=172\\.16\\.\\([0-9]\\{,3\\}\\)\\.\\([0-9]\\{,3\\}\\)/    \\3\\.\\2\\.16\\.172\\.in-addr\\.arpa\\.\\tIN\\tPTR\\t\\1./' DNS)" > $ptr
           sed "s/\\(\\ *\\)[0-9]*\\(\\ *;\\ *Serial number\\)/\\1$(date +%s)\\2/" Kubernetes/Bind/config-map.yaml
@@ -19,8 +21,6 @@ pipeline {
           sed -ie "/; A/r$a" Kubernetes/Bind/config-map.yaml
           sed -ie "/; PTR/r$ptr" Kubernetes/Bind/config-map.yaml
           rm -f $a $ptr
-          git checkout main
-          git pull --all
           git add Kubernetes/Bind/config-map.yaml
           git commit -m "DNS updates "$(date +%s)
           git push ghym HEAD:main
