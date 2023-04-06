@@ -72,7 +72,7 @@ data:
                                                  10800          ; Negative Cache TTL
     )
     0.16.172.in-addr.arpa.          IN   NS      bind.          ; PTR
--e     1.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-gw.ghym.local.
+    1.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-gw.ghym.local.
     2.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-1-ilo.ghym.local.
     3.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-1.ghym.local.
     4.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-2-ilo.ghym.local.
@@ -94,30 +94,6 @@ data:
     16.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn6.ghym.local.
     17.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn7.ghym.local.
     18.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn8.ghym.local.
-    23.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn9.ghym.local.
--e     1.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-gw.ghym.local.
-    2.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-1-ilo.ghym.local.
-    3.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-1.ghym.local.
-    4.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-2-ilo.ghym.local.
-    5.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-2.ghym.local.
-    6.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-3.ghym.local.
-    7.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-4.ghym.local.
-    19.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-5-ilo.ghym.local.
-    20.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-5.ghym.local.
-    21.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-6-idrac.ghym.local.
-    22.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-6.ghym.local.
-    8.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-cp1.ghym.local.
-    11.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-cp2.ghym.local.
-    14.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-cp3.ghym.local.
-    9.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn1.ghym.local.
-    10.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn2.ghym.local.
-    12.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn3.ghym.local.
-    13.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn4.ghym.local.
-    15.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn5.ghym.local.
-    16.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn6.ghym.local.
-    17.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn7.ghym.local.
-    18.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn8.ghym.local.
-    23.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn9.ghym.local.
   ghym.local: |
     $TTL 3600
     @                               IN   SOA     bind.  admin.bind. (
@@ -128,30 +104,7 @@ data:
                                                  10800          ; Negative Cache TTL
     )
                                     IN   NS      bind.          ; A
--e     ae-dc1-gw.ghym.local	IN	A	172.16.0.1
-    ae-dc1-1-ilo.ghym.local	IN	A	172.16.0.2
-    ae-dc1-1.ghym.local	IN	A	172.16.0.3
-    ae-dc1-2-ilo.ghym.local	IN	A	172.16.0.4
-    ae-dc1-2.ghym.local	IN	A	172.16.0.5
-    ae-dc1-3.ghym.local	IN	A	172.16.0.6
-    ae-dc1-4.ghym.local	IN	A	172.16.0.7
-    ae-dc1-5-ilo.ghym.local	IN	A	172.16.0.19
-    ae-dc1-5.ghym.local	IN	A	172.16.0.20
-    ae-dc1-6-idrac.ghym.local	IN	A	172.16.0.21
-    ae-dc1-6.ghym.local	IN	A	172.16.0.22
-    ae-dc1-cp1.ghym.local	IN	A	172.16.0.8
-    ae-dc1-cp2.ghym.local	IN	A	172.16.0.11
-    ae-dc1-cp3.ghym.local	IN	A	172.16.0.14
-    ae-dc1-wn1.ghym.local	IN	A	172.16.0.9
-    ae-dc1-wn2.ghym.local	IN	A	172.16.0.10
-    ae-dc1-wn3.ghym.local	IN	A	172.16.0.12
-    ae-dc1-wn4.ghym.local	IN	A	172.16.0.13
-    ae-dc1-wn5.ghym.local	IN	A	172.16.0.15
-    ae-dc1-wn6.ghym.local	IN	A	172.16.0.16
-    ae-dc1-wn7.ghym.local	IN	A	172.16.0.17
-    ae-dc1-wn8.ghym.local	IN	A	172.16.0.18
-    ae-dc1-wn9.ghym.local	IN	A	172.16.0.23
--e     ae-dc1-gw.ghym.local	IN	A	172.16.0.1
+    ae-dc1-gw.ghym.local	IN	A	172.16.0.1
     ae-dc1-1-ilo.ghym.local	IN	A	172.16.0.2
     ae-dc1-1.ghym.local	IN	A	172.16.0.3
     ae-dc1-2-ilo.ghym.local	IN	A	172.16.0.4
