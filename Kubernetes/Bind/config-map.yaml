@@ -94,7 +94,6 @@ data:
     16.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn6.ghym.local.
     17.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn7.ghym.local.
     18.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn8.ghym.local.
-    23.0.16.172.in-addr.arpa.	IN	PTR	ae-dc1-wn9.ghym.local.
   ghym.local: |
     $TTL 3600
     @                               IN   SOA     bind.  admin.bind. (
