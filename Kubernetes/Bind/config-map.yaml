@@ -128,5 +128,3 @@ data:
     ae-dc1-wn6	IN	A	172.16.0.16
     ae-dc1-wn7	IN	A	172.16.0.17
     ae-dc1-wn8	IN	A	172.16.0.18
-    ae-dc1-gw IN  A 172.16.0.1
-    ae-dc1-1-ilo  IN  A 172.16.0.2
