@@ -10,6 +10,7 @@ COMMIT
 -A ufw-before-input -i lo -j ACCEPT
 -A ufw-before-output -o lo -j ACCEPT
 -A ufw-before-input -p tcp --dport 22 -j ACCEPT
+-A ufw-before-output -p tcp --dport 22 -j ACCEPT
 -A ufw-before-input -p tcp --dport 6443 -j ACCEPT
 -A ufw-before-input -p tcp --dport 65000 -j ACCEPT
 -A ufw-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
