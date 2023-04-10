@@ -58,9 +58,3 @@ ports:
   type: firewall
   hosts:
   - 172.16.0.8
-- name: test1
-  protocol: tcp
-  port: 65000
-  type: firewall
-  hosts:
-  - 172.16.0.54
