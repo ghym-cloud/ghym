@@ -63,4 +63,4 @@ ports:
   port: 65000
   type: firewall
   hosts:
-  - 172.16.0.50
+  - 172.16.0.51
