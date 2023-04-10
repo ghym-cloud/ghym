@@ -45,6 +45,7 @@ pipeline {
          sed -i "30,\$d" LoadBalancer/haproxy.cfg
          for (( i=0; i<${#s_ports[@]}; i++ )) do
           echo "-A ufw-before-input -p ${s_protocols[$i]} --dport ${s_ports[$i]} -j ACCEPT" >> $lb_1
+          echo "-A ufw-before-output -p ${s_protocols[$i]} --dport ${s_ports[$i]} -j ACCEPT" >> $lb_1
          done
          lb_ip_current=0
          lb_ip_last=0
@@ -67,7 +68,7 @@ pipeline {
           echo "-A PREROUTING -i enp4s0 -d 192.168.172.2 -p ${fw_protocols[$i]} --dport ${fw_ports[$i]} -j DNAT --to-destination ${fw_ips[$i]}:${fw_ports[$i]}" >> $fw
          done
          sed -i "/o lo -j ACCEPT/r$lb_1" Firewall/before.rules
-         sed -i "/PREROUTING ACCEPT \\[0:0\\]/r$fw" Firewall/before.rules
+         sed -i "/PREROUTING ACCEPT \[0:0\]/r$fw" Firewall/before.rules
          sed -i "/\\# ghym/r$lb_2" LoadBalancer/haproxy.cfg
          rm -f $lb_1 $lb_2 $fw $s_protocol $s_port $lb_name $lb_protocol $lb_ip $lb_ip_count $lb_port $fw_protocol $fw_ip $fw_port
          git add Firewall/before.rules LoadBalancer/haproxy.cfg
