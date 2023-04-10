@@ -58,3 +58,16 @@ ports:
   type: firewall
   hosts:
   - 172.16.0.8
+- name: test1
+  protocol: tcp
+  port: 65000
+  type: firewall
+  hosts:
+  - 172.16.0.50
+- name: test2
+  protocol: tcp
+  port: 65000
+  type: loadbalancer
+  hosts:
+  - 172.16.0.51
+  - 172.16.0.52
