@@ -43,8 +43,6 @@ pipeline {
          readarray -t fw_ports <$fw_port
          sed -i "/ -p tcp --dport /d" Firewall/before.rules
          sed -i "30,\$d" LoadBalancer/haproxy.cfg
-         s1="-A PREROUTING -i enp4s0 -d 192\\.168\\.172\\.2 -p"
-         s2="-j DNAT --to-destination"
          for (( i=0; i<${#s_ports[@]}; i++ )) do
           echo "-A ufw-before-input -p ${s_protocols[$i]} --dport ${s_ports[$i]} -j ACCEPT" >> $lb_1
          done
@@ -66,7 +64,7 @@ pipeline {
           done
          done
          for (( i=0; i<${#fw_ports[@]}; i++ )) do
-          echo "-A PREROUTING -i enp4s0 -d 192\.168\.172\.2 -p ${fw_protocols[$i]} --dport ${fw_ports[$i]} -j DNAT --to-destination ${fw_ips[$i]}:${fw_ports[$i]}" >> $fw
+          echo "-A PREROUTING -i enp4s0 -d 192.168.172.2 -p ${fw_protocols[$i]} --dport ${fw_ports[$i]} -j DNAT --to-destination ${fw_ips[$i]}:${fw_ports[$i]}" >> $fw
          done
          sed -i "/o lo -j ACCEPT/r$lb_1" Firewall/before.rules
          sed -i "/PREROUTING ACCEPT \\[0:0\\]/r$fw" Firewall/before.rules
