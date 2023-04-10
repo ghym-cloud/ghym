@@ -64,7 +64,7 @@ Get started right now using our documentation
 
 ## Feedback
 
-If you find any issue, have general feedback or question drom an email to bug@ghym.ae
+If you find any issue, have general feedback or question drom an email to info@ghym.ae
 
 ## Contributions
 
