@@ -65,7 +65,7 @@ data:
   0.16.172.in-addr.arpa: |
     $TTL 3600
     @                               IN   SOA     ghym.local. info.ghym.local. (
-                                                 1681129743     ; Serial number
+                                                 1681129751     ; Serial number
                                                  1200           ; Refresh time
                                                  180            ; Retry time
                                                  1209600        ; Expiry time
@@ -98,7 +98,7 @@ data:
   ghym.local: |
     $TTL 3600
     @                               IN   SOA     ghym.local.  info.ghym.local. (
-                                                 1681129743     ; Serial number
+                                                 1681129751     ; Serial number
                                                  1200           ; Refresh time
                                                  180            ; Retry time
                                                  1209600        ; Expiry time
