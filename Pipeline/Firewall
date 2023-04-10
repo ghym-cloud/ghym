@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Firewall') {
       steps {
-       sh '''
+       sh '''#!/bin/bash
         for f in $(git diff --name-only HEAD HEAD~1 | grep PORT); do
          lb_1=$(mktemp)
          lb_2=$(mktemp)
@@ -74,6 +74,7 @@ pipeline {
          git commit -m "Firewall + LB updates "$(date +%s)
          git push ghym HEAD:main
          /var/jenkins_home/.local/bin/kubectl apply -f Kubernetes/Bind/config-map.yaml
+##
 #        for ports in $(sed -En "s/([0-9]{,5}):FW:.*/\\1/p" PORT); do
 #         port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
 #         if [ $port -eq 0 ]
