@@ -65,7 +65,7 @@ data:
   0.16.172.in-addr.arpa: |
     $TTL 3600
     @                               IN   SOA     ghym.local. info.ghym.local. (
-                                                 1680777492     ; Serial number
+                                                 1681128960     ; Serial number
                                                  1200           ; Refresh time
                                                  180            ; Retry time
                                                  1209600        ; Expiry time
@@ -73,21 +73,21 @@ data:
     )
     @ IN NS ae-dc1-cp1.
     @ IN NS ae-dc1-cp2. ; PTR
-    1 IN	PTR	ae-dc1-gw.ghym.local.
-    2 IN	PTR	ae-dc1-1-ilo.ghym.local.
-    3 IN	PTR	ae-dc1-1.ghym.local.
-    4 IN	PTR	ae-dc1-2-ilo.ghym.local.
-    5 IN	PTR	ae-dc1-2.ghym.local.
-    6 IN	PTR	ae-dc1-3.ghym.local.
-    7 IN	PTR	ae-dc1-4.ghym.local.
-    19  IN	PTR	ae-dc1-5-ilo.ghym.local.
+    1	IN	PTR	ae-dc1-gw.ghym.local.
+    2	IN	PTR	ae-dc1-1-ilo.ghym.local.
+    3	IN	PTR	ae-dc1-1.ghym.local.
+    4	IN	PTR	ae-dc1-2-ilo.ghym.local.
+    5	IN	PTR	ae-dc1-2.ghym.local.
+    6	IN	PTR	ae-dc1-3.ghym.local.
+    7	IN	PTR	ae-dc1-4.ghym.local.
+    19	IN	PTR	ae-dc1-5-ilo.ghym.local.
     20	IN	PTR	ae-dc1-5.ghym.local.
     21	IN	PTR	ae-dc1-6-idrac.ghym.local.
     22	IN	PTR	ae-dc1-6.ghym.local.
-    8 IN	PTR	ae-dc1-cp1.ghym.local.
+    8	IN	PTR	ae-dc1-cp1.ghym.local.
     11	IN	PTR	ae-dc1-cp2.ghym.local.
     14	IN	PTR	ae-dc1-cp3.ghym.local.
-    9 IN	PTR	ae-dc1-wn1.ghym.local.
+    9	IN	PTR	ae-dc1-wn1.ghym.local.
     10	IN	PTR	ae-dc1-wn2.ghym.local.
     12	IN	PTR	ae-dc1-wn3.ghym.local.
     13	IN	PTR	ae-dc1-wn4.ghym.local.
@@ -95,10 +95,11 @@ data:
     16	IN	PTR	ae-dc1-wn6.ghym.local.
     17	IN	PTR	ae-dc1-wn7.ghym.local.
     18	IN	PTR	ae-dc1-wn8.ghym.local.
+    51	IN	PTR	ae-dc1-wn9.ghym.local.
   ghym.local: |
     $TTL 3600
     @                               IN   SOA     ghym.local.  info.ghym.local. (
-                                                 1680777492     ; Serial number
+                                                 1681128960     ; Serial number
                                                  1200           ; Refresh time
                                                  180            ; Retry time
                                                  1209600        ; Expiry time
@@ -106,25 +107,28 @@ data:
     )
     @ IN NS ae-dc1-cp1.
     @ IN NS ae-dc1-cp2. ; A
+    ae-dc1-gw	IN	A	172.16.0.1
+    ae-dc1-1-ilo	IN	A	172.16.0.2
+    ae-dc1-1	IN	A	172.16.0.3
+    ae-dc1-2-ilo	IN	A	172.16.0.4
+    ae-dc1-2	IN	A	172.16.0.5
+    ae-dc1-3	IN	A	172.16.0.6
+    ae-dc1-4	IN	A	172.16.0.7
+    ae-dc1-5-ilo	IN	A	172.16.0.19
+    ae-dc1-5	IN	A	172.16.0.20
+    ae-dc1-6-idrac	IN	A	172.16.0.21
+    ae-dc1-6	IN	A	172.16.0.22
+    ae-dc1-cp1	IN	A	172.16.0.8
+    ae-dc1-cp2	IN	A	172.16.0.11
+    ae-dc1-cp3	IN	A	172.16.0.14
+    ae-dc1-wn1	IN	A	172.16.0.9
+    ae-dc1-wn2	IN	A	172.16.0.10
+    ae-dc1-wn3	IN	A	172.16.0.12
+    ae-dc1-wn4	IN	A	172.16.0.13
+    ae-dc1-wn5	IN	A	172.16.0.15
+    ae-dc1-wn6	IN	A	172.16.0.16
+    ae-dc1-wn7	IN	A	172.16.0.17
+    ae-dc1-wn8	IN	A	172.16.0.18
+    ae-dc1-wn9	IN	A	172.16.0.51
     ae-dc1-gw IN  A 172.16.0.1
     ae-dc1-1-ilo  IN  A 172.16.0.2
-    ae-dc1-1	      IN	A	172.16.0.3
-    ae-dc1-2-ilo   IN	A	172.16.0.4
-    ae-dc1-2  	  IN	A	172.16.0.5
-    ae-dc1-3	      IN	A	172.16.0.6
-    ae-dc1-4	      IN	A	172.16.0.7
-    ae-dc1-5-ilo   IN	A	172.16.0.19
-    ae-dc1-5	      IN	A	172.16.0.20
-    ae-dc1-6-idrac IN	A	172.16.0.21
-    ae-dc1-6	      IN	A	172.16.0.22
-    ae-dc1-cp1	  IN	A	172.16.0.8
-    ae-dc1-cp2	  IN	A	172.16.0.11
-    ae-dc1-cp3	  IN	A	172.16.0.14
-    ae-dc1-wn1	  IN	A	172.16.0.9
-    ae-dc1-wn2	  IN	A	172.16.0.10
-    ae-dc1-wn3	  IN	A	172.16.0.12
-    ae-dc1-wn4	  IN	A	172.16.0.13
-    ae-dc1-wn5	  IN	A	172.16.0.15
-    ae-dc1-wn6     IN	A	172.16.0.16
-    ae-dc1-wn7	  IN	A	172.16.0.17
-    ae-dc1-wn8	  IN	A	172.16.0.18
