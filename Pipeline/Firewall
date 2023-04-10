@@ -80,7 +80,8 @@ pipeline {
           scp Firewall/before.rules max@172.16.0.1:/etc/ufw/before.rules
           scp LoadBalancer/haproxy.cfg max@172.16.0.1:/etc/haproxy/haproxy.cfg
 #          ssh max@172.16.0.1 'echo "123456" | sudo -S ufw disable && ufw enable && systemctl restart haproxy.service'
-          ssh max@172.16.0.1 'echo "123456" | sudo -S service ufw restart && service haproxy restart'
+          ssh max@172.16.0.1 'echo "123456" | sudo -S service ufw restart'
+          ssh max@172.16.0.1 'echo "123456" | sudo -S service haproxy restart'
 #####
 #        for ports in $(sed -En "s/([0-9]{,5}):FW:.*/\\1/p" PORT); do
 #         port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
