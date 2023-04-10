@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: maxkadyshev/jenkins:2.387.2-lts-jdk11
+        image: maxkadyshev/jenkins:2.387.2-lts-jdk11-1
         ports:
         - containerPort: 8080
           name: jenkins
