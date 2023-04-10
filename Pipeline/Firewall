@@ -66,7 +66,7 @@ pipeline {
           done
          done
          for (( i=0; i<${#fw_ports[@]}; i++ )) do
-          echo "-A PREROUTING -i enp4s0 -d 192.168.172.2 -p ${fw_protocols[$i]} --dport ${fw_ports[$i]} -j DNAT --to-destination ${fw_ips[$i]}:${fw_ports[$i]}" >> $fw
+          echo "-A PREROUTING -i enp4s0 -d 192\.168\.172\.2 -p ${fw_protocols[$i]} --dport ${fw_ports[$i]} -j DNAT --to-destination ${fw_ips[$i]}:${fw_ports[$i]}" >> $fw
          done
          sed -i "/o lo -j ACCEPT/r$lb_1" Firewall/before.rules
          sed -i "/PREROUTING ACCEPT \\[0:0\\]/r$fw" Firewall/before.rules
