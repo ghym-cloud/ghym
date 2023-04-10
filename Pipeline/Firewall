@@ -30,7 +30,7 @@ pipeline {
          /var/jenkins_home/.local/bin/yq e '.ports[] | select(.type == "loadbalancer") | .port' PORT > $lb_port
          /var/jenkins_home/.local/bin/yq e '.ports[] | select(.type == "firewall") | .protocol' PORT > $fw_protocol
          /var/jenkins_home/.local/bin/yq e '.ports[] | select(.type == "firewall") | .hosts[]' PORT > $fw_ip
-         /var/jenkins_home/.local/bin/yq e '.ports[] | select(.type == "firewall") | .port' /PORT > $fw_port
+         /var/jenkins_home/.local/bin/yq e '.ports[] | select(.type == "firewall") | .port' PORT > $fw_port
          readarray -t s_protocols <$s_protocol
          readarray -t s_ports <$s_port
          readarray -t lb_names <$lb_name
@@ -42,7 +42,7 @@ pipeline {
          readarray -t fw_ips <$fw_ip
          readarray -t fw_ports <$fw_port
          sed -i "/ -p tcp --dport /d" Firewall/before.rules
-         sed -i "30,\$d" LoadBalancer/haproxy.cfg
+         sed -i "30,\\$d" LoadBalancer/haproxy.cfg
          for (( i=0; i<${#s_ports[@]}; i++ )) do
           echo "-A ufw-before-input -p ${s_protocols[$i]} --dport ${s_ports[$i]} -j ACCEPT" >> $lb_1
           echo "-A ufw-before-output -p ${s_protocols[$i]} --dport ${s_ports[$i]} -j ACCEPT" >> $lb_1
@@ -51,6 +51,7 @@ pipeline {
          lb_ip_last=0
          for (( i=0; i<${#lb_ports[@]}; i++ )) do
           echo "-A ufw-before-input -p ${lb_protocols[$i]} --dport ${lb_ports[$i]} -j ACCEPT" >> $lb_1
+          echo "-A ufw-before-output -p ${s_protocols[$i]} --dport ${lb_ports[$i]} -j ACCEPT" >> $lb_1
           echo "frontend ${lb_names[$i]}" >> $lb_2
           echo "    bind 172.16.0.1:${lb_ports[$i]}" >> $lb_2
           echo "    mode ${lb_protocols[$i]}" >> $lb_2
@@ -71,11 +72,11 @@ pipeline {
          sed -i "/PREROUTING ACCEPT [0:0]/r$fw" Firewall/before.rules
          sed -i "/\\# ghym/r$lb_2" LoadBalancer/haproxy.cfg
          rm -f $lb_1 $lb_2 $fw $s_protocol $s_port $lb_name $lb_protocol $lb_ip $lb_ip_count $lb_port $fw_protocol $fw_ip $fw_port
-         git add Firewall/before.rules LoadBalancer/haproxy.cfg
-         git commit -m "Firewall + LB updates "$(date +%s)
-         git push ghym HEAD:main
-         /var/jenkins_home/.local/bin/kubectl apply -f Kubernetes/Bind/config-map.yaml
-##
+#         git add Firewall/before.rules LoadBalancer/haproxy.cfg
+#         git commit -m "Firewall + LB updates "$(date +%s)
+#         git push ghym HEAD:main
+#         /var/jenkins_home/.local/bin/kubectl apply -f Kubernetes/Bind/config-map.yaml
+#####
 #        for ports in $(sed -En "s/([0-9]{,5}):FW:.*/\\1/p" PORT); do
 #         port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
 #         if [ $port -eq 0 ]
