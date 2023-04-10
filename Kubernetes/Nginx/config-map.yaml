@@ -170,6 +170,42 @@ metadata:
   name: nginx-conf-d
   namespace: ghym
 data:
+  kadyshev.com.conf: |
+    server {
+     listen               80;
+     server_name          kadyshev.com;
+     ssl_certificate      /etc/nginx/cert/fullchain.pem;
+     ssl_certificate_key  /etc/nginx/cert/key.pem;
+     location / {
+      root   /etc/nginx/www/kadyshev.com;
+      index  index.html;
+    }
+     error_page   500 502 503 504  /50x.html;
+     location = /50x.html {
+      root   /usr/share/nginx/html;
+     }
+    }
+  ghym.ae.conf: |
+    server {
+     listen               80;
+     server_name          ghym.ae;
+     ssl_certificate      /etc/nginx/cert/fullchain.pem;
+     ssl_certificate_key  /etc/nginx/cert/key.pem;
+     location / {
+      root   /etc/nginx/www/ghym.ae;
+      index  index.php;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www/ghym.ae;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
   971508367195.conf: |
     server {
      listen               80;
@@ -231,62 +267,6 @@ data:
      }
      location ~ /\.ht {
         deny  all;
-     }
-    }
-  default.conf: |
-    server {
-     listen       80;
-     server_name  localhost;
-     access_log  /var/log/nginx/host.access.log  main;
-     location / {
-      root   /etc/nginx/www/ghym.ae;
-      index  index.php index.html;
-     }
-     location ~ \.php$ {
-        include        fastcgi_params;
-        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
-        root           /etc/nginx/www;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-     }
-     location ~ /\.ht {
-        deny  all;
-     }
-    }
-  ghym.ae.conf: |
-    server {
-     listen               80;
-     server_name          *.ghym.ae;
-     ssl_certificate      /etc/nginx/cert/fullchain.pem;
-     ssl_certificate_key  /etc/nginx/cert/key.pem;
-     location / {
-      root   /etc/nginx/www/ghym.ae;
-      index  index.php;
-     }
-     location ~ \.php$ {
-        include        fastcgi_params;
-        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
-        root           /etc/nginx/www/ghym.ae;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-     }
-     location ~ /\.ht {
-        deny  all;
-     }
-    }
-  kadyshev.com.conf: |
-    server {
-     listen               80;
-     server_name          kadyshev.com;
-     ssl_certificate      /etc/nginx/cert/fullchain.pem;
-     ssl_certificate_key  /etc/nginx/cert/key.pem;
-     location / {
-      root   /etc/nginx/www/kadyshev.com;
-      index  index.html;
-    }
-     error_page   500 502 503 504  /50x.html;
-     location = /50x.html {
-      root   /usr/share/nginx/html;
      }
     }
 ---

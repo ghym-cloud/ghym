@@ -1,0 +1,5 @@
+FROM jenkins/jenkins:2.387.2-lts-jdk11
+USER root
+RUN apt-get clean; \
+    apt-get update -y; \
+    apt-get install -y dnsutils;
