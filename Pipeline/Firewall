@@ -75,7 +75,12 @@ pipeline {
 #         git add Firewall/before.rules LoadBalancer/haproxy.cfg
 #         git commit -m "Firewall + LB updates "$(date +%s)
 #         git push ghym HEAD:main
-#         /var/jenkins_home/.local/bin/kubectl apply -f Kubernetes/Bind/config-map.yaml
+          eval "$(ssh-agent -s)"
+          ssh-add /var/jenkins_home/.ssh/github
+          scp Firewall/before.rules max@172.16.0.1:/etc/ufw/before.rules
+          scp LoadBalancer/haproxy.cfg max@172.16.0.1:/etc/haproxy/haproxy.cfg
+#          ssh max@172.16.0.1 'echo "123456" | sudo -S ufw disable && ufw enable && systemctl restart haproxy.service'
+          ssh max@172.16.0.1 'echo "123456" | sudo -S service ufw restart && service haproxy restart'
 #####
 #        for ports in $(sed -En "s/([0-9]{,5}):FW:.*/\\1/p" PORT); do
 #         port=$(curl http://10.96.142.58/mysql/select_port.php?port=$ports)
@@ -87,10 +92,6 @@ pipeline {
 #          curl 'http://10.96.142.58/mysql/insert_port.php?type=FW&port='$ports
 #          git add Firewall/before.rules
 #          git commit -m "Firewall with port: "$ports
-#          eval "$(ssh-agent -s)"
-#          ssh-add /var/jenkins_home/.ssh/jenkins-github-2
-#          scp Firewall/before.rules max@172.16.0.1:/etc/ufw/before.rules
-#          ssh max@172.16.0.1 'echo "123456" | sudo -S ufw reload'
 #          git push ghym HEAD:main
 #         fi
         done
