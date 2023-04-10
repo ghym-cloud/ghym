@@ -1,72 +1,60 @@
-# List of ports are taken and can not be use with ghym anymore
-#
-# Type:
-# LB - Load Balancer
-# FW - Fire Wall
-#
-# Format:
-# PORT:TYPE:HOSTNAME
-#
 ports:
 - name: ssh
   protocol: tcp
   port: 22
+  type: system
+- name: ssh
+  protocol: tcp
+  port: 6443
+  type: loadbalancer
+  hosts:
+  - 172.16.0.8
+  - 172.16.0.11
 - name: http
   protocol: tcp
   port: 80
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
+  - 172.16.0.8
 - name: https
   protocol: tcp
   port: 443
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
+  - 172.16.0.8
 - name: mysql
   protocol: tcp
   port: 3306
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
+  - 172.16.0.8
 - name: registry
   protocol: tcp
   port: 5000
   type: firewall
   hosts:
-  - name: ae-dc1-3
+  - 172.16.0.6
 - name: postgresql
   protocol: tcp
   port: 5432
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
+  - 172.16.0.8
 - name: redis
   protocol: tcp
   port: 6379
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
+  - 172.16.0.8
 - name: cassandra
   protocol: tcp
   port: 9042
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
+  - 172.16.0.8
 - name: mongodb
   protocol: tcp
   port: 27017
   type: firewall
   hosts:
-  - name: ae-dc1-cp1
-# ---
-#22
-#80:FW:ae-dc1-cp1
-#443:FW:ae-dc1-cp1
-#3306:FW:ae-dc1-cp1
-#5000:FW:ae-dc1-3
-#5432:FW:ae-dc1-cp1
-#6379:FW:ae-dc1-cp1
-#6443:LB:[ae-dc1-cp1 ae-dc1-cp2]
-#9042:FW:ae-dc1-cp1
-#27017:FW:ae-dc1-cp1
+  - 172.16.0.8

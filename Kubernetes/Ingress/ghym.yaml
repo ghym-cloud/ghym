@@ -16,16 +16,6 @@ spec:
               name: grafana
               port:
                 number: 3000
-  - host: jenkins.ghym.ae
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: jenkins
-              port:
-                number: 8080
   - host: jenkins.ghym.local
     http:
       paths:
@@ -36,26 +26,16 @@ spec:
               name: jenkins
               port:
                 number: 8080
-  - host: "*.a.ghym.ae"
+  - host: jenkins.ghym.ae
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: apache
-            port:
-              number: 80
-  - host: "*.ghym.ae"
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx
-            port:
-              number: 80
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: jenkins
+              port:
+                number: 8080
   - host: ghym.ae
     http:
       paths:
@@ -67,6 +47,26 @@ spec:
               port:
                 number: 80
   - host: kadyshev.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx
+              port:
+                number: 80
+  - host: "*.a.ghym.ae"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: apache
+            port:
+              number: 80
+  - host: "*.ghym.ae"
     http:
       paths:
       - path: /
