@@ -1,0 +1,28 @@
+vm:
+  enabled: false
+k8s:
+  enabled: false
+apache:
+  enabled: false
+nginx:
+  enabled: false
+mysql:
+  enabled: false
+postgresql:
+  enabled: false
+mongodb:
+  enabled: false
+redis:
+  enabled: false
+cassandra:
+  enabled: false
+kafka:
+  enabled: false
+s3:
+  enabled: false
+fs:
+  enabled: false
+prometheus:
+  enabled: false
+zabbix:
+  enabled: false
