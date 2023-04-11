@@ -1,0 +1,51 @@
+pipeline {
+  agent any
+  triggers {
+    githubPush()
+  }
+  stages {
+    stage('SignUp') {
+      steps {
+        sh '''
+          if [ ! -d User/$PHONE ]; then
+            mkdir -p User/$PHONE
+            cat <<EOF > User/$PHONE/service
+vm:
+  enabled: false
+k8s:
+  enabled: false
+apache:
+  enabled: false
+nginx:
+  enabled: false
+mysql:
+  enabled: false
+postgresql:
+  enabled: false
+mongodb:
+  enabled: false
+redis:
+  enabled: false
+cassandra:
+  enabled: false
+kafka:
+  enabled: false
+s3:
+  enabled: false
+fs:
+  enabled: false
+prometheus:
+  enabled: false
+zabbix:
+  enabled: false
+EOF
+            git add User/$PHONE/service
+            git commit -m "User $PHONE has been added successfully"
+            git push ghym HEAD:main
+            curl http://ghym.local/update_user.php?phone=$PHONE\&git=1
+          fi
+        '''
+      }
+    }
+  }
+}
