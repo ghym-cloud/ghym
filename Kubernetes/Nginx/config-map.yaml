@@ -188,7 +188,7 @@ data:
   ghym.ae.conf: |
     server {
      listen               80;
-     server_name          ghym.ae;
+     server_name          ghym.ae www.ghym.ae .ghym.ae;
      ssl_certificate      /etc/nginx/cert/fullchain.pem;
      ssl_certificate_key  /etc/nginx/cert/key.pem;
      location / {
@@ -199,6 +199,27 @@ data:
         include        fastcgi_params;
         fastcgi_pass unix:/run/php/php7.4-fpm.sock;
         root           /etc/nginx/www/ghym.ae;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+     }
+     location ~ /\.ht {
+        deny  all;
+     }
+    }
+  ghym.local.conf: |
+    server {
+     listen               80;
+     server_name          ghym.local;
+     ssl_certificate      /etc/nginx/cert/fullchain.pem;
+     ssl_certificate_key  /etc/nginx/cert/key.pem;
+     location / {
+      root   /etc/nginx/www/ghym.ae/script;
+      index  index.php;
+     }
+     location ~ \.php$ {
+        include        fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        root           /etc/nginx/www/ghym.ae/script;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
      }
