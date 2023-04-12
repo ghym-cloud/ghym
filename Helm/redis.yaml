@@ -1,3 +1,5 @@
+auth:
+  password: "red1$"
 podSecurityContext:
   enabled: false
 containerSecurityContext:

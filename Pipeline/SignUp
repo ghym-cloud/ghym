@@ -10,33 +10,43 @@ pipeline {
           if [ ! -d User/$PHONE ]; then
             mkdir -p User/$PHONE
             cat <<EOF > User/$PHONE/service
-vm:
+service:
+- name: vm
   enabled: false
-k8s:
+  compute:
+  - hostname: ae-dc1-name
+    cpu: 1
+    ram: 1024
+    hdd: 60
+    os: ubuntu22
+    user:
+    - login: root
+      password: ghym.ae
+- name: k8s
   enabled: false
-apache:
+- name: apache
   enabled: false
-nginx:
+- name: nginx
   enabled: false
-mysql:
+- name: mysql
   enabled: false
-postgresql:
+- name: postgresql
   enabled: false
-mongodb:
+- name: mongodb
   enabled: false
-redis:
+- name: redis
   enabled: false
-cassandra:
+- name: cassandra
   enabled: false
-kafka:
+- name: kafka
   enabled: false
-s3:
+- name: s3
   enabled: false
-fs:
+- name: fs
   enabled: false
-prometheus:
+- name: prometheus
   enabled: false
-zabbix:
+- name: zabbix
   enabled: false
 EOF
             git add User/$PHONE/service
