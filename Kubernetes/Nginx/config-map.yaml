@@ -290,6 +290,7 @@ data:
         deny  all;
      }
     }
+# ghym
 ---
 apiVersion: v1
 kind: ConfigMap

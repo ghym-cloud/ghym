@@ -4,12 +4,12 @@ pipeline {
     githubPush()
   }
   stages {
-    stage('DNS') {
+    stage('Service') {
       steps {
         sh '''
-         for f in $(git diff --name-only HEAD HEAD~1 | grep Kubernetes)
+         for f in $(git diff --name-only HEAD HEAD~1 | grep service)
          do
-          /var/jenkins_home/.local/bin/kubectl apply -f $f
+
          done
         '''
       }
