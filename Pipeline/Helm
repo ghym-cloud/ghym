@@ -7,11 +7,10 @@ pipeline {
     stage('Helm') {
       steps {
         sh '''
-         for f in $(git diff --name-only HEAD HEAD~1 | grep ^Helm)
-         do
+         for f in $(git diff --name-only HEAD HEAD~1 | grep ^Helm); do
           /var/jenkins_home/.local/bin/helm repo add bitnami https://charts.bitnami.com/bitnami
           /var/jenkins_home/.local/bin/helm repo update
-          repo = $(/var/jenkins_home/.local/bin/helm -n ghym ls -qa | grep awk -F '.' '{print $1}' $f)
+          repo = $(/var/jenkins_home/.local/bin/helm -n ghym ls -qa | grep $(echo $f | awk -F '/' '{print $2}' | awk -F '.' '{print $1}'))
           /var/jenkins_home/.local/bin/helm upgrade -i --atomic --wait --values $f $repo $(/var/jenkins_home/.local/bin/helm search repo | grep $repo\\ )
          done
         '''
