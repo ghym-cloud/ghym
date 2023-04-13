@@ -7,7 +7,7 @@ pipeline {
     stage('Helm') {
       steps {
         sh '''
-         for f in $(git diff --name-only HEAD HEAD~1 | grep Helm)
+         for f in $(git diff --name-only HEAD HEAD~1 | grep ^Helm)
          do
           /var/jenkins_home/.local/bin/helm repo add bitnami https://charts.bitnami.com/bitnami
           /var/jenkins_home/.local/bin/helm repo update
