@@ -11,7 +11,7 @@ pipeline {
          do
           helm repo update
           repo = $(helm -n ghym ls -qa | grep awk -F '.' '{print $1}' $f)
-          helm upgrade -i --atomic --wait --values $f $repo $(helm search repo | grep $repo\\ )
+          /var/jenkins_home/.local/bin/helm upgrade -i --atomic --wait --values $f $repo $(helm search repo | grep $repo\\ )
          done
         '''
       }
