@@ -1,12 +1,19 @@
+superUsers: User:ghym
 auth:
   clientProtocol: sasl
   sasl:
     mechanisms: plain,scram-sha-512
     jaas:
       clientUsers:
-      - ghym
+      - "ghym"
+      - "971551659890"
+      - "971551659896"
+      - "971551659891"
       clientPasswords:
-      - k@fk@
+      - "k@fk@"
+      - "971551659890"
+      - "971551659896"
+      - "971551659891"
 listeners:
 - CLIENT://:9092
 - INTERNAL://:9093
@@ -14,6 +21,22 @@ advertisedListeners:
 - CLIENT://:9092
 - INTERNAL://:9093
 listenerSecurityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:PLAINTEXT"
+allowEveryoneIfNoAclFound: true
+autoCreateTopicsEnable: false
+deleteTopicEnable: true
+extraEnvVars:
+- name: KAFKA_OPTS
+  value: "-Djava.security.auth.login.config=/bitnami/kafka/data/kafka_jaas.conf"
+- name: KAFKA_CFG_AUTHORIZER_CLASS_NAME
+  value: "kafka.security.authorizer.AclAuthorizer"
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 30
+  timeoutSeconds: 10
+readinessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 30
+  timeoutSeconds: 10
 podSecurityContext:
   enabled: false
 containerSecurityContext:
@@ -33,3 +56,51 @@ zookeeper:
     allowPrivilegeEscalation: true
   persistence:
     storageClass: local-storage
+extraDeploy:
+- |
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: kafka-client-properties
+    namespace: ghym
+  data:
+    client.properties: |
+      security.protocol=SASL_PLAINTEXT
+      sasl.mechanism=SCRAM-SHA-512
+- |
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: kafka-jaas
+    namespace: ghym
+  data:
+    kafka_jaas.conf: |
+      KafkaClient {
+      org.apache.kafka.common.security.scram.ScramLoginModule required
+      username="ghym"
+      password="k@fk@";
+      };
+      KafkaServer {
+      org.apache.kafka.common.security.plain.PlainLoginModule required
+      user_ghym="k@fk@"
+      user_971551659890="971551659890"
+      user_971551659896="971551659896"
+      user_971551659891="971551659891"
+      ;org.apache.kafka.common.security.scram.ScramLoginModule required;
+      };
+extraVolumeMounts:
+- name: kafka-client-properties
+  mountPath: /bitnami/kafka/config/client.properties
+  subPath: client.properties
+  readOnly: true
+- name: kafka-jaas
+  mountPath: /bitnami/kafka/data/kafka_jaas.conf
+  subPath: kafka_jaas.conf
+  readOnly: true
+extraVolumes:
+- name: kafka-client-properties
+  configMap:
+    name: kafka-client-properties
+- name: kafka-jaas
+  configMap:
+    name: kafka-jaas

@@ -1,6 +1,5 @@
 dbUser:
-  user: cassandra
-  password: ardnassac
+  password: "c@ssan6ra"
 podSecurityContext:
   enabled: false
 containerSecurityContext:
