@@ -11,7 +11,7 @@ pipeline {
           /var/jenkins_home/.local/bin/helm repo add bitnami https://charts.bitnami.com/bitnami
           /var/jenkins_home/.local/bin/helm repo update
           repo="$(/var/jenkins_home/.local/bin/helm -n ghym ls -qa | grep $(echo $f | awk -F '/' '{print $2}' | awk -F '.' '{print $1}'))"
-          /var/jenkins_home/.local/bin/helm upgrade -i --atomic --wait --values $f $repo "$(/var/jenkins_home/.local/bin/helm search repo | grep $repo\\  | awk '{print $1}')"
+          /var/jenkins_home/.local/bin/helm -n ghym upgrade -i --atomic --cleanup-on-fail --timeout 10m0s --wait --values $f $repo "$(/var/jenkins_home/.local/bin/helm search repo | grep $repo\\  | awk '{print $1}')"
          done
         '''
       }
