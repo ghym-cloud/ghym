@@ -28,6 +28,13 @@ COMMIT
 -A ufw-before-output -p  --dport 9042 -j ACCEPT
 -A ufw-before-input -p tcp --dport 27017 -j ACCEPT
 -A ufw-before-output -p  --dport 27017 -j ACCEPT
+-A ufw-before-output -p  --dport 80 -j ACCEPT
+-A ufw-before-output -p  --dport 443 -j ACCEPT
+-A ufw-before-output -p  --dport 3306 -j ACCEPT
+-A ufw-before-output -p  --dport 5432 -j ACCEPT
+-A ufw-before-output -p  --dport 6379 -j ACCEPT
+-A ufw-before-output -p  --dport 9042 -j ACCEPT
+-A ufw-before-output -p  --dport 27017 -j ACCEPT
 -A ufw-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A ufw-before-output -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A ufw-before-forward -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
