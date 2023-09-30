@@ -1,39 +1,50 @@
 superUsers: User:ghym
-sasl:
-  enabledMechanisms: PLAIN,SCRAM-SHA-512
-  client:
-    users:
-    - "ghym"
-    - "971551659890"
-    - "971551659896"
-    - "971551659891"
-    passwords:
-    - "k@fk@"
-    - "971551659890"
-    - "971551659896"
-    - "971551659891"
+auth:
+  clientProtocol: sasl
+  sasl:
+    mechanisms: plain,scram-sha-512
+    jaas:
+      clientUsers:
+      - "ghym"
+      - "971551659890"
+      - "971551659896"
+      - "971551659891"
+      clientPasswords:
+      - "k@fk@"
+      - "971551659890"
+      - "971551659896"
+      - "971551659891"
 listeners:
-  controller:
-    protocol: PLAINTEXT
-  advertisedListener: "CLIENT://:9092,CONTROLLER://:9093"
-  securityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:PLAINTEXT"
-extraConfig: "autoCreateTopicsEnable:false,deleteTopicEnable:true"
+- CLIENT://:9092
+- INTERNAL://:9093
+advertisedListeners:
+- CLIENT://:9092
+- INTERNAL://:9093
+listenerSecurityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:PLAINTEXT"
+allowEveryoneIfNoAclFound: true
+autoCreateTopicsEnable: false
+deleteTopicEnable: true
 extraEnvVars:
 - name: KAFKA_OPTS
   value: "-Djava.security.auth.login.config=/bitnami/kafka/data/kafka_jaas.conf"
 - name: KAFKA_CFG_AUTHORIZER_CLASS_NAME
   value: "kafka.security.authorizer.AclAuthorizer"
-controller:
-  replicaCount: 1
-  podSecurityContext:
-    enabled: false
-  containerSecurityContext:
-    allowPrivilegeEscalation: true
-    runAsUser: 0
-    runAsNonRoot: false
-  persistence:
-    enabled: false
-    storageClass: local-storage
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 30
+  timeoutSeconds: 10
+readinessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 30
+  timeoutSeconds: 10
+podSecurityContext:
+  enabled: false
+containerSecurityContext:
+  allowPrivilegeEscalation: true
+  runAsUser: 0
+  runAsNonRoot: false
+persistence:
+  storageClass: local-storage
 volumePermissions:
   enabled: true
 zookeeper:
@@ -44,7 +55,6 @@ zookeeper:
     runAsNonRoot: false
     allowPrivilegeEscalation: true
   persistence:
-    enabled: false
     storageClass: local-storage
 extraDeploy:
 - |
@@ -78,26 +88,6 @@ extraDeploy:
       user_971551659891="971551659891"
       ;org.apache.kafka.common.security.scram.ScramLoginModule required;
       };
-- |
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: kafka
-    namespace: ghym
-    labels:
-      type: local
-      app.kubernetes.io/managed-by: Helm
-    annotations:
-      meta.helm.sh/release-namespace: ghym
-      meta.helm.sh/release-name: kafk
-  spec:
-    storageClassName: local-storage
-    capacity:
-      storage: 8Gi
-    accessModes:
-    - ReadWriteOnce
-    hostPath:
-      path: /cephfs/kafka_data
 extraVolumeMounts:
 - name: kafka-client-properties
   mountPath: /bitnami/kafka/config/client.properties
@@ -114,5 +104,3 @@ extraVolumes:
 - name: kafka-jaas
   configMap:
     name: kafka-jaas
-
-# helm -n ghym upgrade -i --atomic --debug --wait kafka bitnami/kafka -f Helm/kafka.yaml

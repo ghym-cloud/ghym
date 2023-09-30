@@ -54,7 +54,7 @@ ghym - is a private cloud for myself DevOps education that I plan to convert to 
 5.      AE-DC1-5        (Hypervisor)    MS Server 2019 Core
  1.     AE-DC1-CP3      (Virtual)       Ubuntu 22.04
  2.     AE-DC1-WN5      (Virtual)       Ubuntu 22.04
- 3.     AE-DC1-WN5      (Virtual)       Ubuntu 22.04
+ 3.     AE-DC1-WN6      (Virtual)       Ubuntu 22.04
 6.	AE-DC1-6	(Hypervisor)	                       #
  1.	AE-DC1-CP	(Virtual)	Ubuntu 22.04           #
  2.	AE-DC1-WN	(Virtual)	Ubuntu 22.04           #

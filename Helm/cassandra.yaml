@@ -1,9 +1,31 @@
 dbUser:
-  password: "c@ssan6ra"
+  password: 'c@ssan6ra'
 podSecurityContext:
   enabled: false
 containerSecurityContext:
   runAsUser: 0
   runAsNonRoot: false
+resources:
+  limits:
+    cpu: 2
+    memory: 4G
+  requests:
+    cpu: 200m
+    memory: 2G
+#service:
+#  extraPorts:
+#  - name: jmx
+#    port: 7199
+#    nodePort: null
+jvm:
+  extraOpts: '-Dcom.sun.managment.jmxremote.authenticate=false'
+  maxHeapSize: 1500M
+  newHeapSize: 800M
+#extraEnvVars:
+#  - name: LOCAL_JMX
+#    value: 'no'
+livenessProbe:
+  initialDelaySeconds: 300
 persistence:
   storageClass: local-storage
+#  commitStorageClass: local-storage

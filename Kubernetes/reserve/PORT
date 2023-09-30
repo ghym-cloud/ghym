@@ -3,7 +3,7 @@ ports:
   protocol: tcp
   port: 22
   type: system
-- name: k8s
+- name: ssh
   protocol: tcp
   port: 6443
   type: loadbalancer
@@ -14,27 +14,21 @@ ports:
 - name: http
   protocol: tcp
   port: 80
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
 - name: https
   protocol: tcp
   port: 443
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
 - name: mysql
   protocol: tcp
   port: 3306
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
 - name: registry
   protocol: tcp
   port: 5000
@@ -44,32 +38,24 @@ ports:
 - name: postgresql
   protocol: tcp
   port: 5432
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
 - name: redis
   protocol: tcp
   port: 6379
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
 - name: cassandra
   protocol: tcp
   port: 9042
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
 - name: mongodb
   protocol: tcp
   port: 27017
-  type: loadbalancer
+  type: firewall
   hosts:
   - 172.16.0.8
-  - 172.16.0.11
-  - 172.16.0.15
