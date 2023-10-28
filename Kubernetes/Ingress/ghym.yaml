@@ -76,3 +76,10 @@ spec:
             name: nginx
             port:
               number: 80
+  tls:
+  - hosts:
+    - kadyshev.com
+    - ghym.ae
+    - "*.ghym.ae"
+    - "*.a.ghym.ae"
+    secretName: ghym.ae

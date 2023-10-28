@@ -8,6 +8,8 @@ pipeline {
       steps {
         sh '''
          for f in $(git diff --name-only HEAD HEAD~1 | grep ^Helm); do
+          git checkout main
+          git pull --all -f
           /var/jenkins_home/.local/bin/helm repo add bitnami https://charts.bitnami.com/bitnami
           /var/jenkins_home/.local/bin/helm repo update
           repo="$(/var/jenkins_home/.local/bin/helm -n ghym ls -qa | grep $(echo $f | awk -F '/' '{print $2}' | awk -F '.' '{print $1}'))"
