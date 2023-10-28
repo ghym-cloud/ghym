@@ -15,8 +15,9 @@ sasl:
 listeners:
   controller:
     protocol: PLAINTEXT
-  advertisedListener: "CLIENT://:9092,CONTROLLER://:9093"
-  securityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:PLAINTEXT"
+  advertisedListener: "CLIENT://:9092,CONTROLLER://:9093,INTERNAL://:9094"
+  securityProtocolMap: "CLIENT:SASL_PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT"
+interBrokerProtocolVersion: "0"
 extraConfig: "autoCreateTopicsEnable:false,deleteTopicEnable:true"
 extraEnvVars:
 - name: KAFKA_OPTS
@@ -24,19 +25,14 @@ extraEnvVars:
 - name: KAFKA_CFG_AUTHORIZER_CLASS_NAME
   value: "kafka.security.authorizer.AclAuthorizer"
 controller:
+  replicaCount: 0
+broker:
   replicaCount: 1
-  podSecurityContext:
-    enabled: false
-  containerSecurityContext:
-    allowPrivilegeEscalation: true
-    runAsUser: 0
-    runAsNonRoot: false
   persistence:
-    enabled: false
+    enabled: true
     storageClass: local-storage
-volumePermissions:
-  enabled: true
 zookeeper:
+  enabled: true
   podSecurityContext:
     enabled: false
   containerSecurityContext:
@@ -44,8 +40,10 @@ zookeeper:
     runAsNonRoot: false
     allowPrivilegeEscalation: true
   persistence:
-    enabled: false
+    enabled: true
     storageClass: local-storage
+kraft:
+  enabled: false
 extraDeploy:
 - |
   apiVersion: v1
@@ -79,17 +77,35 @@ extraDeploy:
       ;org.apache.kafka.common.security.scram.ScramLoginModule required;
       };
 - |
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: kafka
+      labels:
+        type: local
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        meta.helm.sh/release-namespace: ghym
+        meta.helm.sh/release-name: kafka
+    spec:
+      storageClassName: local-storage
+      capacity:
+        storage: 8Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /cephfs/kafka_data
+- |
   apiVersion: v1
   kind: PersistentVolume
   metadata:
-    name: kafka
-    namespace: ghym
+    name: zookeeper
     labels:
       type: local
       app.kubernetes.io/managed-by: Helm
     annotations:
       meta.helm.sh/release-namespace: ghym
-      meta.helm.sh/release-name: kafk
+      meta.helm.sh/release-name: kafka
   spec:
     storageClassName: local-storage
     capacity:
@@ -97,7 +113,7 @@ extraDeploy:
     accessModes:
     - ReadWriteOnce
     hostPath:
-      path: /cephfs/kafka_data
+      path: /cephfs/zookeeper_data
 extraVolumeMounts:
 - name: kafka-client-properties
   mountPath: /bitnami/kafka/config/client.properties

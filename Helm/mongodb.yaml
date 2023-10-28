@@ -2,3 +2,25 @@ auth:
   rootPassword: "m0n90db"
 persistence:
   storageClass: local-storage
+extraDeploy:
+- |
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: mongodb
+      labels:
+        type: local
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        meta.helm.sh/release-namespace: ghym
+        meta.helm.sh/release-name: mongodb
+    spec:
+      storageClassName: local-storage
+      capacity:
+        storage: 8Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /cephfs/mongodb_data
+
+# helm -n ghym upgrade -i --atomic --debug --wait mongodb bitnami/mongodb -f Helm/mongodb.yaml

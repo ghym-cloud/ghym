@@ -11,4 +11,4 @@ spec:
   accessModes:
   - ReadWriteOnce
   hostPath:
-    path: /cephfs/nginx_data
+    path: /cephfs/www_data

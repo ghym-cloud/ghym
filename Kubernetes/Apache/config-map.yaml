@@ -29,6 +29,7 @@ data:
     LoadModule autoindex_module modules/mod_autoindex.so
     LoadModule dir_module modules/mod_dir.so
     LoadModule alias_module modules/mod_alias.so
+    LoadModule ssl_module modules/mod_ssl.so
     <IfModule unixd_module>
     User www-data
     Group www-data
@@ -76,13 +77,12 @@ data:
         AddType application/x-compress .Z
         AddType application/x-gzip .gz .tgz
     </IfModule>
-    Include conf/extra/httpd-vhosts.conf
+      Include conf/extra/httpd-vhosts.conf
     <IfModule proxy_html_module>
-    Include conf/extra/proxy-html.conf
+      Include conf/extra/proxy-html.conf
     </IfModule>
-    <IfModule ssl_module>
-    SSLRandomSeed startup builtin
-    SSLRandomSeed connect builtin
+    <IfModule ssl_module_module>
+      Include conf/extra/httpd-ssl.conf
     </IfModule>
   magic: |
     0	short		0xcafe
@@ -1229,26 +1229,25 @@ data:
     SSLPassPhraseDialog  builtin
     SSLSessionCache        "shmcb:/usr/local/apache2/logs/ssl_scache(512000)"
     SSLSessionCacheTimeout  300
-    <VirtualHost _default_:443>
-    DocumentRoot "/usr/local/apache2/htdocs"
-    ServerName www.example.com:443
-    ServerAdmin you@example.com
-    ErrorLog /proc/self/fd/2
-    TransferLog /proc/self/fd/1
-    SSLEngine on
-    SSLCertificateFile "/usr/local/apache2/conf/server.crt"
-    SSLCertificateKeyFile "/usr/local/apache2/conf/server.key"
-    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+    <VirtualHost *:443>
+      DocumentRoot "/usr/local/apache2/conf/www/971508367195"
+      ServerName 971508367195.a.ghym.ae
+      ServerAdmin maxkadyshev@gmail.com
+      ErrorLog "logs/971508367195-error_log"
+      SSLEngine on
+      SSLCertificateFile /usr/local/apache2/cert/cert.pem
+      SSLCertificateKeyFile /usr/local/apache2/cert/key.pem
+      <FilesMatch "\.(cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
-    </FilesMatch>
-    <Directory "/usr/local/apache2/cgi-bin">
+      </FilesMatch>
+      <Directory "/usr/local/apache2/cgi-bin">
         SSLOptions +StdEnvVars
-    </Directory>
-    BrowserMatch "MSIE [2-5]" \
-             nokeepalive ssl-unclean-shutdown \
-             downgrade-1.0 force-response-1.0
-    CustomLog /proc/self/fd/1 \
-              "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+      </Directory>
+      BrowserMatch "MSIE [2-5]" \
+        nokeepalive ssl-unclean-shutdown \
+        downgrade-1.0 force-response-1.0
+      CustomLog /proc/self/fd/1 \
+        "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     </VirtualHost>
   httpd-userdir.conf: |
     UserDir public_html
@@ -1271,6 +1270,9 @@ data:
         ServerName 971508367195.a.ghym.ae
         ErrorLog "logs/971508367195-error_log"
         CustomLog "logs/971508367195-access_log" common
+        SSLEngine on
+        SSLCertificateFile /usr/local/apache2/cert/fullchain.pem
+        SSLCertificateKeyFile /usr/local/apache2/cert/key.pem
     </VirtualHost>
     <VirtualHost *:80>
         ServerAdmin maxkadyshev@gmail.com
@@ -1278,6 +1280,9 @@ data:
         ServerName 971527704925.a.ghym.ae
         ErrorLog "logs/971527704925-error_log"
         CustomLog "logs/971527704925-access_log" common
+        SSLEngine on
+        SSLCertificateFile /usr/local/apache2/cert/fullchain.pem
+        SSLCertificateKeyFile /usr/local/apache2/cert/key.pem
     </VirtualHost>
     <VirtualHost *:80>
         ServerAdmin maxkadyshev@gmail.com

@@ -12,3 +12,44 @@ replica:
   replicaCount: 1
   persistence:
     storageClass: local-storage
+extraDeploy:
+- |
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: redis-master
+      labels:
+        type: local
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        meta.helm.sh/release-namespace: ghym
+        meta.helm.sh/release-name: redis
+    spec:
+      storageClassName: local-storage
+      capacity:
+        storage: 8Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /cephfs/redis_data/master
+- |
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: redis-replica
+      labels:
+        type: local
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        meta.helm.sh/release-namespace: ghym
+        meta.helm.sh/release-name: redis
+    spec:
+      storageClassName: local-storage
+      capacity:
+        storage: 8Gi
+      accessModes:
+      - ReadWriteOnce
+      hostPath:
+        path: /cephfs/redis_data/replica
+
+# helm -n ghym upgrade -i --atomic --debug --wait redis bitnami/redis -f Helm/redis.yaml
