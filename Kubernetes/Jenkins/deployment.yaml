@@ -23,9 +23,7 @@ spec:
         - name: jenkins
           mountPath: /var/jenkins_home
         - name: nginx
-          mountPath: /var/jenkins_home/nginx
-        - name: apache
-          mountPath: /var/jenkins_home/apache
+          mountPath: /var/www_data
       dnsConfig:
         nameservers:
         - 172.16.0.8
@@ -38,7 +36,4 @@ spec:
       - name: nginx
         persistentVolumeClaim:
           claimName: nginx
-      - name: apache
-        persistentVolumeClaim:
-          claimName: apache
 # password: j3nK1n$@dm1n
