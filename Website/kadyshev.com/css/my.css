@@ -5,8 +5,8 @@ a:visited {
  color: black;
 }
 img {
- max-width: 880px;
- max-height: 380px;
+ max-width: 1024px;
+ max-height: 768px;
 }
 table {
  width: 90%;
@@ -39,15 +39,15 @@ table {
 }
 * {box-sizing:border-box}
 .slideshow-container {
-  max-width: 880px;
-  max-height: 380px;
+  max-width: 1024px;
+  max-height: 768px;
   position: relative;
   margin: auto;
 }
 .mySlides {
   display: none;
-  max-width: 880px;
-  max-height: 380px;
+  max-width: 1024px;
+  max-height: 768px;
 }
 .prev, .next {
   cursor: pointer;
