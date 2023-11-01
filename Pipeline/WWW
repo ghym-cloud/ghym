@@ -10,7 +10,7 @@ pipeline {
          for f in $(git diff --name-only HEAD HEAD~1 | grep Website | awk -F'/' '{print $2}' | sort -u); do
           git checkout main
           git pull --all -f
-          cp -rf Website/$f /var/www_data/$folder
+          cp -rf Website/$f /var/www_data/$f
          done
         '''
       }
