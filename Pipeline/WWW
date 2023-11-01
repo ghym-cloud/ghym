@@ -7,11 +7,10 @@ pipeline {
     stage('WWW') {
       steps {
         sh '''
-         for f in $(git diff --name-only HEAD HEAD~1 | grep Website); do
+         for f in $(git diff --name-only HEAD HEAD~1 | grep Website | awk -F'/' '{print $2}' | sort -u); do
           git checkout main
           git pull --all -f
-          folder=$(echo $f | awk -F'/' '{print $2}')
-          cp -rf Website/$folder /var/www_data/$folder
+          cp -rf Website/$f /var/www_data/$folder
          done
         '''
       }
