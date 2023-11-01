@@ -11,7 +11,7 @@ pipeline {
           git checkout main
           git pull --all -f
           folder=$(echo $f | awk -F'/' '{print $2}')
-          rsync -au --delete Website/$folder /var/www_data/$folder
+          mv -f /var/www_data/$folder Website/$folder
          done
         '''
       }
