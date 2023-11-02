@@ -1,0 +1,25 @@
+<?php
+ date_default_timezone_set("Asia/Dubai");
+ $db=mysqli_connect("mysql","ghym","9hympasSw0rd") OR DIE(mysqli_error());
+ mysqli_select_db($db,"ghym") or die(mysqli_error());
+ mysqli_query($db,"set names utf8");
+ function query($db,$query,$columns){
+  $result=mysqli_query($db,$query) or die(mysqli_error());
+  $i=0;
+  while ($value=mysqli_fetch_array($result,MYSQLI_NUM)){
+   for ($j=0;$j<=$columns;$j++){
+    $return[$i][$j]=$value[$j];
+   }
+   $i++;
+  }
+  return ($return)?$return:0;
+ }
+ function sms($text,$phone){
+  $ch=curl_init();
+  $url="http://onlysms.ae/api/api_http.php?username=mkadyshev&password=xyz025&senderid=mkadyshev&to=".$phone."&text=".urlencode($text)."&type=text";
+  curl_setopt($ch,CURLOPT_URL,$url);
+  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+  $result=curl_exec($ch);
+  curl_close($ch);
+ }
+?>

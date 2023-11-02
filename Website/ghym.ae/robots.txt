@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /linux/
+
+User-agent: *
+Disallow: /mysql/
+
+User-agent: *
+Allow: /
+
+Sitemap: http://ghym.ae/sitemap.txt
