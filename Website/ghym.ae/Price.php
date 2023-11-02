@@ -36,7 +36,7 @@
           <div class="u-custom-menu u-nav-container">
             <ul class="u-custom-font u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-80" href="http://ghym.ae" style="padding: 10px 20px;">Home</a>
 </li><li class="u-nav-item"><text style="padding: 10px 20px;">Price</text>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-80" href="Sign-Up.php" style="padding: 10px 20px;">Sign Up</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-80 u-sign-up-btn" href="Sign-Up.php" style="padding: 10px 20px;">Sign Up</a>
 </li></ul>
           </div>
         </nav>
