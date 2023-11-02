@@ -4,6 +4,9 @@ a:link {
 a:visited {
  color: black;
 }
+ul li {
+ font-size: 2;
+}
 img {
  max-width: 861px;
  max-height: 849px;
