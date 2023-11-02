@@ -36,7 +36,7 @@
           <div class="u-custom-menu u-nav-container">
             <ul class="u-custom-font u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-80" href="http://ghym.ae" style="padding: 10px 20px;">Home</a>
 </li><li class="u-nav-item"><text style="padding: 10px 20px;">Price</text>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-80 u-sign-up-btn" href="Sign-Up.php" style="padding: 10px 20px;">Sign Up</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-80" href="Sign-Up.php" style="padding: 10px 20px;">Sign Up</a>
 </li></ul>
           </div>
         </nav>
@@ -61,7 +61,7 @@
                   </h3>
                   <p class="u-align-center u-custom-font u-text u-text-5">all you need is UAE mobile number only<br>
                   </p>
-                  <a href="Sign-Up.php" data-page-id="2504795" class="u-border-none u-btn u-btn-round u-button-style u-custom-font u-hover-grey-80 u-radius-50 u-btn-1">Sign Up</a>
+                  <a href="Sign-Up.php" data-page-id="2504795" class="u-border-none u-btn u-btn-round u-button-style u-custom-font u-hover-grey-80 u-radius-50 u-btn-1 u-sign-up-btn">Sign Up</a>
                 </div>
               </div>
               <div class="cell-temp-clone u-align-left u-container-style u-layout-cell u-size-20 u-white u-layout-cell-3">
