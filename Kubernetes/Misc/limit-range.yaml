@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: ghym
+  namespace: ghym
+spec:
+  limits:
+  - type: Container
+    default:
+      cpu: 0.1
+      memory: 100M
+    defaultRequest:
+      cpu: 0.1
+      memory: 100M
+    max:
+      cpu: 2
+      memory: 4G
+      ephemeral-storage: 25G
+  - type: PersistentVolumeClaim
+    max:
+      storage: 25G

@@ -26,9 +26,15 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "printf '#!/bin/bash\nmysqldump --all-databases > /nfs/mysql_all_databases.sql 2>&1\n' > /etc/cron.daily/backup"]
         volumeMounts:
         - name: mysql
           mountPath: /var/lib/mysql
+        - name: backup
+          mountPath: /backup
       dnsConfig:
         nameservers:
         - 172.16.0.8
@@ -38,3 +44,6 @@ spec:
       - name: mysql
         persistentVolumeClaim:
           claimName: mysql
+      - name: backup
+        persistentVolumeClaim:
+          claimName: backup

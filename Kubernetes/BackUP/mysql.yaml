@@ -1,0 +1,7 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-mysql
+  namespace: ghym
+spec:
+  schedule: '0 0 * * *'

@@ -6,6 +6,7 @@ metadata:
 spec:
   ports:
   - name: jenkins
-    port: 8080
+    port: 8008
+    targetPort: 8080
   selector:
     app: jenkins

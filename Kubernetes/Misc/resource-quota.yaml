@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ghym
+  namespace: ghym
+spec:
+  hard:
+# Compute resource quota
+    requests.cpu: 50
+    requests.memory: 50G
+    limits.cpu: 100
+    limits.memory: 100G
+# Storage resource quota
+    requests.storage: 1T
+    limits.ephemeral-storage: 1T
+    persistentvolumeclaims: 100
+# Object count quota
+    count/apiservices.apiregistration.k8s.io: 100
+    count/certificatesigningrequests.certificates.k8s.io: 5
+    count/componentstatuses: 10
+    count/configmaps: 100
+    count/controllerrevisions.apps: 100
+    count/clusterrolebindings.rbac.authorization.k8s.io: 100
+    count/clusterroles.rbac.authorization.k8s.io: 100
+    count/cronjobs.batch: 5
+    count/csidrivers.storage.k8s.io: 5
+    count/customresourcedefinitions.apiextensions.k8s.io: 5
+    count/daemonsets.apps: 30
+    count/deployments.apps: 30
+    count/endpoints: 100
+    count/events: 10
+    count/flowschemas.flowcontrol.apiserver.k8s.io: 20
+    count/horizontalpodautoscalers.autoscaling: 5
+    count/ingressclasses.networking.k8s.io: 1
+    count/ingresses.networking.k8s.io: 5
+    count/jobs.batch: 5
+    count/leases.coordination: 5
+    count/limitranges: 5
+    count/mutatingwebhookconfigurations.admissionregistration.k8s.io: 5
+    count/namespaces: 10
+    count/networkpolicies.networking.k8s.io: 5
+    count/nodes: 20
+    count/persistentvolumeclaims: 100
+    count/persistentvolumes: 100
+    count/poddisruptionbudgets.policy: 5
+    count/pods: 100
+    count/podtemplates: 5
+    count/priorityclasses.scheduling.k8s.io: 5
+    count/prioritylevelconfigurations.flowcontrol.apiserver.k8s.io: 10
+    count/replicationcontrollers: 5
+    count/replicasets.apps: 30
+    count/resourcequotas: 5
+    count/rolebindings.rbac.authorization.k8s.io: 500
+    count/roles.rbac.authorization.k8s.io: 1000
+    count/runtimeclasses.node.k8s.io: 5
+    count/secrets: 30
+    count/serviceaccounts: 20
+    count/services: 100
+    count/statefulsets.apps: 30
+    count/storageclasses.storage.k8s.io: 5
+    count/validatingwebhookconfigurations.admissionregistration.k8s.io: 5
+    count/volumeattachments.storage.k8s.io: 5

@@ -18,7 +18,7 @@ ghym - is a private cloud for myself DevOps education that I plan to convert to 
  - CPU: 2 Cores
  - RAM: 8Gb
  - RAID 0: 1944 GiB
-5. HP EliteDesk 800 G6
+5. HP EliteDesk 800 G6 (portable)
  - CPU: 6 Cores
  - RAM: 16Gb
  - RAID 0: 1408 GiB
@@ -51,10 +51,10 @@ ghym - is a private cloud for myself DevOps education that I plan to convert to 
  3.	AE-DC1-WN2	(Virtual)	Ubuntu 20.04
 3.	AE-DC1-3	(Hardware)	Ubuntu 20.04
 4.	AE-DC1-4	(Hardware)	Ubuntu 20.04
-5.      AE-DC1-5        (Hypervisor)    MS Server 2019 Core
- 1.     AE-DC1-CP3      (Virtual)       Ubuntu 22.04
- 2.     AE-DC1-WN5      (Virtual)       Ubuntu 22.04
- 3.     AE-DC1-WN6      (Virtual)       Ubuntu 22.04
+5.      AE-DC1-5        (Hypervisor)    MS Server 2019 Core	(portable)	172.16.0.14:5616
+ 1.     AE-DC1-CP3      (Virtual)       Ubuntu 22.04		(portable)	172.16.0.15
+ 2.     AE-DC1-WN5      (Virtual)       Ubuntu 22.04		(portable)	172.16.0.16
+ 3.     AE-DC1-WN6      (Virtual)       Ubuntu 22.04		(portable)	172.16.0.17
 6.	AE-DC1-6	(Hypervisor)	                       #
  1.	AE-DC1-CP	(Virtual)	Ubuntu 22.04           #
  2.	AE-DC1-WN	(Virtual)	Ubuntu 22.04           #

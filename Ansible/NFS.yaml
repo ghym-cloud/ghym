@@ -1,0 +1,54 @@
+---
+- name: NFS server
+  hosts: aedc14
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_sudo_pass: 123456
+  pre_tasks:
+  - name: Update all packages to their latest version
+    apt:
+      name: "*"
+      state: latest
+  - name: Install nfs server
+    apt:
+      name: nfs-kernel-server
+      state: present
+  - name: Create directory for NFS
+    file:
+      path: /nfs
+      mopde: 1777
+      state: directory
+  - name: Share directory
+    blockinfile:
+      path: /etc/exports
+      block: |
+        /nfs/ *(rw,sync,no_root_squash,subtree_check)
+  - name: Re-read config
+    command: 'exportfs -ra'
+- name: NFS client
+  hosts: ghym
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_sudo_pass: 123456
+  pre_tasks:
+  - name: Update all packages to their latest version
+    apt:
+      upgrade: yes
+      update_cache: yes
+  - name: Install nfs client
+    apt:
+      name: nfs-common
+      state: present
+  - name: Create directory for NFS
+    file:
+      path: /nfs
+      state: directory
+  - name: Add mountfolder
+    blockinfile:
+      path: /etc/fstab
+      block: |
+        ae-dc1-4:/nfs /nfs nfs defaults 0 0
+  - name: Re-read config
+    command: 'mount -a'

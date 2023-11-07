@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab
+  namespace: ghym
+data:
+  gitlab.rb: |
+    external_url 'gitlab.ghym.local'

@@ -9,54 +9,54 @@ spec:
   - host: grafana.ghym.local
     http:
       paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: grafana
-              port:
-                number: 3000
-  - host: mysql.ghym.local
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 3000
+  - host: gitlab.ghym.local
     http:
       paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: jenkins
-              port:
-                number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gitlab
+            port:
+              number: 80
   - host: jenkins.ghym.ae
     http:
       paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: jenkins
-              port:
-                number: 8080
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jenkins
+            port:
+              number: 8008
   - host: ghym.ae
     http:
       paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: nginx
-              port:
-                number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
   - host: kadyshev.com
     http:
       paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: nginx
-              port:
-                number: 80
-  - host: "*.a.ghym.ae"
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+  - host: '*.a.ghym.ae'
     http:
       paths:
       - path: /
@@ -66,7 +66,7 @@ spec:
             name: apache
             port:
               number: 80
-  - host: "*.ghym.ae"
+  - host: '*.ghym.ae'
     http:
       paths:
       - path: /
@@ -80,6 +80,7 @@ spec:
   - hosts:
     - kadyshev.com
     - ghym.ae
-    - "*.ghym.ae"
-    - "*.a.ghym.ae"
+    - '*.a.ghym.ae'
+    - '*.ghym.ae'
+    - '*.ghym.local'
     secretName: ghym.ae

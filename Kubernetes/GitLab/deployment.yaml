@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab
+  namespace: ghym
+  labels:
+    app: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  template:
+    metadata:
+      labels:
+        app: gitlab
+    spec:
+      containers:
+      - name: gitlab
+        image: gitlab/gitlab-ce:16.5.1-ce.0
+        volumeMounts:
+        - name: gitlab-conf
+          mountPath: /etc/gitlab
+        - name: gitlab-data
+          mountPath: /var/opt/gitlab
+        resources:
+          limits:
+            cpu: 1
+            memory: 500M
+          requests:
+            cpu: 0.2
+            memory: 256M
+      dnsConfig:
+        nameservers:
+        - 172.16.0.8
+        searches:
+        - ghym.local
+      volumes:
+      - name: gitlab-data
+        persistentVolumeClaim:
+          claimName: gitlab
+      - name: gitlab-conf
+        configMap:
+          name: gitlab
