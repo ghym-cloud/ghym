@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bind
+  namespace: ghym
+  labels:
+    app: bind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bind
+  template:
+    metadata:
+      labels:
+        app: bind
+    spec:
+      containers:
+      - name: bind
+        image: ubuntu/bind9
+        ports:
+        - containerPort: 53
+        volumeMounts:
+        - name: bind-conf
+          mountPath: /etc/bind/named.conf
+          subPath: named.conf
+          readOnly: true
+        - name: bind-log
+          mountPath: /etc/bind/named.conf.logging
+          subPath: named.conf.logging
+          readOnly: true
+        - name: bind-options
+          mountPath: /etc/bind/named.conf.options
+          subPath: named.conf.options
+          readOnly: true
+        - name: bind-arpa-conf
+          mountPath: /etc/bind/custom/conf/0.16.172.in-addr.arpa.conf
+          subPath: 0.16.172.in-addr.arpa.conf
+          readOnly: true
+        - name: bind-ghym-conf
+          mountPath: /etc/bind/custom/conf/ghym.local.conf
+          subPath: ghym.local.conf
+          readOnly: true
+        - name: bind-arpa-zone
+          mountPath: /etc/bind/custom/zone/0.16.172.in-addr.arpa
+          subPath: 0.16.172.in-addr.arpa
+          readOnly: true
+        - name: bind-ghym-zone
+          mountPath: /etc/bind/custom/zone/ghym.local
+          subPath: ghym.local
+          readOnly: true
+      dnsConfig:
+        nameservers:
+        - 94.200.200.200
+        - 91.74.74.74
+      volumes:
+      - name: bind-conf
+        configMap:
+          name: bind-conf
+      - name: bind-log
+        configMap:
+          name: bind-log
+      - name: bind-options
+        configMap:
+          name: bind-options
+      - name: bind-arpa-conf
+        configMap:
+          name: bind-arpa-conf
+      - name: bind-ghym-conf
+        configMap:
+          name: bind-ghym-conf
+      - name: bind-arpa-zone
+        configMap:
+          name: bind-arpa-zone
+      - name: bind-ghym-zone
+        configMap:
+          name: bind-ghym-zone

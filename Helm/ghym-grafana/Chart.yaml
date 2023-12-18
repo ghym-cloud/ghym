@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ghym-grafana
+description: ghym version of grafana configuration
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

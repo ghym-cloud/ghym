@@ -1,0 +1,26 @@
+persistent:
+  enabled: true
+  storage: 1Gi
+  path: /cifs/mysql_data
+password: my59I9hym
+service:
+  type: ClusterIP
+  port: 3306
+externalIP:
+- 172.16.0.15
+replicaCount: 1
+image:
+  repository: mysql
+  pullPolicy: IfNotPresent
+  tag: 5.6
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+domain: ghym.local
+resources:
+  limits:
+    memory: 500M
+  requests:
+    memory: 256M
+
+# helm upgrade -i -n ghym --atomic --wait --debug mysql . -f values.yaml

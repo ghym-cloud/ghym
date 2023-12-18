@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+          name: {{ .Release.Name }}
+        volumeMounts:
+        {{- if .Values.persistent.enabled }}
+        - name: {{ .Release.Name }}
+          mountPath: /var/jenkins_home
+        {{- end }}
+        - name: nginx
+          mountPath: /var/www_data
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+        searches:
+        - {{ .Values.domain }}
+      volumes:
+      {{- if .Values.persistent.enabled }}
+      - name: {{ .Release.Name }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- end }}
+      - name: nginx
+        persistentVolumeClaim:
+          claimName: nginx
+
+# password: j3nK1n$@dm1n

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ghym-apache
+description: ghym version of Apache configuration
+type: application
+version: 0.1.0
+appVersion: "2.4.57"

@@ -1,9 +1,9 @@
-window.onload = function() {
- var loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
- console.log('Page load time is ' + loadTime / 1000);
- performanceDisplay = document.getElementById("timer");
- performanceDisplay.innerText = loadTime / 1000;
-}
+//window.onload = function() {
+// var loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
+// console.log('Page load time is ' + loadTime / 1000);
+// performanceDisplay = document.getElementById("timer");
+// performanceDisplay.innerText = loadTime / 1000;
+//}
 var modal = document.getElementById("myModal");
 var modal2 = document.getElementById("myModal2");
 var modal3 = document.getElementById("myModal3");

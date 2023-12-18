@@ -1,0 +1,35 @@
+persistent:
+  enabled: false
+  storage: 1Gi
+  path: /cifs/grafana_data
+service:
+  type: ClusterIP
+  port: 3000
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    enables: true
+domain: ghym.local
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+replicaCount: 1
+readinessProbe:
+  failureThreshold: 3
+  httpGet:
+    path: /robots.txt
+    port: 3000
+    scheme: HTTP
+image:
+  repository: grafana/grafana
+  tag: latest
+resources:
+  limits:
+    cpu: 500m
+    memory: 1000Mi
+  requests:
+    cpu: 250m
+    memory: 750Mi
+
+# helm upgrade -i -n ghym --atomic --wait --debug grafana . -f values.yaml

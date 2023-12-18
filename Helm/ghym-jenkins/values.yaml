@@ -1,0 +1,24 @@
+persistent:
+  enabled: true
+  storage: 1Gi
+  path: /cifs/jenkins_data
+service:
+  type: ClusterIP
+  port: 8008
+  targetPort: 8080
+replicaCount: 1
+image:
+  repository: maxkadyshev/jenkins
+  pullPolicy: IfNotPresent
+  tag: 2.387.2-lts-jdk11-1
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+domain: ghym.local
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    enables: true
+
+# helm upgrade -i -n ghym --atomic --wait --debug jenkins . -f values.yaml

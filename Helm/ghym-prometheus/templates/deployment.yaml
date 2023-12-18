@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: prometheus
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: {{ .Values.image.repository }}
+        ports:
+        - containerPort: {{ .Values.service.port.ui }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-config
+          mountPath: /etc/prometheus/prometheus.yml
+          subPath: prometheus.yml
+        {{- if .Values.persistent.enabled }}
+        volumeMounts:
+        - name: {{ .Release.Name }}
+          mountPath: /metrics
+        {{- end }}
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+        searches:
+        - {{ .Values.domain }}
+      volumes:
+      - name: {{ .Release.Name }}-config
+        configMap:
+          name: {{ .Release.Name }}
+      {{- if .Values.persistent.enabled }}
+      - name: {{ .Release.Name }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- end }}

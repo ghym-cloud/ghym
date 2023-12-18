@@ -1,0 +1,35 @@
+persistent:
+  enabled: true
+  storage: 1Gi
+  path: /cifs/gitlab
+replicaCount: 1
+image:
+  repository: gitlab/gitlab-ce
+  tag: 16.5.1-ce.0
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+resources:
+  limits:
+    cpu: 1
+    memory: 500M
+  requests:
+    cpu: 0.2
+    memory: 256M
+domain: ghym.local
+service:
+  type: ClusterIP
+  port: 80
+  ssl:
+    enabled: true
+    port: 443
+  ssh:
+    enabled: true
+    port: 22
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    enables: true
+
+# helm upgrade -i -n ghym --atomic --wait --debug gitlab . -f values.yaml

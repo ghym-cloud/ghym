@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ghym-jenkins
+description: ghym version of Jenkins configuration
+type: application
+version: 0.1.0
+appVersion: "2.387.2-lts-jdk11-1"

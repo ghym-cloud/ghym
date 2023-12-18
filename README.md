@@ -1,5 +1,5 @@
 # Ghym
-ghym - is a private cloud for myself DevOps education that I plan to convert to free cloud computing platform if I succeed with my education gaols. SLA - there is no sla, use As Is or don't use at all as I keep right to shutdown cloud suddenly and forever without prior notice or handover data
+ghym - is a private cloud for myself DevOps education that I plan to convert to free cloud computing platform if I succeed with my education goals. SLA - there is no sla, use "As Is" or don't use at all as I keep right to shutdown cloud suddenly and forever without prior notice or handover data
 
 ## Hardware
 1. HP Pro Liant DL360e G8
@@ -50,8 +50,8 @@ ghym - is a private cloud for myself DevOps education that I plan to convert to 
  2.	AE-DC1-WN1	(Virtual)	Ubuntu 20.04
  3.	AE-DC1-WN2	(Virtual)	Ubuntu 20.04
 3.	AE-DC1-3	(Hardware)	Ubuntu 20.04
-4.	AE-DC1-4	(Hardware)	Ubuntu 20.04
-5.      AE-DC1-5        (Hypervisor)    MS Server 2019 Core	(portable)	172.16.0.14:5616
+4.	AE-DC1-4	(Hardware)	Ubuntu 20.04 
+5. AE-DC1-5        (Hypervisor)    MS Server 2019 Core	(portable)	172.16.0.14:5616
  1.     AE-DC1-CP3      (Virtual)       Ubuntu 22.04		(portable)	172.16.0.15
  2.     AE-DC1-WN5      (Virtual)       Ubuntu 22.04		(portable)	172.16.0.16
  3.     AE-DC1-WN6      (Virtual)       Ubuntu 22.04		(portable)	172.16.0.17
@@ -72,7 +72,7 @@ Get started right now using our documentation
 
 ## Feedback
 
-If you find any issue, have general feedback or question drom an email to info@ghym.ae
+If you find any issue, have general feedback or question drop an email to maxkadyshev@gmail.com
 
 ## Contributions
 

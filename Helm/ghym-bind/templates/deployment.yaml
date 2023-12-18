@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: bind
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: bind
+  template:
+    metadata:
+      labels:
+        app: bind
+    spec:
+      containers:
+      - name: bind
+        image: {{ .Values.image.repository }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-conf-root
+          mountPath: /etc/bind
+          readOnly: true
+        - name: {{ .Release.Name }}-conf-custom
+          mountPath: /etc/bind/custom/conf
+          readOnly: true
+        - name: {{ .Release.Name }}-conf-zone
+          mountPath: /etc/bind/custom/zone
+          readOnly: true
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+      volumes:
+      - name: {{ .Release.Name }}-conf-root
+        configMap:
+          name: {{ .Release.Name }}-conf-root
+      - name: {{ .Release.Name }}-conf-custom
+        configMap:
+          name: {{ .Release.Name }}-conf-custom
+      - name: {{ .Release.Name }}-conf-zone
+        configMap:
+          name: {{ .Release.Name }}-conf-zone

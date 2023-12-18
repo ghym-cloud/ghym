@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: grafana
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        env:
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-clock-panel,grafana-simple-json-datasource"
+#        - name: GF_PATHS_CONFIG
+#          value: /var/lib/grafana/grafana.ini
+#        - name: GF_PATHS_PROVISIONING
+#          value: /var/lib/grafana/provisioning
+#        - name: GF_PATHS_DATA
+#          value: /var/lib/grafana
+#        - name: GF_PATHS_PLUGINS
+#          value: /var/lib/grafana/plugins
+        readinessProbe:
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          httpGet:
+            path: {{ .Values.readinessProbe.httpGet.path }}
+            port: {{ .Values.readinessProbe.httpGet.port }}
+            scheme: {{ .Values.readinessProbe.httpGet.scheme }}
+        {{- if .Values.persistent.enabled }}
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        volumeMounts:
+        - name: {{ .Release.Name }}
+          mountPath: /var/lib/grafana
+        {{- end }}
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+        searches:
+        - {{ .Values.domain }}
+      {{- if .Values.persistent.enabled }}
+      volumes:
+      - name: {{ .Release.Name }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{ end }}

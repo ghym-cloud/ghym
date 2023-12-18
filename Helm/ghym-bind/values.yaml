@@ -1,0 +1,12 @@
+replicaCount: 1
+image:
+  repository: ubuntu/bind9
+service:
+  port: 53
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+externalIP:
+- 172.16.0.15
+
+# helm upgrade -i -n ghym --atomic --wait --debug bind . -f values.yaml

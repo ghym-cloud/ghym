@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ghym-bind
+description: ghym version of Bind configuration
+type: application
+version: 0.1.0
+appVersion: "9"

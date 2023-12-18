@@ -1,0 +1,16 @@
+persistent:
+  enabled: true
+  storage: 1Gi
+  path: /cifs/www_data
+service:
+  type: ClusterIP
+  port: 80
+  ssl:
+    enabled: true
+    port: 443
+replicaCount: 1
+image:
+  repository: httpd
+  tag: 2.4.57
+
+# helm upgrade -i -n ghym --atomic --wait --debug apache . -f values.yaml

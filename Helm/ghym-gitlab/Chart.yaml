@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ghym-gitlab
+description: ghym version of GitLab configuration
+type: application
+version: 0.1.0
+appVersion: "16.5.1-ce.0"

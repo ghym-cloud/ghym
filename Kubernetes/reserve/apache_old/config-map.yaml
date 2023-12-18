@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: apache-conf
+  name: apache-httpd
   namespace: ghym
 data:
   httpd.conf: |
@@ -29,7 +29,6 @@ data:
     LoadModule autoindex_module modules/mod_autoindex.so
     LoadModule dir_module modules/mod_dir.so
     LoadModule alias_module modules/mod_alias.so
-    LoadModule ssl_module modules/mod_ssl.so
     <IfModule unixd_module>
     User www-data
     Group www-data
@@ -77,13 +76,21 @@ data:
         AddType application/x-compress .Z
         AddType application/x-gzip .gz .tgz
     </IfModule>
-      Include conf/extra/httpd-vhosts.conf
+    Include conf/extra/httpd-vhosts.conf
     <IfModule proxy_html_module>
-      Include conf/extra/proxy-html.conf
+    Include conf/extra/proxy-html.conf
     </IfModule>
-    <IfModule ssl_module_module>
-      Include conf/extra/httpd-ssl.conf
+    <IfModule ssl_module>
+    SSLRandomSeed startup builtin
+    SSLRandomSeed connect builtin
     </IfModule>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-magic
+  namespace: ghym
+data:
   magic: |
     0	short		0xcafe
     >2	short		0xbabe		application/java
@@ -190,6 +197,13 @@ data:
     0	byte		2			video/unknown
     4   string      moov        video/quicktime
     4   string      mdat        video/quicktime
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-mime-types
+  namespace: ghym
+data:
   mime.types: |
     application/andrew-inset			ez
     application/applixware				aw
@@ -962,7 +976,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: apache-extra
+  name: apache-httpd-autoindex
   namespace: ghym
 data:
   httpd-autoindex.conf: |
@@ -1002,6 +1016,13 @@ data:
     ReadmeName README.html
     HeaderName HEADER.html
     IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-dav
+  namespace: ghym
+data:
   httpd-dav.conf: |
     DavLockDB "/usr/local/apache2/var/DavLock"
     Alias /uploads "/usr/local/apache2/uploads"
@@ -1009,8 +1030,12 @@ data:
         Dav On
         AuthType Digest
         AuthName DAV-upload
+        # You can use the htdigest program to create the password database:
+        #   htdigest -c "/usr/local/apache2/user.passwd" DAV-upload admin
         AuthUserFile "/usr/local/apache2/user.passwd"
         AuthDigestProvider file
+        # Allow universal read-access, but writes are restricted
+        # to the admin user.
         <RequireAny>
             Require method GET POST OPTIONS
             Require user admin
@@ -1024,6 +1049,13 @@ data:
     BrowserMatch "^XML Spy" redirect-carefully
     BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
     BrowserMatch " Konqueror/4" redirect-carefully
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-default
+  namespace: ghym
+data:
   httpd-default.conf: |
     Timeout 60
     KeepAlive On
@@ -1037,6 +1069,13 @@ data:
     <IfModule reqtimeout_module>
       RequestReadTimeout header=20-40,MinRate=500 body=20,MinRate=500
     </IfModule>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-info
+  namespace: ghym
+data:
   httpd-info.conf: |
     <Location /server-status>
         SetHandler server-status
@@ -1048,6 +1087,13 @@ data:
         Require host .example.com
         Require ip 127
     </Location>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-languages
+  namespace: ghym
+data:
   httpd-languages.conf: |
     AddLanguage ca .ca
     AddLanguage cs .cz .cs
@@ -1124,6 +1170,13 @@ data:
     AddCharset iso-10646-ucs-2 .ucs-2 .iso-10646-ucs-2
     AddCharset iso-10646-ucs-4 .ucs-4 .iso-10646-ucs-4
     AddCharset shift_jis   .shift_jis .sjis
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-manual
+  namespace: ghym
+data:
   httpd-manual.conf: |
     AliasMatch ^/manual(?:/(?:da|de|en|es|fr|ja|ko|pt-br|ru|tr|zh-cn))?(/.*)?$ "/usr/local/apache2/manual$1"
     <Directory "/usr/local/apache2/manual">
@@ -1133,13 +1186,27 @@ data:
         <Files *.html>
             SetHandler type-map
         </Files>
+        # .tr is text/troff in mime.types!
         RemoveType tr
+        # Traditionally, used .dk filename extension for da language
         AddLanguage da .da
         SetEnvIf Request_URI ^/manual/(da|de|en|es|fr|ja|ko|pt-br|ru|tr|zh-cn)/ prefer-language=$1
         RedirectMatch 301 ^/manual(?:/(da|de|en|es|fr|ja|ko|pt-br|ru|tr|zh-cn)){2,}(/.*)?$ /manual/$1$2
+        # Reflect the greatest effort in translation (most content available),
+        # inferring greater attention to detail (potentially false assumption,
+        # counting translations presently in-sync would be more helpful.)
+        # Use caution counting; safest pattern is '*.xml.XX'. Recent .xml source
+        # document count: 266 214 110 94 82 25 22    18     4  1  1
         LanguagePriority   en  fr  ko ja tr es de zh-cn pt-br da ru
         ForceLanguagePriority Prefer Fallback
     </Directory>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-mpm
+  namespace: ghym
+data:
   httpd-mpm.conf: |
     <IfModule !mpm_netware_module>
         PidFile "logs/httpd.pid"
@@ -1191,6 +1258,13 @@ data:
     <IfModule mpm_netware_module>
         MaxMemFree             100
     </IfModule>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-multilang-errordoc
+  namespace: ghym
+data:
   httpd-multilang-errordoc.conf: |
     Alias /error/ "/usr/local/apache2/error/"
     <Directory "/usr/local/apache2/error">
@@ -1219,6 +1293,13 @@ data:
     ErrorDocument 502 /error/HTTP_BAD_GATEWAY.html.var
     ErrorDocument 503 /error/HTTP_SERVICE_UNAVAILABLE.html.var
     ErrorDocument 506 /error/HTTP_VARIANT_ALSO_VARIES.html.var
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-ssl
+  namespace: ghym
+data:
   httpd-ssl.conf: |
     Listen 443
     SSLCipherSuite HIGH:MEDIUM:!MD5:!RC4:!3DES
@@ -1229,26 +1310,34 @@ data:
     SSLPassPhraseDialog  builtin
     SSLSessionCache        "shmcb:/usr/local/apache2/logs/ssl_scache(512000)"
     SSLSessionCacheTimeout  300
-    <VirtualHost *:443>
-      DocumentRoot "/usr/local/apache2/conf/www/971508367195"
-      ServerName 971508367195.a.ghym.ae
-      ServerAdmin maxkadyshev@gmail.com
-      ErrorLog "logs/971508367195-error_log"
-      SSLEngine on
-      SSLCertificateFile /usr/local/apache2/cert/cert.pem
-      SSLCertificateKeyFile /usr/local/apache2/cert/key.pem
-      <FilesMatch "\.(cgi|shtml|phtml|php)$">
+    <VirtualHost _default_:443>
+    DocumentRoot "/usr/local/apache2/htdocs"
+    ServerName www.example.com:443
+    ServerAdmin you@example.com
+    ErrorLog /proc/self/fd/2
+    TransferLog /proc/self/fd/1
+    SSLEngine on
+    SSLCertificateFile "/usr/local/apache2/conf/server.crt"
+    SSLCertificateKeyFile "/usr/local/apache2/conf/server.key"
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
-      </FilesMatch>
-      <Directory "/usr/local/apache2/cgi-bin">
+    </FilesMatch>
+    <Directory "/usr/local/apache2/cgi-bin">
         SSLOptions +StdEnvVars
-      </Directory>
-      BrowserMatch "MSIE [2-5]" \
-        nokeepalive ssl-unclean-shutdown \
-        downgrade-1.0 force-response-1.0
-      CustomLog /proc/self/fd/1 \
-        "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+    </Directory>
+    BrowserMatch "MSIE [2-5]" \
+             nokeepalive ssl-unclean-shutdown \
+             downgrade-1.0 force-response-1.0
+    CustomLog /proc/self/fd/1 \
+              "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     </VirtualHost>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-userdir
+  namespace: ghym
+data:
   httpd-userdir.conf: |
     UserDir public_html
     <Directory "/home/*/public_html">
@@ -1256,41 +1345,49 @@ data:
     Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
     Require method GET POST OPTIONS
     </Directory>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-httpd-vhosts
+  namespace: ghym
+data:
   httpd-vhosts.conf: |
     <VirtualHost *:80>
         ServerAdmin maxkadyshev@gmail.com
         DocumentRoot "/usr/local/apache2/conf/www/971551659890"
-        ServerName 971551659890.a.ghym.ae
+        ServerName 971551659890.ghym.ae
         ErrorLog "logs/971551659890-error_log"
         CustomLog "logs/971551659890-access_log" common
     </VirtualHost>
     <VirtualHost *:80>
         ServerAdmin maxkadyshev@gmail.com
         DocumentRoot "/usr/local/apache2/conf/www/971508367195"
-        ServerName 971508367195.a.ghym.ae
+        ServerName 971508367195.ghym.ae
         ErrorLog "logs/971508367195-error_log"
         CustomLog "logs/971508367195-access_log" common
-        SSLEngine on
-        SSLCertificateFile /usr/local/apache2/cert/fullchain.pem
-        SSLCertificateKeyFile /usr/local/apache2/cert/key.pem
     </VirtualHost>
     <VirtualHost *:80>
         ServerAdmin maxkadyshev@gmail.com
         DocumentRoot "/usr/local/apache2/conf/www/971527704925"
-        ServerName 971527704925.a.ghym.ae
+        ServerName 971527704925.ghym.ae
         ErrorLog "logs/971527704925-error_log"
         CustomLog "logs/971527704925-access_log" common
-        SSLEngine on
-        SSLCertificateFile /usr/local/apache2/cert/fullchain.pem
-        SSLCertificateKeyFile /usr/local/apache2/cert/key.pem
     </VirtualHost>
     <VirtualHost *:80>
         ServerAdmin maxkadyshev@gmail.com
         DocumentRoot "/usr/local/apache2/conf/www/971508427630"
-        ServerName 971508427630.a.ghym.ae
+        ServerName 971508427630.ghym.ae
         ErrorLog "logs/971508427630-error_log"
         CustomLog "logs/971508427630-access_log" common
     </VirtualHost>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-proxy-html
+  namespace: ghym
+data:
   proxy-html.conf: |
     ProxyHTMLLinks	a		href
     ProxyHTMLLinks	area		href

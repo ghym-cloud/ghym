@@ -1,0 +1,25 @@
+persistent:
+  enabled: true
+  storage: 5Gi
+  path: /cifs/prometheus_data
+externalIP:
+- 172.16.0.15
+service:
+  type: ClusterIP
+  port:
+    ui: 9090
+    alertManager: 9093
+replicaCount: 1
+image:
+  repository: prom/prometheus
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+domain: ghym.local
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    enables: true
+
+# helm upgrade -i -n ghym --atomic --wait --debug prometheus . -f values.yaml

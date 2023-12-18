@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: {{ .Release.Name}}
+  selector:
+    matchLabels:
+      app: postgresql
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: password
+        - name: PGDATA
+          value: /data/pgdata
+        {{- if .Values.persistent.enabled }}
+        volumeMounts:
+        - name: {{ .Release.Name }}
+          mountPath: /data
+        {{ end }}
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+        searches:
+        - {{ .Values.domain }}
+      {{- if .Values.persistent.enabled }}
+      volumes:
+      - name: {{ .Release.Name }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- end }}

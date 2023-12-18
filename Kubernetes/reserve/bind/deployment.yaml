@@ -21,57 +21,26 @@ spec:
         ports:
         - containerPort: 53
         volumeMounts:
-        - name: bind-conf
-          mountPath: /etc/bind/named.conf
-          subPath: named.conf
+        - name: bind-conf-root
+          mountPath: /etc/bind
           readOnly: true
-        - name: bind-log
-          mountPath: /etc/bind/named.conf.logging
-          subPath: named.conf.logging
+        - name: bind-conf-custom
+          mountPath: /etc/bind/custom/conf
           readOnly: true
-        - name: bind-options
-          mountPath: /etc/bind/named.conf.options
-          subPath: named.conf.options
-          readOnly: true
-        - name: bind-arpa-conf
-          mountPath: /etc/bind/custom/conf/0.16.172.in-addr.arpa.conf
-          subPath: 0.16.172.in-addr.arpa.conf
-          readOnly: true
-        - name: bind-ghym-conf
-          mountPath: /etc/bind/custom/conf/ghym.local.conf
-          subPath: ghym.local.conf
-          readOnly: true
-        - name: bind-arpa-zone
-          mountPath: /etc/bind/custom/zone/0.16.172.in-addr.arpa
-          subPath: 0.16.172.in-addr.arpa
-          readOnly: true
-        - name: bind-ghym-zone
-          mountPath: /etc/bind/custom/zone/ghym.local
-          subPath: ghym.local
+        - name: bind-conf-zone
+          mountPath: /etc/bind/custom/zone
           readOnly: true
       dnsConfig:
         nameservers:
         - 94.200.200.200
         - 91.74.74.74
       volumes:
-      - name: bind-conf
+      - name: bind-conf-root
         configMap:
-          name: bind-conf
-      - name: bind-log
+          name: bind-conf-root
+      - name: bind-conf-custom
         configMap:
-          name: bind-log
-      - name: bind-options
+          name: bind-conf-custom
+      - name: bind-conf-zone
         configMap:
-          name: bind-options
-      - name: bind-arpa-conf
-        configMap:
-          name: bind-arpa-conf
-      - name: bind-ghym-conf
-        configMap:
-          name: bind-ghym-conf
-      - name: bind-arpa-zone
-        configMap:
-          name: bind-arpa-zone
-      - name: bind-ghym-zone
-        configMap:
-          name: bind-ghym-zone
+          name: bind-conf-zone

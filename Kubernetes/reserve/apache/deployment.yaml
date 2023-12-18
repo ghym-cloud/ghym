@@ -20,70 +20,18 @@ spec:
     spec:
       containers:
       - name: apache
-        image: httpd:2.4.54
+        image: httpd:2.4.57
         volumeMounts:
+        - name: apache-conf
+          mountPath: /usr/local/apache2/conf
+          readOnly: true
+        - name: apache-extra
+          mountPath: /usr/local/apache2/conf/extra
+          readOnly: true
         - name: apache-data
           mountPath: /usr/local/apache2/conf/www
-        - name: apache-httpd
-          mountPath: /usr/local/apache2/conf/httpd.conf
-          subPath: httpd.conf
-          readOnly: true
-        - name: apache-magic
-          mountPath: /usr/local/apache2/conf/magic
-          subPath: magic
-          readOnly: true
-        - name: apache-mime-types
-          mountPath: /usr/local/apache2/conf/mime.types
-          subPath: mime.types
-          readOnly: true
-        - name: apache-httpd-autoindex
-          mountPath: /usr/local/apache2/conf/extra/httpd-autoindex.conf
-          subPath: httpd-autoindex.conf
-          readOnly: true
-        - name: apache-httpd-dav
-          mountPath: /usr/local/apache2/conf/extra/httpd-dav.conf
-          subPath: httpd-dav.conf
-          readOnly: true
-        - name: apache-httpd-default
-          mountPath: /usr/local/apache2/conf/extra/httpd-default.conf
-          subPath: httpd-default.conf
-          readOnly: true
-        - name: apache-httpd-info
-          mountPath: /usr/local/apache2/conf/extra/httpd-info.conf
-          subPath: httpd-info.conf
-          readOnly: true
-        - name: apache-httpd-languages
-          mountPath: /usr/local/apache2/conf/extra/httpd-languages.conf
-          subPath: httpd-languages.conf
-          readOnly: true
-        - name: apache-httpd-manual
-          mountPath: /usr/local/apache2/conf/extra/httpd-manual.conf
-          subPath: httpd-manual.conf
-          readOnly: true
-        - name: apache-httpd-mpm
-          mountPath: /usr/local/apache2/conf/extra/httpd-mpm.conf
-          subPath: httpd-mpm.conf
-          readOnly: true
-        - name: apache-httpd-multilang-errordoc
-          mountPath: /usr/local/apache2/conf/extra/httpd-multilang-errordoc.conf
-          subPath: httpd-multilang-errordoc.conf
-          readOnly: true
-        - name: apache-httpd-ssl
-          mountPath: /usr/local/apache2/conf/extra/httpd-ssl.conf
-          subPath: httpd-ssl.conf
-          readOnly: true
-        - name: apache-httpd-userdir
-          mountPath: /usr/local/apache2/conf/extra/httpd-userdir.conf
-          subPath: httpd-userdir.conf
-          readOnly: true
-        - name: apache-httpd-vhosts
-          mountPath: /usr/local/apache2/conf/extra/httpd-vhosts.conf
-          subPath: httpd-vhosts.conf
-          readOnly: true
-        - name: apache-proxy-html
-          mountPath: /usr/local/apache2/conf/extra/proxy-html.conf
-          subPath: proxy-html.conf
-          readOnly: true
+        - name: apache-cert
+          mountPath: /usr/local/apache2/cert
       dnsConfig:
         nameservers:
         - 172.16.0.8
@@ -93,48 +41,12 @@ spec:
       - name: apache-data
         persistentVolumeClaim:
           claimName: apache
-      - name: apache-httpd
+      - name: apache-conf
         configMap:
-          name: apache-httpd
-      - name: apache-magic
+          name: apache-conf
+      - name: apache-extra
         configMap:
-          name: apache-magic
-      - name: apache-mime-types
+          name: apache-extra
+      - name: apache-cert
         configMap:
-          name: apache-mime-types
-      - name: apache-httpd-autoindex
-        configMap:
-          name: apache-httpd-autoindex
-      - name: apache-httpd-dav
-        configMap:
-          name: apache-httpd-dav
-      - name: apache-httpd-default
-        configMap:
-          name: apache-httpd-default
-      - name: apache-httpd-info
-        configMap:
-          name: apache-httpd-info
-      - name: apache-httpd-languages
-        configMap:
-          name: apache-httpd-languages
-      - name: apache-httpd-manual
-        configMap:
-          name: apache-httpd-manual
-      - name: apache-httpd-mpm
-        configMap:
-          name: apache-httpd-mpm
-      - name: apache-httpd-multilang-errordoc
-        configMap:
-          name: apache-httpd-multilang-errordoc
-      - name: apache-httpd-ssl
-        configMap:
-          name: apache-httpd-ssl
-      - name: apache-httpd-userdir
-        configMap:
-          name: apache-httpd-userdir
-      - name: apache-httpd-vhosts
-        configMap:
-          name: apache-httpd-vhosts
-      - name: apache-proxy-html
-        configMap:
-          name: apache-proxy-html
+          name: nginx-cert

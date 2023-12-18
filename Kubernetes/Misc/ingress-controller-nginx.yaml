@@ -337,8 +337,8 @@ spec:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
   externalIPs:
-  - 172.16.0.8
-  - 172.16.0.11
+#  - 172.16.0.8
+#  - 172.16.0.11
   - 172.16.0.15
 ---
 apiVersion: v1
@@ -364,8 +364,8 @@ spec:
     app.kubernetes.io/name: ingress-nginx
   type: ClusterIP
   externalIPs:
-  - 172.16.0.8
-  - 172.16.0.11
+#  - 172.16.0.8
+#  - 172.16.0.11
   - 172.16.0.15
 ---
 apiVersion: apps/v1
@@ -405,7 +405,7 @@ spec:
         - --validating-webhook-certificate=/usr/local/certificates/cert
         - --validating-webhook-key=/usr/local/certificates/key
         - --enable-ssl-passthrough=true
-        - --default-ssl-certificate=ghym/ghym.ae
+#        - --default-ssl-certificate=ghym/ghym.ae
         env:
         - name: POD_NAME
           valueFrom:

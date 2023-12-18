@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: mysql
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: password
+        ports:
+        - containerPort: {{ .Values.service.port }}
+          name: mysql
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "printf '#!/bin/bash\nmysqldump --all-databases > /cifs/backup/mysql/mysql_all_databases.sql 2>&1\n' > /etc/cron.daily/backup"]
+        {{- if .Values.persistent.enabled }}
+        volumeMounts:
+        - name: {{ .Release.Name }}
+          mountPath: /var/lib/mysql
+        {{- end }}
+        resources:
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            memory: {{ .Values.resources.requests.memory }}
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+        searches:
+        - {{ .Values.domain }}
+      {{- if .Values.persistent.enabled }}
+      volumes:
+      - name: {{ .Release.Name }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- end }}

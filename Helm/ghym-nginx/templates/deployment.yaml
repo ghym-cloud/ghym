@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name}}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: nginx
+    type: front-end
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: nginx
+      type: front-end
+  template:
+    metadata:
+      labels:
+        app: nginx
+        type: front-end
+    spec:
+      pullPolicy: {{ .Values.image.pullPolicy }}
+      containers:
+      - name: nginx
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-conf-root
+          mountPath: /etc/nginx
+          readOnly: true
+        - name: {{ .Release.Name }}-conf-d
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+        {{- if .Values.persistent.enabled }}
+        - name: {{ .Release.Name }}
+          mountPath: /etc/nginx/www
+        {{- end }}
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  service php7.4-fpm start
+                  chown -R nginx:nginx /run/php/
+      dnsConfig:
+        nameservers:
+        {{- range .Values.nameservers }}
+        - {{ . }}
+        {{- end }}
+        searches:
+        - {{ .Values.domain }}
+      volumes:
+      {{- if .Values.persistent.enabled }}
+      - name: {{ .Release.Name }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- end }}
+      - name: {{ .Release.Name }}-conf-root
+        configMap:
+          name: {{ .Release.Name }}-conf-root
+      - name: {{ .Release.Name }}-conf-d
+        configMap:
+          name: {{ .Release.Name }}-conf-d

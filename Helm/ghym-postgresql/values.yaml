@@ -1,0 +1,21 @@
+password: p05t9rE59I6hYm
+persistent:
+  enabled: false
+  storage: 5Gi
+  path: /cifs/postgresql_data
+service:
+  type: ClusterIP
+  port: 5432
+externalIP:
+- 172.16.0.15
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+domain: ghym.local
+replicaCount: 1
+image:
+  repository: maxkadyshev/sandbox
+  pullPolicy: IfNotPresent
+  tag: 14.6
+
+# helm upgrade -i -n ghym --atomic --wait --debug postgresql . -f values.yaml

@@ -1,0 +1,21 @@
+persistent:
+  enabled: true
+  storage: 1Gi
+  path: /cifs/www_data
+replicaCount: 1
+image:
+  repository: maxkadyshev/nginx
+  pullPolicy: IfNotPresent
+  tag: 1.22.0
+nameservers:
+- 8.8.8.8
+- 8.8.4.4
+domain: ghym.local
+service:
+  type: ClusterIP
+  port: 80
+  ssl:
+    enabled: true
+    port: 443
+
+# helm upgrade -i -n ghym --atomic --wait --debug nginx . -f values.yaml
