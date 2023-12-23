@@ -1,7 +1,8 @@
 auth:
-  rootPassword: "m0n90db"
+  rootPassword: m0n90db
 persistence:
   storageClass: local-storage
+  size: 1Gi
 extraDeploy:
 - |
     apiVersion: v1
@@ -17,10 +18,10 @@ extraDeploy:
     spec:
       storageClassName: local-storage
       capacity:
-        storage: 8Gi
+        storage: 1Gi
       accessModes:
       - ReadWriteOnce
       hostPath:
-        path: /cephfs/mongodb_data
+        path: /cifs/mongodb_data
 
 # helm -n ghym upgrade -i --atomic --debug --wait mongodb bitnami/mongodb -f Helm/mongodb.yaml

@@ -30,8 +30,11 @@ spec:
           postStart:
             exec:
               command: ["/bin/sh", "-c", "printf '#!/bin/bash\nmysqldump --all-databases > /cifs/backup/mysql/mysql_all_databases.sql 2>&1\n' > /etc/cron.daily/backup"]
-        {{- if .Values.persistent.enabled }}
         volumeMounts:
+        - name: {{ .Release.Name }}-config
+          mountPath: /etc/mysql/mysql.conf.d/mysqld.cnf
+          subPath: mysqld.cnf
+        {{- if .Values.persistent.enabled }}
         - name: {{ .Release.Name }}
           mountPath: /var/lib/mysql
         {{- end }}
@@ -47,8 +50,11 @@ spec:
         {{- end }}
         searches:
         - {{ .Values.domain }}
-      {{- if .Values.persistent.enabled }}
       volumes:
+      - name: {{ .Release.Name }}-config
+        configMap:
+          name: {{ .Release.Name }}
+      {{- if .Values.persistent.enabled }}
       - name: {{ .Release.Name }}
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}

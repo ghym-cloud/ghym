@@ -16,8 +16,8 @@ spec:
           service:
             name: {{ .Release.Name }}
             port:
-              number: {{ .Values.service.port.ui }}
-  {{ if .Values.ingress.tls.enabled }}
+              number: {{ .Values.service.port }}
+  {{- if .Values.ingress.tls.enabled }}
   tls:
   - hosts:
     - {{ .Release.Name }}.{{ .Values.domain }}

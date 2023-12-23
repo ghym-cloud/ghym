@@ -19,13 +19,15 @@ spec:
       - name: prometheus
         image: {{ .Values.image.repository }}
         ports:
-        - containerPort: {{ .Values.service.port.ui }}
+        - containerPort: {{ .Values.service.port }}
         volumeMounts:
         - name: {{ .Release.Name }}-config
           mountPath: /etc/prometheus/prometheus.yml
           subPath: prometheus.yml
+        - name: {{ .Release.Name }}-config
+          mountPath: /prometheus/ghym-rule.yml
+          subPath: ghym-rule.yml
         {{- if .Values.persistent.enabled }}
-        volumeMounts:
         - name: {{ .Release.Name }}
           mountPath: /metrics
         {{- end }}

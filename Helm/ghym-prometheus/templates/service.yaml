@@ -8,12 +8,8 @@ spec:
   selector:
     app: prometheus
   ports:
-  - name: ui
-    protocol: TCP
-    port: {{ .Values.service.port.ui }}
-  - name: alertmanager
-    protocol: TCP
-    port: {{ .Values.service.port.alertManager }}
+  - protocol: TCP
+    port: {{ .Values.service.port }}
   externalIPs:
   {{- range .Values.externalIP }}
   - {{ . }}
