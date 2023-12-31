@@ -72,7 +72,7 @@ data:
                                                  1209600      ; Expiry time
                                                  10800        ; Negative Cache TTL
     )
-    @ IN NS ae-dc1-cp3.                 ; PTR
+    @   IN  NS  ae-dc1-cp3.             ; PTR
     1	IN	PTR	ae-dc1-gw.ghym.local.   ; Gateway
     14	IN	PTR	ae-dc1-5.ghym.local.    ; Hyper-V
     15	IN	PTR	ae-dc1-cp3.ghym.local.  ; Control plane
@@ -87,9 +87,17 @@ data:
                                                  1209600      ; Expiry time
                                                  10800        ; Negative Cache TTL
     )
-    @ IN NS ae-dc1-cp3.             ; A
-    ae-dc1-gw	IN	A	172.16.0.1  ; Gateway
-    ae-dc1-5	IN	A	172.16.0.14 ; Hyper-V
-    ae-dc1-cp3	IN	A	172.16.0.15 ; Control plane
-    ae-dc1-wn5	IN	A	172.16.0.16 ; Worker node 1
-    ae-dc1-wn6	IN	A	172.16.0.17 ; Worker node 2
+    @             IN  NS    ae-dc1-cp3. ; A
+    ae-dc1-gw	  IN  A	    172.16.0.1  ; Gateway
+    ae-dc1-5	  IN  A	    172.16.0.14 ; Hyper-V
+    ae-dc1-cp3	  IN  A	    172.16.0.15 ; Control plane
+    ae-dc1-wn5	  IN  A	    172.16.0.16 ; Worker node 1
+    ae-dc1-wn6    IN  A	    172.16.0.17 ; Worker node 2
+    www           IN  CNAME ae-dc1-cp3  ; Ingress
+    kadyshev      IN  CNAME ae-dc1-cp3  ; Ingress
+    prometheus    IN  CNAME ae-dc1-cp3  ; Ingress
+    grafana       IN  CNAME ae-dc1-cp3  ; Ingress
+    jenkins       IN  CNAME ae-dc1-cp3  ; Ingress
+    gitlab        IN  CNAME ae-dc1-cp3  ; Ingress
+    dashboard     IN  CNAME ae-dc1-cp3  ; Ingress
+    alertmanager  IN  CNAME ae-dc1-cp3  ; Ingress

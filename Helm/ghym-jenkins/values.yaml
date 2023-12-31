@@ -20,5 +20,10 @@ ingress:
   className: nginx
   tls:
     enables: true
+resources:
+  limits:
+    memory: 1G
+  requests:
+    memory: 512M
 
 # helm upgrade -i -n ghym --atomic --wait --debug jenkins . -f values.yaml

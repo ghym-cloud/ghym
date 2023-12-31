@@ -26,6 +26,11 @@ spec:
         {{- end }}
         - name: nginx
           mountPath: /var/www_data
+        resources:
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            memory: {{ .Values.resources.requests.memory }}
       dnsConfig:
         nameservers:
         {{- range .Values.nameservers }}

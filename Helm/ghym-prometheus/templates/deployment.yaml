@@ -17,9 +17,13 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: {{ .Values.image.repository }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         ports:
-        - containerPort: {{ .Values.service.port }}
+        - containerPort: {{ .Values.service.port.ui }}
+        lifecycle:
+          postStart:
+            exec:
+              command: [ "/bin/sh", "-c", "start-stop-daemon -Sbx /usr/bin/alertmanager -- --config.file=/usr/bin/alertmanager.yml && start-stop-daemon -Sbx /usr/bin/blackbox -- --config.file=/usr/bin/blackbox.yml" ]
         volumeMounts:
         - name: {{ .Release.Name }}-config
           mountPath: /etc/prometheus/prometheus.yml
@@ -31,13 +35,11 @@ spec:
         - name: {{ .Release.Name }}
           mountPath: /metrics
         {{- end }}
-      dnsConfig:
-        nameservers:
-        {{- range .Values.nameservers }}
-        - {{ . }}
-        {{- end }}
-        searches:
-        - {{ .Values.domain }}
+        resources:
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            memory: {{ .Values.resources.requests.memory }}
       volumes:
       - name: {{ .Release.Name }}-config
         configMap:

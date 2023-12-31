@@ -21,6 +21,6 @@ spec:
   tls:
   - hosts:
     - {{ .Release.Name }}.{{ .Values.domain }}
-    secretName: {{ .Values.domain }}
+#    secretName: {{ .Values.domain }}
   {{ end }}
 {{ end }}

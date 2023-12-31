@@ -1,0 +1,13 @@
+FROM prom/prometheus:v2.48.1
+USER root
+RUN wget -P /tmp https://github.com/prometheus/alertmanager/releases/download/v0.26.0/alertmanager-0.26.0.linux-amd64.tar.gz; \
+    tar -xzvf /tmp/alertmanager-0.26.0.linux-amd64.tar.gz; \
+    cp alertmanager-0.26.0.linux-amd64/alertmanager /usr/bin/alertmanager; \
+    wget -P /tmp https://github.com/prometheus/blackbox_exporter/releases/download/v0.24.0/blackbox_exporter-0.24.0.linux-amd64.tar.gz; \
+    tar -xzvf /tmp/blackbox_exporter-0.24.0.linux-amd64.tar.gz; \
+    cp blackbox_exporter-0.24.0.linux-amd64/blackbox_exporter /usr/bin/blackbox
+COPY misc/alertmanager.yml /usr/bin/
+COPY misc/blackbox.yml /usr/bin/
+RUN  rm -r alertmanager-0.26.0.linux-amd64; \
+     rm -r blackbox_exporter-0.24.0.linux-amd64
+USER nobody

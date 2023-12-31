@@ -1,7 +1,7 @@
 persistent:
-  enabled: false
+  enabled: true
   storage: 1Gi
-  path: /cifs/grafana_data
+  path: /cifs/backup/grafana/
 service:
   type: ClusterIP
   port: 3000
@@ -22,8 +22,8 @@ readinessProbe:
     port: 3000
     scheme: HTTP
 image:
-  repository: grafana/grafana
-  tag: latest
+  repository: maxkadyshev/grafana
+  tag: 10.2.3-ubuntu
 resources:
   limits:
     cpu: 500m
@@ -31,5 +31,7 @@ resources:
   requests:
     cpu: 250m
     memory: 1000Mi
+
+# UI Password: 9r@f@n@
 
 # helm upgrade -i -n ghym --atomic --wait --debug grafana . -f values.yaml

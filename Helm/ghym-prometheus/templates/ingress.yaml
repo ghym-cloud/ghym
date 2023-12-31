@@ -16,11 +16,22 @@ spec:
           service:
             name: {{ .Release.Name }}
             port:
-              number: {{ .Values.service.port }}
+              number: {{ .Values.service.port.ui }}
+  - host: alertmanager.{{ .Values.domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-alertmanager
+            port:
+              number: {{ .Values.service.port.alertmanager }}
   {{- if .Values.ingress.tls.enabled }}
   tls:
   - hosts:
     - {{ .Release.Name }}.{{ .Values.domain }}
-    secretName: {{ .Values.domain }}
+    - alertmanager.{{ .Values.domain }}
+#    secretName: {{ .Values.domain }}
   {{ end }}
 {{ end }}

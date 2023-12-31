@@ -15,29 +15,29 @@ spec:
       labels:
         app: grafana
     spec:
+      initContainers:
+      - name: init-{{ .Release.Name }}
+        image: busybox:1.28
+        command: [ "/bin/sh", "-c", "cp -R /backup/* /grafana/" ]
+        volumeMounts:
+        - name: {{ .Release.Name }}
+          mountPath: /grafana
+        - name: {{ .Release.Name }}-backup
+          mountPath: /backup
       containers:
-      - name: grafana
+      - name: {{ .Release.Name }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         ports:
         - containerPort: {{ .Values.service.port }}
         env:
         - name: GF_INSTALL_PLUGINS
           value: "grafana-clock-panel,grafana-simple-json-datasource"
-#        - name: GF_PATHS_CONFIG
-#          value: /var/lib/grafana/grafana.ini
-#        - name: GF_PATHS_PROVISIONING
-#          value: /var/lib/grafana/provisioning
-#        - name: GF_PATHS_DATA
-#          value: /var/lib/grafana
-#        - name: GF_PATHS_PLUGINS
-#          value: /var/lib/grafana/plugins
         readinessProbe:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           httpGet:
             path: {{ .Values.readinessProbe.httpGet.path }}
             port: {{ .Values.readinessProbe.httpGet.port }}
             scheme: {{ .Values.readinessProbe.httpGet.scheme }}
-        {{- if .Values.persistent.enabled }}
         resources:
           limits:
             cpu: {{ .Values.resources.limits.cpu }}
@@ -45,10 +45,17 @@ spec:
           requests:
             cpu: {{ .Values.resources.requests.cpu }}
             memory: {{ .Values.resources.requests.memory }}
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "printf '#!/bin/sh\ncp -Rf /grafana/* /backup/ 2>&1\n' > /etc/cron.daily/backup"]
         volumeMounts:
+        {{- if .Values.persistent.enabled }}
+        - name: {{ .Release.Name }}-backup
+          mountPath: /backup
+        {{- end }}
         - name: {{ .Release.Name }}
           mountPath: /var/lib/grafana
-        {{- end }}
       dnsConfig:
         nameservers:
         {{- range .Values.nameservers }}
@@ -58,7 +65,9 @@ spec:
         - {{ .Values.domain }}
       {{- if .Values.persistent.enabled }}
       volumes:
-      - name: {{ .Release.Name }}
+      - name: {{ .Release.Name }}-backup
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}
       {{ end }}
+      - name: {{ .Release.Name }}
+        emptyDir: {}

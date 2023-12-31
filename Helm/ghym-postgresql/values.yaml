@@ -16,6 +16,6 @@ replicaCount: 1
 image:
   repository: maxkadyshev/sandbox
   pullPolicy: IfNotPresent
-  tag: 14.6
+  tag: 14.9
 
 # helm upgrade -i -n ghym --atomic --wait --debug postgresql . -f values.yaml

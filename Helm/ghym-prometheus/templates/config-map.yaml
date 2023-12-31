@@ -8,6 +8,11 @@ data:
     global:
       scrape_interval: 15s
       evaluation_interval: 15s
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - 127.0.0.1:9093
     rule_files:
     - /prometheus/ghym-rule.yml
     scrape_configs:
@@ -25,6 +30,29 @@ data:
       static_configs:
       - targets:
         - 172.16.0.15:8080
+    - job_name: 'blackbox'
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      static_configs:
+      - targets:
+        - http://kadyshev.com
+        - http://ghym.ae
+        - http://prometheus.ghym.local
+        - http://alertmanager.ghym.local
+        - https://dashboard.ghym.local:8443
+        - http://grafana.ghym.local
+        - http://jenkins.ghym.local
+      relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115
+    - job_name: 'blackbox_exporter'
+      static_configs:
+      - targets: ['127.0.0.1:9115']
   ghym-rule.yml: |
     groups:
     - name: graph
@@ -33,15 +61,15 @@ data:
         expr: 100 - 100 * node_memory_MemFree_bytes / node_memory_MemTotal_bytes
     - name: alert
       rules:
-      - alert: off-line
-        expr: up == 0
+      - alert: node_off_line
+        expr: up{job="node-exporter"} == 0
         for: 1m
         labels:
           severity: critical
         annotations:
           summary: "{{ "{{" }} $labels.instance {{ "}}" }} off-line"
           description: "Node {{ "{{" }} $labels.instance {{ "}}" }} of job {{ "{{" }} $labels.job {{ "}}" }} has been down for more than 1 minute"
-      - alert: pod-down
+      - alert: pod_down
         expr: kube_pod_status_ready{condition="true"} == 0
         for: 1m
         labels:
@@ -49,3 +77,19 @@ data:
         annotations:
           summary: "{{ "{{" }} $labels.pod {{ "}}" }} off-line"
           description: "Pod {{ "{{" }} $labels.pod {{ "}}" }} at namespace {{ "{{" }} $labels.namespace {{ "}}" }} on the node {{ "{{" }} $labels.instance {{ "}}" }} is down for more than 1 minute"
+      - alert: pod_count_ghym
+        expr: sum(kube_pod_container_info{namespace="ghym"}) < 8
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Number of pods less then 8"
+          description: "Number of Pods in namespace {{ "{{" }} $labels.namespace {{ "}}" }} should be 8 but actual is {{ "{{" }} $value {{ "}}" }}"
+      - alert: www_off_line
+        expr: probe_http_status_code != 200 and probe_http_status_code != 0 and probe_http_status_code != 403
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Web site is off line"
+          description: "Web site {{ "{{" }} $labels.instance {{ "}}" }} return code {{ "{{" }} $value {{ "}}" }}"

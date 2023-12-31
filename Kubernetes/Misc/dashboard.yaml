@@ -308,6 +308,6 @@ spec:
   tls:
   - hosts:
     - dashboard.ghym.local
-    secretName: ghym.local
+#    secretName: ghym.local
 
 # kubectl -n kubernetes-dashboard get secret dashboard-admin -o jsonpath={'.data.token'} | base64 -d

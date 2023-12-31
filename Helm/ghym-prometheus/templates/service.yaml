@@ -9,7 +9,24 @@ spec:
     app: prometheus
   ports:
   - protocol: TCP
-    port: {{ .Values.service.port }}
+    port: {{ .Values.service.port.ui }}
+  externalIPs:
+  {{- range .Values.externalIP }}
+  - {{ . }}
+  {{ end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-alertmanager
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: prometheus
+  ports:
+  - protocol: TCP
+    port: {{ .Values.service.port.alertmanager }}
   externalIPs:
   {{- range .Values.externalIP }}
   - {{ . }}
