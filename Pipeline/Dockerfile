@@ -6,6 +6,7 @@ pipeline {
         script {
           def Grafana = docker.build("maxkadyshev/grafana -t jenkins -f ../Dockerfile/Grafana")
           Grafana.push()
+        }
       }
     }
   }
