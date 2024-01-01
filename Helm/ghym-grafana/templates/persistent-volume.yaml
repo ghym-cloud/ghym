@@ -1,4 +1,3 @@
-{{ if .Values.persistent.enabled }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -8,9 +7,8 @@ metadata:
 spec:
   storageClassName: local-storage
   capacity:
-    storage: {{ .Values.persistent.storage }}
+    storage: {{ .Values.backup.storage }}
   accessModes:
   - ReadWriteOnce
   hostPath:
-    path: {{ .Values.persistent.path }}
-{{ end }}
+    path: {{ .Values.backup.path }}

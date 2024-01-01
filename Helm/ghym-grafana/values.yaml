@@ -1,5 +1,4 @@
-persistent:
-  enabled: true
+backup:
   storage: 1Gi
   path: /cifs/backup/grafana/
 service:

@@ -50,10 +50,8 @@ spec:
             exec:
               command: ["/bin/sh", "-c", "printf '#!/bin/sh\ncp -Rf /grafana/* /backup/ 2>&1\n' > /etc/cron.daily/backup"]
         volumeMounts:
-        {{- if .Values.persistent.enabled }}
         - name: {{ .Release.Name }}-backup
           mountPath: /backup
-        {{- end }}
         - name: {{ .Release.Name }}
           mountPath: /var/lib/grafana
       dnsConfig:
@@ -63,11 +61,9 @@ spec:
         {{- end }}
         searches:
         - {{ .Values.domain }}
-      {{- if .Values.persistent.enabled }}
       volumes:
       - name: {{ .Release.Name }}-backup
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}
-      {{ end }}
       - name: {{ .Release.Name }}
         emptyDir: {}
