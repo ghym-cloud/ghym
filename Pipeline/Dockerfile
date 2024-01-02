@@ -3,10 +3,10 @@ pipeline {
   stages {
     stage('Grafana') {
       steps {
-        script {
-          def Grafana = docker.build("maxkadyshev/grafana -t jenkins -f ../Dockerfile/Grafana")
-          Grafana.push()
-        }
+        sh '''
+          docker build -t maxkadyshev/grafana:jenkins -f ../Dockerfile/Grafana
+          docker push maxkadyshev/grafana:jenkins
+        '''
       }
     }
   }
