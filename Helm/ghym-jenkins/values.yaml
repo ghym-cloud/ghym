@@ -10,7 +10,7 @@ replicaCount: 1
 image:
   repository: maxkadyshev/jenkins
   pullPolicy: IfNotPresent
-  tag: 2.426.2-lts-jdk21-2
+  tag: 2.426.2-lts-jdk21-3
 nameservers:
 - 8.8.8.8
 - 8.8.4.4
