@@ -1,11 +1,13 @@
 pipeline {
   agent any
   stages {
-    stage('Grafana') {
+    stage('Build') {
       steps {
         sh '''
-          docker build -t maxkadyshev/grafana:jenkins -f ../Dockerfile/Grafana
-          docker push maxkadyshev/grafana:jenkins
+          foreach n ( Grafana Prometheus Jenkins Nginx Sandbox )
+            docker build -t maxkadyshev/$n:jenkins -f ../Dockerfile/$n ../Dockerfile
+            docker push maxkadyshev/$n:jenkins
+          end
         '''
       }
     }
