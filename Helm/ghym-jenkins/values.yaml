@@ -10,7 +10,7 @@ replicaCount: 1
 image:
   repository: maxkadyshev/jenkins
   pullPolicy: IfNotPresent
-  tag: 2.426.2-lts-jdk21-6
+  tag: 2.426.2-lts-jdk21-8
 nameservers:
 - 8.8.8.8
 - 8.8.4.4
@@ -22,8 +22,8 @@ ingress:
     enables: true
 resources:
   limits:
-    memory: 1G
+    memory: 1.5G
   requests:
-    memory: 512M
+    memory: 1G
 
 # helm upgrade -i -n ghym --atomic --wait --debug jenkins . -f values.yaml
