@@ -4,10 +4,11 @@ pipeline {
     stage('Build') {
       steps {
         sh '''
-          foreach n ( Grafana Prometheus Jenkins Nginx Sandbox )
+          for n in Grafana Prometheus Jenkins Nginx Sandbox
+          do
             docker build -t maxkadyshev/$n:jenkins -f ../Dockerfile/$n ../Dockerfile
             docker push maxkadyshev/$n:jenkins
-          end
+          done
         '''
       }
     }
