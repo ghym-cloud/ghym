@@ -22,8 +22,8 @@ ingress:
     enables: true
 resources:
   limits:
-    memory: 1.5G
+    memory: 4G
   requests:
-    memory: 1G
+    memory: 3.45G
 
 # helm upgrade -i -n ghym --atomic --wait --debug jenkins . -f values.yaml
