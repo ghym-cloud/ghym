@@ -24,6 +24,6 @@ resources:
   limits:
     memory: 4G
   requests:
-    memory: 3.45G
+    memory: 3.44G
 
 # helm upgrade -i -n ghym --atomic --wait --debug jenkins . -f values.yaml
